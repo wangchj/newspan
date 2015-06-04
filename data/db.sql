@@ -2,21 +2,9 @@
  * Sqlite 3 database
  */
 
-create table Users (
-    userId   integer     primary key, -- auto-increment by default
-    userName varchar(30) null unique, -- unique, max_len = 30
-    forename text        not null,    -- User's first name
-    surname  text        not null,    -- User's last name
-    gender   text        not null,    -- User's gender
-    email    text        not null,    -- User's email, also used as log-in id
-    password text        not null,    -- Salted password hash
-    picture  text        null,        -- Url of profile picture
-    authKey  text        not null     -- Yii Framework authentication key
-);
-
  create table MathProblems (
     problemId integer primary key,     -- Auto-generated integer key
-    question  text    not null unique, -- Math problem
+    problem   text    not null unique, -- Math problem
     answer    boolean not null         -- True means the equation is valid; false otherwise
 );
 
@@ -58,7 +46,7 @@ create table ProblemSets (
 /**
  * Problems of problem sets.
  */
-create table SetProblems (
+create table ProblemSetItems (
     problemSetId integer not null,
     problemType  text    not null, -- Problem type
     problemId    integer not null, -- Problem ID within each type
@@ -69,23 +57,23 @@ create table SetProblems (
 /**
  * A set of answers by a user in response to a problem set.
  */
-create table AnswerSets (
-    answerSetId  integer primary key, -- Auto-generated key
+create table Responses (
+    responseId   integer primary key, -- Auto-generated key
     problemSetId integer not null,    -- Problem set corresponds to this answer set
-    userId       integer not null,    -- User id of the user who answered the question
-    foreign key (problemSetId) references ProblemSets(problemSetId),
-    foreign key (userId) references User(userId)
+    gender       text    null,        -- Gender of the person. This can be unspecified
+    birthdate    text    null,        -- Birth date of the person, in the format 'yyyy-mm-dd'. This can be unspecified
+    foreign key (problemSetId) references ProblemSets(problemSetId)
 );
 
 /**
- * Answers of problem sets.
+ * User responses of problem sets.
  */
-create table SetAnswers (
-    answerSetId integer not null, -- References answer set
+create table ResponseItems (
+    responseId  integer not null, -- References answer set
     problemType text    not null, -- Problem type
     problemId   integer not null, -- Problem ID within each type
-    answer      text    not null, -- The answer provided by the user, the actual type of this will be mixed.
-    primary key (answerSetId, problemType, problemId),
-    foreign key (answerSetId) references AnswerSets(answerSetId)
+    response    text    not null, -- The response provided by the user, the actual type of this will be mixed.
+    primary key (responseId, problemType, problemId),
+    foreign key (responseId) references Responses(responseId)
 );
 
