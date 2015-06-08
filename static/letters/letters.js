@@ -54,7 +54,7 @@ var LetterRecall = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-xs-1 col-xs-offset-5"><button className="btn btn-default" onClick={this.clearSelects}>Clear</button></div>
-                    <div className="col-xs-1"><button className="btn btn-default">Continue</button></div>
+                    <div className="col-xs-1"><button className="btn btn-default" onClick={this.submitResponse}>Continue</button></div>
                 </div>
             </div>
         );
@@ -102,35 +102,175 @@ var LetterRecall = React.createClass({
             this.state.selects[i] = null;
         }
         this.setState({selects:this.state.selects});
+    },
+    submitResponse: function() {
+        this.props.onSubmitResponse(this.state.letters, this.state.selects, this.startTime, new Date().getTime());
+    }
+});
+
+var LetterSequenceReport = React.createClass({
+    render: function() {
+        var solution = this.props.response.solution;
+        var challenge = this.props.response.challenge;
+        var selections = this.props.response.selections;
+        var startTime = this.props.response.startTime;
+        var endTime = this.props.response.endTime;
+
+        //Response letter sequence
+        var response = selections.map(function(sequenceNum) {return challenge[sequenceNum];});
+        console.log(response);
+        var correctCount = 0;
+
+        //Calculate correct count
+        for(var i = 0; i < solution.length; i++) {
+            if(solution[i] == response[i])
+                correctCount++;
+        }
+
+        return (
+            <div>
+                <div className="row">
+                    <div className="col-xs-6" style={{fontSize:35}}>
+                        Correct: {correctCount}/{solution.length} ({Math.round(correctCount/solution.length * 100)}%)
+                    </div>
+                    <div className="col-sx-6" style={{fontSize:35}}>
+                        Time: {(endTime - startTime) / 1000} Seconds
+                    </div>
+                </div>
+
+                <div className="row" style={{margin:30}}>
+                    {
+                        challenge.map(function(letter, index){
+                            var solSeq = solution.indexOf(letter);
+                            var selSeq = selections.indexOf(index);
+
+                            //Not part of the solution and not selected
+                            if(solSeq == -1 && selSeq == -1) {
+                                return (
+                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
+                                        <div className="recall-num" style={{display:'inline-block', width:50}}></div>
+                                        <div className="recall-letter" style={{display:'inline-block'}}>{letter}</div>
+                                    </div>
+                                );
+                            }
+                            //Not part of the solution, but selected
+                            else if(solSeq == -1 && selSeq != -1) {
+                                return (
+                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
+                                        <div className="recall-num" style={{display:'inline-block', width:50, color:'red', textDecoration:'line-through'}}>
+                                            {selSeq + 1}
+                                        </div>
+                                        <div className="recall-letter" style={{display:'inline-block', color:'red', textDecoration:'line-through'}}>{letter}</div>
+                                    </div>
+                                );
+                            }
+                            //Part of the solution, but not selected
+                            else if(solSeq != -1 && selSeq == -1) {
+                                return (
+                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
+                                        <div className="recall-num" style={{display:'inline-block', width:50}}>{solSeq + 1}</div>
+                                        <div className="recall-letter" style={{display:'inline-block', color:'red'}}>{letter}</div>
+                                    </div>
+                                );
+                            }
+                            //Part of the solution, and incorrectly selected
+                            else if(solSeq != -1 && selSeq != -1 && solSeq != selSeq) {
+                                return (
+                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
+                                        <div className="recall-num" style={{display:'inline-block', width:50, color:'red', textDecoration:'line-through'}}>
+                                            {selSeq + 1}
+                                        </div>
+                                        <div className="recall-num" style={{display:'inline-block', width:50}}>
+                                            {solSeq + 1}
+                                        </div>
+                                        <div className="recall-letter" style={{display:'inline-block'}}>{letter}</div>
+                                    </div>
+                                );
+                            }
+                            else {
+                                return (
+                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
+                                        <div className="recall-num" style={{display:'inline-block', width:50}}>{solSeq + 1}</div>
+                                        <div className="recall-letter" style={{display:'inline-block'}}>{letter}</div>
+                                    </div>
+                                );
+                            }
+                        })
+                    }  
+                </div>
+
+                <div className="row">
+                    <div className="col-xs-2 col-xs-offset-5"><button className="btn btn-default">Continue</button></div>
+                </div>
+            </div>
+        );
+
     }
 });
 
 var LetterSequence = React.createClass({
+    /**
+     * Gets the initial state of this component.
+     * Stages: 'flash', 'recall', 'report'
+     */
     getInitialState: function() {
-        return {count:0};
+        return {count:0, stage:'flash'};
     },
     componentDidMount: function() {
         this.timer = setInterval(this.timerTick, 1000);
     },
     timerTick: function() {
         var count = this.state.count + 1;
-        if(count == this.props.letters.length)
+
+        if(count == this.props.letters.length) {
             clearInterval(this.timer);
+            this.state.stage = 'recall';
+        }
+
         this.setState({count:count});
+    },
+    /**
+     * @params challenge array  The list of letters presented to the user on the recall screen.
+     * @params selections array User's selections.
+     */
+    handleResponse: function(challenge, selections, startTime, endTime) {
+        
+
+        //TODO: Submit response to the server
+
+        if(this.props.report) {
+            //Show result
+            this.response = {
+                solution: this.props.letters, 
+                challenge: challenge,
+                selections: selections,
+                startTime: startTime,
+                endTime: endTime
+            };
+
+            this.setState({stage: 'report'});
+        }
+        else {
+
+            //TODO: Raise finish event to go to next challenge
+
+        }
     },
     render: function() {
         //If there are still more letters, display the letters.
-        if(this.state.count < this.props.letters.length) {
+        if(this.state.stage == 'flash') {
             return (<SingleLetterSlide letter={this.props.letters[this.state.count]} />);
         }
-        //Otherwise, display the letter selection slide.
+        else if(this.state.stage == 'recall') {
+            return (<LetterRecall letters={this.props.letters} onSubmitResponse={this.handleResponse}/>);
+        }
         else {
-            return (<LetterRecall letters={this.props.letters}/>);
+            return <LetterSequenceReport response={this.response} />
         }
     }
 });
 
 React.render(
-    <LetterSequence letters={['D', 'B', 'C']} />,
+    <LetterSequence letters={['D', 'B', 'C']} report={true} />,
     document.getElementById('content')
 );
