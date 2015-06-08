@@ -1,0 +1,19 @@
+Task/Assessment (top level)
+    - Practice block
+        - Challenge (problem): series of letters, and recall
+        - Result (report): indicate correct or incorrect
+    - Instruction (optional?)
+    - Assessment
+        - Block
+            - Challenge (problem): series of letters, and recall
+            - Challenge (problem)
+            - Challenge (problem)
+        - Block
+            - Challenge (problem): series of letters, and recall
+            - Challenge (problem)
+            - Challenge (problem)
+        - Block
+            - Challenge (problem): series of letters, and recall
+            - Challenge (problem)
+            - Challenge (problem)
+    - End
