@@ -1,7 +1,9 @@
-.letter {
-    font-size:35px;
+.flash-letter {
+    margin-top:200px;
+    font-size:60px;
 }
 
-.recall-letter {
+.recall-letter, .recall-num {
+    font-size:35px;
     cursor: pointer;
 }

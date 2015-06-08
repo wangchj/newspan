@@ -19,7 +19,7 @@ function shuffle(array) {
 
 var SingleLetterSlide = React.createClass({
     render: function() {
-        return (<span className="letter">{this.props.letter}</span>);
+        return (<div className="flash-letter">{this.props.letter}</div>);
     }
 });
 
@@ -44,9 +44,9 @@ var LetterRecall = React.createClass({
                         this.state.letters.map(function(letter, index){
                             var s = this.state.selects.indexOf(index);
                             return (
-                                <div key={index} className="col-xs-4" onClick={this.letterClicked.bind(this, index)} style={{paddingTop:10, paddingBottom:10}}>
-                                    <div className="letter recall-sequence" style={{display:'inline-block', width:60}}>{s == -1 ? '' : s + 1}</div>
-                                    <div className="letter recall-letter" style={{display:'inline-block'}}>{letter}</div>
+                                <div key={index} className="col-xs-4" onClick={this.letterClicked.bind(this, index)} style={{paddingTop:15, paddingBottom:15}}>
+                                    <div className="recall-num" style={{display:'inline-block', width:50}}>{s == -1 ? '' : s + 1}</div>
+                                    <div className="recall-letter" style={{display:'inline-block'}}>{letter}</div>
                                 </div>
                             );
                         }, this)
