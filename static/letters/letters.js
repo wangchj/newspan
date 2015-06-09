@@ -353,12 +353,82 @@ var Assessment = React.createClass({
     }
 });
 
+var Demographics = React.createClass({
+    complete: function() {
+        this.props.onComplete();
+    },
+    render: function() {
+        var years=[];
+        for(var i = 0; i < 100; i++)
+            years.push(new Date().getFullYear() - 2 - i);
+
+        return (
+            <div>
+                <div className="row" style={{marginBottom:25, fontSize:20}}>
+                    <div className="col-xs-12">Before we start, tell us a little about you</div>
+                </div>
+                <div className="row" style={{marginBottom:25}}>
+                    <div className="col-sm-6 col-sm-offset-3">
+                        <form>
+                            <div className="form-group">
+                                <label className="control-label">Birthday</label>
+                                
+                                <div className="row">
+                                    <div className="col-xs-4">
+                                        <select className="form-control">
+                                            <option value="1">Jan</option><option value="2">Feb</option><option value="3">Mar</option>
+                                            <option value="4">Apr</option><option value="5">May</option><option value="6">Jun</option>
+                                            <option value="7">Jul</option><option value="8">Aug</option><option value="9">Sep</option>
+                                            <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-xs-4">
+                                        <select className="form-control">
+                                            {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
+                                                .map(function(val){
+                                                    return <option value={val}>{val}</option>
+                                                })
+                                            }
+                                        </select>
+                                    </div>
+                                    <div className="col-xs-4">
+                                        <select className="form-control">
+                                            {years.map(function(val){return <option value={val}>{val}</option>})}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-group">
+                                <label className="control-label">Gender</label>
+                                <div className="row">
+                                    <div className="col-xs-4 col-xs-offset-4">
+                                        <select className="form-control">
+                                            <option value="female">Female</option>
+                                            <option value="male">Male</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <button className="btn btn-default" onClick={this.complete}>Continue</button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
 var Demo = React.createClass({
     getInitialState: function() {
         return {progress: 0};
     },
     advance: function() {
-        if(this.state.progress < 3)
+        if(this.state.progress < 5)
             this.setState({progress: this.state.progress + 1});
     },
     generateRandomBlock: function() {
@@ -382,14 +452,17 @@ var Demo = React.createClass({
     render:function(){
         switch(this.state.progress) {
             case 0:
-                return <Instruction practice={true} onComplete={this.advance} />
+                return <Demographics onComplete={this.advance} />
             case 1:
-                return <Block block={this.generateRandomBlock()} practice={true} onComplete={this.advance} />
+                return <Instruction practice={true} onComplete={this.advance} />
             case 2:
-                return <Instruction practice={false} onComplete={this.advance} />
+                return <Block block={this.generateRandomBlock()} practice={true} onComplete={this.advance} />
             case 3:
+                return <Instruction practice={false} onComplete={this.advance} />
+            case 4:
                 return <Assessment blocks={data} onComplete={this.advance} />
-            //case 4:
+            case 5:
+                return <div>Congrats, you have finished the task. Have a lolllipop!</div>
 
         }
         //if(this.state.progress == 0)
