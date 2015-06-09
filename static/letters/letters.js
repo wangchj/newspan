@@ -283,14 +283,17 @@ var LetterSequence = React.createClass({
 
 var Instruction = React.createClass({
     render: function() {
+        console.log(this.props.children);
         return (
             <div>
                 <div className="row" style={{marginBottom:20}}>
-                    <div className="col-xs-6 col-xs-offset-3" style={{textAlign:'justify', fontSize:20}}>
-                        For this practice set, letters will appear on the screen one at a time. Try to remember each letter in the order presented.
-                        After 2-3 letters have been shown, you will see a screen listing 12 possible letters with a check box beside each one.
-                        Your job is to select each letter in the order presented. To do this, use the mouse to select the box beside each letter. 
-                        The letters you select will appear at the bottom of the screen.
+                    <div className="col-xs-6 col-xs-offset-3 instruction" style={{textAlign:'justify', fontSize:20}}>
+                        {this.props.children ?
+                            this.props.children :
+                            this.props.practice ? 
+                                'For this practice set, letters will appear on the screen one at a time. Try to remember each letter in the order presented. After 2-3 letters have been shown, you will see a screen listing 12 possible letters with a check box beside each one. Your job is to select each letter in the order presented. To do this, use the mouse to select the box beside each letter. The letters you select will appear at the bottom of the screen.' :
+                                'In this task you will try to memorize letters you see on the screen, just like what we have practiced.'
+                        }
                     </div>
                 </div>
                 <div className="row">
