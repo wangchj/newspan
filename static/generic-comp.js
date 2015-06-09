@@ -1,6 +1,5 @@
 var Instruction = React.createClass({
     render: function() {
-        console.log(this.props.children);
         return (
             <div>
                 <div className="row" style={{marginBottom:20}}>
@@ -112,7 +111,6 @@ var Block = React.createClass({
         }
     },
     render: function() {
-        console.log(this.props.block);
         switch(this.props.block[this.state.progress].type) {
             case 'letter':
                 return <LetterSequence key={this.state.progress} letters={this.props.block[this.state.progress].problem} onComplete={this.advance} report={this.props.practice} />
