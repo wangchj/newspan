@@ -109,6 +109,9 @@ var LetterRecall = React.createClass({
 });
 
 var LetterSequenceReport = React.createClass({
+    complete: function() {
+        this.props.onComplete();
+    },
     render: function() {
         var solution = this.props.response.solution;
         var challenge = this.props.response.challenge;
@@ -200,7 +203,9 @@ var LetterSequenceReport = React.createClass({
                 </div>
 
                 <div className="row">
-                    <div className="col-xs-2 col-xs-offset-5"><button className="btn btn-default">Continue</button></div>
+                    <div className="col-xs-2 col-xs-offset-5">
+                        <button className="btn btn-default" onClick={this.complete}>Continue</button>
+                    </div>
                 </div>
             </div>
         );
@@ -208,6 +213,11 @@ var LetterSequenceReport = React.createClass({
     }
 });
 
+/**
+ * @prop letters    array    The list of alphabets to present to user.
+ * @prop report     boolean  Indicates if the result of this assessment should be displayed.
+ * @prop onComplete callback The callback when this component is finished.
+ */
 var LetterSequence = React.createClass({
     /**
      * Gets the initial state of this component.
@@ -251,10 +261,11 @@ var LetterSequence = React.createClass({
             this.setState({stage: 'report'});
         }
         else {
-
-            //TODO: Raise finish event to go to next challenge
-
+            this.props.onComplete();
         }
+    },
+    complete: function() {
+        this.props.onComplete();
     },
     render: function() {
         //If there are still more letters, display the letters.
@@ -265,7 +276,7 @@ var LetterSequence = React.createClass({
             return (<LetterRecall letters={this.props.letters} onSubmitResponse={this.handleResponse}/>);
         }
         else {
-            return <LetterSequenceReport response={this.response} />
+            return <LetterSequenceReport response={this.response} onComplete={this.complete}/>
         }
     }
 });
@@ -292,18 +303,96 @@ var Instruction = React.createClass({
     }
 });
 
+/**
+ * A set of problems.
+ * @prop block      array   The set of problems to render
+ * @prop practice   boolean True if this block is a practice; false if this this block is to be recorded.
+ * @prop onComplete callback 
+ */
+var Block = React.createClass({
+    getInitialState: function() {
+        return {progress: 0};
+    },
+    advance: function() {
+        if(this.state.progress == this.props.block.length - 1) {
+            this.props.onComplete();
+        }
+        else {
+            this.setState({progress: this.state.progress + 1});
+        }
+    },
+    render: function() {
+        return <LetterSequence key={this.state.progress} letters={this.props.block[this.state.progress]} onComplete={this.advance} report={this.props.practice} />
+        //console.log(this.props);
+        //return <div>this is a block</div>
+    }
+});
+
+/**
+ * A set of blocks to be presented to the user.
+ * @prop blocks array An array of blocks to render.
+ * @prop onComplete callback
+ */
+var Assessment = React.createClass({
+    getInitialState: function() {
+        return {progress: 0};
+    },
+    advance: function() {
+        if(this.state.progress == this.props.blocks.length - 1) {
+            this.props.onComplete();
+        }
+        else {
+            this.setState({progress: this.state.progress + 1});
+        }
+    },
+    render: function() {
+        return <Block key={this.state.progress} block={this.props.blocks[this.state.progress]} onComplete={this.advance} practice={false} />
+    }
+});
+
 var Demo = React.createClass({
     getInitialState: function() {
         return {progress: 0};
     },
     advance: function() {
-        this.setState({progress: this.state.progress + 1});
+        if(this.state.progress < 3)
+            this.setState({progress: this.state.progress + 1});
+    },
+    generateRandomBlock: function() {
+        var res = [];
+        for(var l = 2; l <= 4; l++)
+            res.push(this.generateRandomProblem(l));
+        return res;
+    },
+    generateRandomProblem: function(length) {
+        var res = [], a = 'A'.charCodeAt(0), z = 'Z'.charCodeAt(0);
+
+        while(res.length < length) {
+            //Get a random letter
+            var c = Math.floor(Math.random() * (z - a)) + a;
+            var l = String.fromCharCode(c);
+            if(l != 'A' && l != 'E' && l != 'I' && l != 'O' && l != 'U' && res.indexOf(l) == -1)
+                res.push(l);
+        }
+        return res;
     },
     render:function(){
-        if(this.state.progress == 0)
-            return <Instruction practice={true} onComplete={this.advance} />
-        else
-            return <LetterSequence letters={['D', 'B', 'C']} report={true} />
+        switch(this.state.progress) {
+            case 0:
+                return <Instruction practice={true} onComplete={this.advance} />
+            case 1:
+                return <Block block={this.generateRandomBlock()} practice={true} onComplete={this.advance} />
+            case 2:
+                return <Instruction practice={false} onComplete={this.advance} />
+            case 3:
+                return <Assessment blocks={data} onComplete={this.advance} />
+            //case 4:
+
+        }
+        //if(this.state.progress == 0)
+        //    return <Instruction practice={true} onComplete={this.advance} />
+        //else
+        //    return <LetterSequence letters={['D', 'B', 'C']} report={true} />
     }
 });
 
@@ -311,3 +400,47 @@ React.render(
     <Demo />,
     document.getElementById('content')
 );
+
+var data = [
+    //First block
+    [
+        //Problem 1: 3-letter sequence
+        ['V', 'R', 'N'],
+        //Problem 2: 4-letter sequence
+        ['D', 'W', 'J', 'N'],
+        //Problem 3: 5-letter sequence
+        ['K', 'B', 'X', 'Q', 'P'],
+        //Problem 4: 6-letter sequence
+        ['T', 'M', 'S', 'P', 'X', 'L'],
+        //Problem 5: 7-letter sequence
+        ['H', 'Z', 'X', 'Y', 'F', 'V', 'C']
+    ],
+    //Second block
+    [
+        //Problem 1: 3-letter sequence
+        ['B', 'T', 'D'],
+        //Problem 2: 4-letter sequence
+        ['P', 'T', 'C', 'X'],
+        //Problem 3: 5-letter sequence
+        ['S', 'Q', 'N', 'C', 'S'],
+        //Problem 4: 6-letter sequence
+        ['P', 'R', 'S', 'N', 'T', 'D'],
+        //Problem 5: 7-letter sequence
+        ['B', 'C', 'D', 'F', 'G', 'H', 'J']
+    ],
+    //Third block
+    [
+        //Problem 1: 3-letter sequence
+        ['W', 'G', 'N'],
+        //Problem 2: 4-letter sequence
+        ['T', 'S', 'L', 'R'],
+        //Problem 3: 5-letter sequence
+        ['S', 'L', 'F', 'B', 'Y'],
+        //Problem 4: 6-letter sequence
+        ['V', 'R', 'T', 'L', 'M', 'D'],
+        //Problem 5: 7-letter sequence
+        ['Z', 'X', 'C', 'V', 'B', 'N', 'M'],
+        //Problem 6: 8-letter sequence
+        ['S', 'D', 'F', 'G', 'H', 'J', 'K', 'L']
+    ]
+];
