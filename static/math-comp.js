@@ -69,7 +69,7 @@ MathEq.Equation = React.createClass({
         this.props.onSubmit(res, this.startTime, endTime);
     },
     render: function() {
-        var equation = this.props.equation.replace('*', '\\times');
+        var equation = this.props.equation.replace(/\*/g, '\\times');
 
         return (
             <div style={{visibility:'hidden', marginTop:200}} id="component">
