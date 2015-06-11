@@ -1,0 +1,13 @@
+.flash-letter {
+    margin-top:200px;
+    font-size:60px;
+}
+
+.recall-letter, .recall-num {
+    font-size:35px;
+    cursor: pointer;
+}
+
+.instruction {
+    line-height: 160%;
+}

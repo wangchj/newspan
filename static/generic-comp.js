@@ -132,7 +132,15 @@ var Block = React.createClass({
     render: function() {
         switch(this.props.block[this.state.progress].type) {
             case 'letter':
-                return <LetterSequence key={this.state.progress} letters={this.props.block[this.state.progress].problem} onComplete={this.advance} report={this.props.practice} />
+                return (<LetterSequence key={this.state.progress} letters={this.props.block[this.state.progress].problem}
+                    onComplete={this.advance} report={this.props.practice} />
+                );
+            case 'math':
+                return (<MathEq key={this.state.progress}
+                    equation={this.props.block[this.state.progress].problem}
+                    solution={this.props.block[this.state.progress].answer}
+                    feedback={this.props.practice} onComplete={this.advance} />
+                );
         }
     }
 });
