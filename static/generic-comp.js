@@ -136,10 +136,18 @@ var Block = React.createClass({
                     onComplete={this.advance} report={this.props.practice} />
                 );
             case 'math':
-                return (<MathEq key={this.state.progress}
-                    equation={this.props.block[this.state.progress].problem}
-                    solution={this.props.block[this.state.progress].answer}
-                    feedback={this.props.practice} onComplete={this.advance} />
+                return (
+                    <MathEq key={this.state.progress}
+                        equation={this.props.block[this.state.progress].problem}
+                        solution={this.props.block[this.state.progress].answer}
+                        feedback={this.props.practice} onComplete={this.advance} />
+                );
+            case 'math-letter':
+                return (
+                    <MathLetter key={this.state.progress}
+                        problem={this.props.block[this.state.progress]}
+                        feedback={this.props.practice}
+                        onComplete={this.advance} />
                 );
         }
     }

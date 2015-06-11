@@ -4,6 +4,11 @@ var SingleLetterSlide = React.createClass({
     }
 });
 
+/**
+ * Letter recall screen.
+ * @prop letters array
+ * @prop onSubmitResponse callback
+ */ 
 var LetterRecall = React.createClass({
     getInitialState: function() {
         return {
