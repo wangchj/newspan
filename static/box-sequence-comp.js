@@ -104,7 +104,8 @@ BoxSequence.Slide = React.createClass({
  */
 BoxSequence.Slide.Figure = React.createClass({
     onCellClick: function(cell) {
-        this.props.onCellClick(cell);
+        if(this.props.onCellClick)
+            this.props.onCellClick(cell);
     },
     /**
      * Checks if a cell is colored against props 'colored'.
