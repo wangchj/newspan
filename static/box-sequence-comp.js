@@ -40,7 +40,7 @@ var BoxSequence = React.createClass({
                 );
             case 2:
                 return (
-                    <BoxSequence.Feedback sequence={this.props.sequence} response={this.res} />
+                    <BoxSequence.Feedback sequence={this.props.sequence} response={this.res} onComplete={this.advance} />
                 );
         }
     }

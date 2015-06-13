@@ -149,6 +149,13 @@ var Block = React.createClass({
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
+            case 'squares':
+                return (
+                    <BoxSequence key={this.state.progress}
+                        sequence={this.props.block[this.state.progress].problem}
+                        feedback={this.props.practice}
+                        onComplete={this.advance} />
+                );
         }
     }
 });
