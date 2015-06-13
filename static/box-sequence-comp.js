@@ -284,7 +284,7 @@ BoxSequence.Feedback = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12" style={{fontSize:25, marginTop:200, marginBottom:25}}>
-                        You have recalled {this.getCorrectCount()} out of {this.props.sequence.length} squares correctly.
+                        You recalled {this.getCorrectCount()} out of {this.props.sequence.length} squares correctly.
                     </div>
                 </div>
                 <div className="row" style={{marginBottom:25}}>
