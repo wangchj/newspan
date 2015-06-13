@@ -1,5 +1,3 @@
-var test = [[0, 0], [1, 0], [1, 1], [1, 2]];
-
 var Demo = React.createClass({
     getInitialState: function() {
         return {progress: 0};
@@ -18,7 +16,7 @@ var Demo = React.createClass({
             var x = Math.floor(Math.random() * 4);
             var y = Math.floor(Math.random() * 4);
             var p = [x, y];
-            if(!this.containsPoint(res, p))
+            if(!this.containsPoint(res.problem, p))
                 res.problem.push(p);
         }
 
@@ -85,9 +83,11 @@ var Demo = React.createClass({
         if(!array || !point)
             return false;
 
+        console.log(array);
+        console.log(point);
+
         for(var i = 0; i < array.length; i++)
-            if(array[i] && array[0] && array[1] && point[0] && point[1] &&
-                array[i][0] == point[0] && array[i][1] == point[1])
+            if(array[i] && array[i][0] == point[0] && array[i][1] == point[1])
                 return true;
         return false;
     }
