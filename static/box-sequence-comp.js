@@ -40,7 +40,7 @@ var BoxSequence = React.createClass({
                 );
             case 2:
                 return (
-                    <BoxSequence.Feedback />
+                    <BoxSequence.Feedback sequence={this.props.sequence} response={this.res} />
                 );
         }
     }
@@ -263,9 +263,38 @@ BoxSequence.Recall = React.createClass({
 
 /**
  * The feedback screen.
+ * @prop sequence array<point> The original problem sequence
+ * @prop response object       The user's response with format
+ *                             {res: array<point>, startTime: integer, endTime: integer}
+ * @prop onComplete callback
  */
 BoxSequence.Feedback = React.createClass({
+    getCorrectCount: function() {
+        var res = 0;
+        var sequence = this.props.sequence;
+        var response = this.props.response.res;
+
+        for(var i = 0; i < sequence.length; i++)
+            if(response[i] && response[i][0] == sequence[i][0] && response[i][1] == sequence[i][1])
+                res++;
+        return res;
+    },
     render: function() {
-        return <div>This is BoxSequence.Feedback</div>
+        return (
+            <div>
+                <div className="row">
+                    <div className="col-xs-12" style={{fontSize:25, marginTop:200, marginBottom:25}}>
+                        You have recalled {this.getCorrectCount()} out of {this.props.sequence.length} squares correctly.
+                    </div>
+                </div>
+                <div className="row">
+                    <button className="btn btn-default" onClick={this.onComplete}>Continue</button>
+                </div>
+            </div>
+        )
+    },
+    onComplete: function() {
+        if(this.props.onComplete)
+            this.props.onComplete();
     }
 });
