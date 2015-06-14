@@ -150,7 +150,7 @@ BoxSequence.Slide.Figure = React.createClass({
                     cells.map(function(cell, index) {
                         if(this.cellTextIndex(cell) != -1)
                             return (
-                                <g key={index} onClick={this.onCellClick.bind(this, cell)}>
+                                <g key={index} onClick={this.onCellClick.bind(this, cell)} onTouchStart={this.onCellClick.bind(this, cell)}>
                                     <rect x={x0 + width * cell[0]} y={y0 + width * cell[1]} width={width} height={width}
                                         stroke="black"
                                         fill={this.cellIsColored(cell) ? 'black' : 'white'}>
@@ -169,7 +169,7 @@ BoxSequence.Slide.Figure = React.createClass({
                             )
                         else
                             return (
-                                <g key={index} onClick={this.onCellClick.bind(this, cell)}>
+                                <g key={index} onClick={this.onCellClick.bind(this, cell)} onTouchStart={this.onCellClick.bind(this, cell)}>
                                     <rect key={index} x={x0 + width * cell[0]} y={y0 + width * cell[1]}
                                         width={width} height={width} stroke="black"
                                         fill={this.cellIsColored(cell) ? 'black' : 'white'}>
