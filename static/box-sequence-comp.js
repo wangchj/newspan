@@ -103,6 +103,11 @@ BoxSequence.Slide = React.createClass({
  * @prop onCellClick callback
  */
 BoxSequence.Slide.Figure = React.createClass({
+    componentDidMount: function() {
+        var svg = $('svg');
+        var width = svg.width();
+        svg.height(width);
+    },
     onCellClick: function(cell) {
         if(this.props.onCellClick)
             this.props.onCellClick(cell);
