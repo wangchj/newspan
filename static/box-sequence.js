@@ -97,3 +97,13 @@ React.render(
     <Demo />,
     document.getElementById('content')
 );
+
+$(function(){
+    $(window).resize(function(){
+        var svg = $('svg');
+        if(svg.length != 0) {
+            var width = svg.width();
+            svg.height(width);
+        }
+    })
+});
