@@ -3,7 +3,7 @@ var Demo = React.createClass({
         return {progress: 0};
     },
     advance: function() {
-        if(this.state.progress < 5)
+        if(this.state.progress < 4)
             this.setState({progress: this.state.progress + 1});
     },
     generateRandomBlock: function() {
@@ -28,16 +28,14 @@ var Demo = React.createClass({
     render:function(){
         switch(this.state.progress) {
             case 0:
-                return <Demographics onComplete={this.advance} />
-            case 1:
                 return <Instruction practice={true} onComplete={this.advance} />
-            case 2:
+            case 1:
                 return <Block block={this.generateRandomBlock()} practice={true} onComplete={this.advance} />
-            case 3:
+            case 2:
                 return <Instruction practice={false} onComplete={this.advance} />
-            case 4:
+            case 3:
                 return <Assessment blocks={data} onComplete={this.advance} />
-            case 5:
+            case 4:
                 return <div>Congrats, you have finished the task. Have a lolllipop!</div>
         }
     }
