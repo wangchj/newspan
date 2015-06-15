@@ -89,7 +89,7 @@ BoxSequence.Slide = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2">
-                        <BoxSequence.Slide.Figure colored={this.props.colored} />
+                        <BoxSequence.Slide.Figure rows={4} cols={4} colored={this.props.colored} />
                     </div>
                 </div>
             </div>
@@ -98,6 +98,8 @@ BoxSequence.Slide = React.createClass({
 });
 
 /**
+ * @prop rows     integer       Number of rows.
+ * @prop cols     integer       Number of columns.
  * @prop colored  array<point>  An array specified which box should be color-filled.
  * @prop cellText array<object> Cell text with format {loc: [x, y], text:'text'}.
  * @prop onCellClick callback
@@ -145,12 +147,15 @@ BoxSequence.Slide.Figure = React.createClass({
         var cells = [];
 
         //Make the cells to draw
-        for(var x = 0; x < 4; x++)
-            for(var y = 0; y < 4; y++)
+        for(var x = 0; x < this.props.cols; x++)
+            for(var y = 0; y < this.props.rows; y++)
                 cells.push([x, y]);
 
+        var viewBoxW = this.props.cols * width + x0;
+        var viewBoxH = this.props.rows * width + y0;
+
         return (
-            <svg style={{width:'100%'}} viewBox="0 0 450 450">
+            <svg style={{width:'100%'}} viewBox={'0 0 ' + viewBoxH + ' ' + viewBoxH}>
                 {
                     cells.map(function(cell, index) {
                         if(this.cellTextIndex(cell) != -1)
@@ -251,7 +256,7 @@ BoxSequence.Recall = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2">
-                        <BoxSequence.Slide.Figure cellText={cellText} onCellClick={this.onCellClick} />
+                        <BoxSequence.Slide.Figure rows={4} cols={4} cellText={cellText} onCellClick={this.onCellClick} />
                     </div>
                 </div>
                 <div className="row">

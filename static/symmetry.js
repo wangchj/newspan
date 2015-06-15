@@ -6,47 +6,29 @@ var Demo = React.createClass({
         if(this.state.progress < 4)
            this.setState({progress: this.state.progress + 1});
     },
-    generateRandomProblem: function(length) {
-        var res = {
-            type: 'squares',
-            problem: []
-        };
-
-        while(res.problem.length < length) {
-            var x = Math.floor(Math.random() * 4);
-            var y = Math.floor(Math.random() * 4);
-            var p = [x, y];
-            if(!arrayHasPoint(res.problem, p))
-                res.problem.push(p);
-        }
-
-        return res;
-    },
     /**
      * Generates a set of computer generated problems.
-     * @param minLength  integer The minimum problem length.
-     * @param maxLength  integer The maximum problem length.
+     * @param integer The number of problems in this block.
      */
-    generateRandomBlock: function(minLength, maxLength){
+    generateRandomBlock: function(count){
         var res = [];
-        for(var i = minLength; i <= maxLength; i++)
-            res.push(this.generateRandomProblem(i));
+        for(var i = 0; i < count; i++)
+            res.push({type:'symmetry', problem:SymmetryTest.genreateFigure()});
         return res;
     },
     /**
      * Generate a set of blockCount number of blocks of computer generated problems.
      * @param blockCount integer The number of block to generate.
-     * @param minLength  integer The minimum problem length.
-     * @param maxLength  integer The maximum problem length.
+     * @param count      integer The number of problems in this block.
      */
-    generateRandomAssessment: function(blockCount, minLength, maxLength) {
+    generateRandomAssessment: function(blockCount, count) {
         var res = [];
         for(var i = 0; i < blockCount; i++)
-            res.push(this.generateRandomBlock(minLength, maxLength));
+            res.push(this.generateRandomBlock(count));
         return res;
     },
     render:function(){
-        //return (<BoxSequence sequence={test} feedback={true} onComplete={this.advance} />);
+        //return (<SymmetryTest colored={SymmetryTest.genreateFigure()} feedback={true} onComplete={this.advance} />);
 
         switch(this.state.progress) {
             case 0:
@@ -56,7 +38,7 @@ var Demo = React.createClass({
                     </Instruction>
                 );
             case 1:
-                return <Block block={this.generateRandomBlock(2, 4)} practice={true} onComplete={this.advance} />
+                return <Block block={this.generateRandomBlock(3)} practice={true} onComplete={this.advance} />
             case 2:
                 return (
                     <Instruction practice={false} onComplete={this.advance}>
@@ -64,9 +46,9 @@ var Demo = React.createClass({
                     </Instruction>
                 );
             case 3:
-                return <Assessment blocks={this.generateRandomAssessment(3, 3, 7)} onComplete={this.advance} />
+                return <Assessment blocks={this.generateRandomAssessment(3, 5)} onComplete={this.advance} />
             case 4:
-                return <div>Congrats, you have finished the task. Have a lolllipop!</div>
+                return <div><p style={{fontSize:25, marginTop:100}}>Congrats, you have finished the task. Have a chocolate!</p></div>
         }
     }
 });

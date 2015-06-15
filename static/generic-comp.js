@@ -156,6 +156,13 @@ var Block = React.createClass({
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
+            case 'symmetry':
+                return (
+                    <SymmetryTest key={this.state.progress}
+                        colored={this.props.block[this.state.progress].problem}
+                        feedback={this.props.practice}
+                        onComplete={this.advance} />
+                );
         }
     }
 });
@@ -181,3 +188,23 @@ var Assessment = React.createClass({
         return <Block key={this.state.progress} block={this.props.blocks[this.state.progress]} onComplete={this.advance} practice={false} />
     }
 });
+
+/**
+ * Checks if the array of points contains a specific point.
+ * @param array array<array>   An array of array which is a point.
+ * @param point array<integer> An array containing two elements [x, y].
+ * @return true if array contains the point.
+ *         false if:
+ *             array is null or undefined
+ *             point is null or undefined
+ *             array does not contain the point
+ */
+function arrayHasPoint(array, point) {
+    if(!array || !point)
+        return false;
+
+    for(var i = 0; i < array.length; i++)
+        if(array[i] && array[i][0] == point[0] && array[i][1] == point[1])
+            return true;
+    return false;
+}
