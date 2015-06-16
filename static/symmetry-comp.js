@@ -124,7 +124,7 @@ var SymmetryTest = React.createClass({
             }
             return points;
         },
-        genreateFigure: function() {
+        generateFigure: function() {
             var density = Math.floor(Math.random() * 18) + 12; 
             switch(Math.floor(Math.random() * 5)) {
                 case 0:

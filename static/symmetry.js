@@ -13,7 +13,7 @@ var Demo = React.createClass({
     generateRandomBlock: function(count){
         var res = [];
         for(var i = 0; i < count; i++)
-            res.push({type:'symmetry', problem:SymmetryTest.genreateFigure()});
+            res.push({type:'symmetry', problem:SymmetryTest.generateFigure()});
         return res;
     },
     /**
@@ -28,8 +28,6 @@ var Demo = React.createClass({
         return res;
     },
     render:function(){
-        //return (<SymmetryTest colored={SymmetryTest.genreateFigure()} feedback={true} onComplete={this.advance} />);
-
         switch(this.state.progress) {
             case 0:
                 return (
