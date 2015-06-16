@@ -31,8 +31,15 @@ var LetterRecall = React.createClass({
                             var s = this.state.selects.indexOf(index);
                             return (
                                 <div key={index} className="col-xs-4" onClick={this.letterClicked.bind(this, index)} style={{paddingTop:15, paddingBottom:15}}>
-                                    <div className="recall-num" style={{display:'inline-block', width:50}}>{s == -1 ? '' : s + 1}</div>
-                                    <div className="recall-letter" style={{display:'inline-block'}}>{letter}</div>
+                                    <div className="recall-letter">
+                                        {letter}
+                                    
+                                        <div style={{display:'inline-block', textAlign:'center', width:50, position:'relative', top:-5}}>
+                                            <span className="badge" style={{fontSize:18, backgroundColor:'#5bc0de'}}>
+                                                {s == -1 ? '' : s + 1}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             );
                         }, this)
@@ -213,7 +220,7 @@ var LetterSequence = React.createClass({
         return {count:0, stage:'flash'};
     },
     componentDidMount: function() {
-        this.timer = setInterval(this.timerTick, 1000);
+        this.timer = setInterval(this.timerTick, 10);
     },
     timerTick: function() {
         var count = this.state.count + 1;
