@@ -43,6 +43,21 @@ var BoxSequence = React.createClass({
                     <BoxSequence.Feedback sequence={this.props.sequence} response={this.res} onComplete={this.advance} />
                 );
         }
+    },
+    statics: {
+        generateRandomProblem: function(length) {
+            var res = {type: 'squares', problem: []};
+
+            while(res.problem.length < length) {
+                var x = Math.floor(Math.random() * 4);
+                var y = Math.floor(Math.random() * 4);
+                var p = [x, y];
+                if(!arrayHasPoint(res.problem, p))
+                    res.problem.push(p);
+            }
+
+            return res;
+        }
     }
 });
 
@@ -254,7 +269,7 @@ BoxSequence.Recall = React.createClass({
 
         return (
             <div>
-                <div className="row">
+                <div className="row" style={{marginBottom:25}}>
                     <div className="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2">
                         <BoxSequence.Slide.Figure rows={4} cols={4} cellText={cellText} onCellClick={this.onCellClick} />
                     </div>

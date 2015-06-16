@@ -163,6 +163,13 @@ var Block = React.createClass({
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
+            case 'symmetry-squares':
+                return (
+                    <SymmetryBoxSequence key={this.state.progress}
+                    problem={this.props.block[this.state.progress]}
+                    feedback={this.props.practice}
+                    onComplete={this.advance} />
+                );
         }
     }
 });

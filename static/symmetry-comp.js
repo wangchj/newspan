@@ -15,6 +15,10 @@ var SymmetryTest = React.createClass({
     componentDidMount: function() {
         this.startTime = new Date().getTime();
     },
+    /**
+     * Handles the event when user click on true or false.
+     * @params res boolean The user's response
+     */
     onRespond: function(res) {
         var endTime = new Date().getTime();
         this.res = {res: res, startTime: this.startTime, endTime: endTime}
@@ -24,13 +28,12 @@ var SymmetryTest = React.createClass({
         if(this.state.stage == 0 && this.props.feedback)
             this.setState({stage: 1});
         else {
-            if(this.props.onComplete)
-                this.props.onComplete();
+            this.onComplete();
         }
     },
     onComplete:function() {
         if(this.props.onComplete)
-            this.props.onComplete();
+            this.props.onComplete(this.res);
     },
     render: function(){
         switch(this.state.stage) {
