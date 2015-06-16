@@ -220,7 +220,7 @@ var LetterSequence = React.createClass({
         return {count:0, stage:'flash'};
     },
     componentDidMount: function() {
-        this.timer = setInterval(this.timerTick, 10);
+        this.timer = setInterval(this.timerTick, 1000);
     },
     timerTick: function() {
         var count = this.state.count + 1;
