@@ -73,7 +73,17 @@ var Demo = React.createClass({
             case 2:
                 return (
                     <Instruction practice={false} onComplete={this.advance}>
-                        <p style={{textAlign:'center'}}>[Instruction for Non-Practice Section]</p>
+                        <p>
+                        That is the end of the practice. The real trials will look like the practice
+                        trials you just completed. First you will get a sentence to read, then a letter
+                        to remember. When you see the recall screen, select the letters in the order
+                        presented. If you forgot a letter, select the letter that you think is correct.
+                        Some sets will have more sentences and letters than others. It is important
+                        that you do your best on both the sentence problems and the letter recall parts
+                        of this experiment. Remember for the sentences you must work as QUICKLY and
+                        ACCURATELY as possible. Also, remember to keep your sentence accuracy at 85% or
+                        above. Do you have any questions? If not, click the mouse to begin the experiment.
+                        </p>
                     </Instruction>
                 );
             case 3:
