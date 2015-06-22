@@ -100,9 +100,10 @@ var SentenceQuestion = React.createClass({
     statics: {
         pickRandomQuestion: function() {
             var r = Math.floor(Math.random() * 2);
+            var n = Math.floor(Math.random() * sentences[r].length);
             var sol = (r == 0 ? true : false);
-            var sentence = sentences[r][Math.floor(Math.random() * sentences[r].length)];
-            return {type:'sentence', sentence: sentence, sol: sol};
+            var sentence = sentences[r][n];
+            return {type:'sentence', id: r * 100 + n, sentence: sentence, sol: sol};
         }
     }
 });
