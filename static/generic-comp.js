@@ -178,6 +178,14 @@ var Block = React.createClass({
                     feedback={this.props.practice}
                     onComplete={this.advance} />
                 );
+            case 'sentence-letter':
+                return (
+                    <SentenceLetter key={this.state.progress}
+                    sentences={this.props.block[this.state.progress].sentences}
+                    letters={this.props.block[this.state.progress].letters}
+                    feedback={this.props.practice}
+                    onComplete={this.advance} />
+                );
         }
     }
 });

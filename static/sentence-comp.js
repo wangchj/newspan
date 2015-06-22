@@ -50,7 +50,7 @@ var SentenceQuestion = React.createClass({
         if(this.state.stage == 0 && this.props.feedback)
             this.setState({stage: 1});
         else {
-            this.onComplete();
+            this.onComplete(this.res);
         }
     },
     onComplete:function() {
@@ -104,6 +104,18 @@ var SentenceQuestion = React.createClass({
             var sol = (r == 0 ? true : false);
             var sentence = sentences[r][n];
             return {type:'sentence', id: r * 100 + n, sentence: sentence, sol: sol};
+        },
+        pickRandomQuestions: function(length) {
+            var res = [];
+            var used = [];
+            while(res.length < length) {
+                var s = SentenceQuestion.pickRandomQuestion();
+                if(used.indexOf(s.id) == -1) {
+                    res.push(s);
+                    used.push(s.id);
+                }
+            }
+            return res;
         }
     }
 });
