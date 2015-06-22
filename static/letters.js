@@ -9,20 +9,7 @@ var Demo = React.createClass({
     generateRandomBlock: function() {
         var res = [];
         for(var l = 2; l <= 4; l++)
-            res.push(this.generateRandomProblem(l));
-        return res;
-    },
-    generateRandomProblem: function(length) {
-        var res = {type:'letter', problem:[]};
-        var a = 'A'.charCodeAt(0), z = 'Z'.charCodeAt(0);
-
-        while(res.problem.length < length) {
-            //Get a random letter
-            var c = Math.floor(Math.random() * (z - a)) + a;
-            var l = String.fromCharCode(c);
-            if(l != 'A' && l != 'E' && l != 'I' && l != 'O' && l != 'U' && res.problem.indexOf(l) == -1)
-                res.problem.push(l);
-        }
+            res.push(LetterSequence.generateRandomProblem(l));
         return res;
     },
     render:function(){
