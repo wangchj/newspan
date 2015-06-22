@@ -12,8 +12,16 @@ var Demo = React.createClass({
      */
     generateRandomBlock: function(count){
         var res = [];
-        for(var i = 0; i < count; i++)
-            res.push(SentenceQuestion.pickRandomQuestion());
+        var used = [];
+
+        while(res.length < count) {
+            var s = SentenceQuestion.pickRandomQuestion();
+            if(used.indexOf(s.id) == -1) {
+                res.push(s);
+                used.push(s.id);
+            }
+        }
+        
         return res;
     },
     /**
