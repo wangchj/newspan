@@ -19,9 +19,14 @@ function shuffle(array) {
 
 var Instruction = React.createClass({
     render: function() {
+        var style = this.props.style;
+        if(style) {
+            style.marginBottom = 20;
+        }
+
         return (
             <div>
-                <div className="row" style={{marginBottom:20}}>
+                <div className="row" style={style}>
                     <div className="col-xs-10 col-xs-offset-1 col-lg-8 col-lg-offset-2" 
                     style={{
                         lineHeight: '160%',

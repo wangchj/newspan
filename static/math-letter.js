@@ -174,14 +174,14 @@ var Demo = React.createClass({
     render:function(){
         switch(this.state.progress) {
             case 0:
-                return (<Instruction practice={true} onComplete={this.advance}>
-                    <p style={{marginTop:100, textAlign:'center'}}>[Instruction]</p>
+                return (<Instruction practice={true} onComplete={this.advance} style={{marginTop:40}}>
+                    <p style={{textAlign:'center'}}>[Instruction]</p>
                 </Instruction>);
             case 1:
                 return <Block block={practice} practice={true} onComplete={this.advance}/>
             case 2:
-                return (<Instruction practice={true} onComplete={this.advance}>
-                    <p style={{marginTop:100, textAlign:'center'}}>[Instruction for non-practice section]</p>
+                return (<Instruction practice={true} onComplete={this.advance} style={{marginTop:40}}>
+                    <p style={{textAlign:'center'}}>[Instruction for non-practice section]</p>
                 </Instruction>);
             case 3:
                 return <Assessment blocks={data} onComplete={this.advance} />

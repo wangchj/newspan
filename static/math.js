@@ -67,17 +67,19 @@ var MathDemo = React.createClass({
     render:function(){
         switch(this.state.progress) {
             case 0:
-                return (<Instruction practice={true} onComplete={this.advance}>
-                    <p style={{marginTop:100}}>Now you will practice doing the math part of the experiment.
+                return (
+                    <Instruction practice={true} onComplete={this.advance} style={{marginTop:40}}>
+                    <p>Now you will practice doing the math part of the experiment.
                     A math equation, like (2*1)+1=3, will appear along with two buttons labeled 'True' and 'False'.
                     Your job is to determine the validity of the equation. If the equation is true, selected the
                     button labeled 'True', otherwise, selected the button labeled 'False'.</p>
-                </Instruction>);
+                </Instruction>
+                );
             case 1:
                 return <Block block={practice} solution={false} practice={true} onComplete={this.advance}/>
             case 2:
-                return (<Instruction practice={true} onComplete={this.advance}>
-                    <p style={{marginTop:100, textAlign:'center'}}>[Instruction for non-practice section]</p>
+                return (<Instruction practice={true} onComplete={this.advance}  style={{marginTop:40}}>
+                    <p style={{textAlign:'center'}}>[Instruction for non-practice section]</p>
                 </Instruction>);
             case 3:
                 return <Assessment blocks={data} onComplete={this.advance} />
