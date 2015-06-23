@@ -41,7 +41,7 @@ var LetterRecall = React.createClass({
                                         {letter}
                                     
                                         <div style={{display:'inline-block', textAlign:'center', width:50, position:'relative', top:-5}}>
-                                            <span className="badge" style={{fontSize:18, backgroundColor:'#5bc0de'}}>
+                                            <span className="badge" style={{fontSize:30, backgroundColor:'#5bc0de'}}>
                                                 {s == -1 ? '' : s + 1}
                                             </span>
                                         </div>
