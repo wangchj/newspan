@@ -19,7 +19,7 @@ function shuffle(array) {
 
 var Instruction = React.createClass({
     render: function() {
-        var style = this.props.style;
+        var style = this.props.style ? this.props.style : {};
         if(style) {
             style.marginBottom = 20;
         }
