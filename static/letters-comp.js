@@ -5,18 +5,24 @@ var SingleLetterSlide = React.createClass({
 });
 
 /**
- * Letter recall screen.
- * @prop letters array
+ * Letter recall     screen.
+ * @prop letters     array
+ * @prop limitSelect boolean Limit the number of selections to the number alphabets shown.
  * @prop onSubmitResponse callback
  */ 
 var LetterRecall = React.createClass({
     getInitialState: function() {
+        var selects =[];
+        var limit = this.props.limitSelect ? this.props.letters.length: 12;
+        for(var i = 0;  i < limit; i++)
+            selects.push(null);
+
         return {
             letters: this.randomize(this.props.letters),
             //selects stores the order in which slots were selected.
             //For example, if the 3rd slot were select first, then 1st slot, and finally 2nd slot,
             //select would contain the values [3, 1, 2]
-            selects: this.props.letters.map(function(){return null;})
+            selects: selects
         };
     },
     componentDidMount: function() {
