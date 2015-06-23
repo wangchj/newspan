@@ -22,7 +22,15 @@ var Instruction = React.createClass({
         return (
             <div>
                 <div className="row" style={{marginBottom:20}}>
-                    <div className="col-xs-6 col-xs-offset-3 instruction" style={{textAlign:'justify', fontSize:20}}>
+                    <div className="col-xs-10 col-xs-offset-1 col-lg-8 col-lg-offset-2" 
+                    style={{
+                        lineHeight: '160%',
+                        textAlign:'justify', fontSize:20,
+                        padding: '20px 25px',
+                        backgroundColor: '#fcfcfc',
+                        border: '1px solid #e1e1e8',
+                        borderRadius: 4
+                    }}>
                         {this.props.children ?
                             this.props.children :
                             this.props.practice ? 
