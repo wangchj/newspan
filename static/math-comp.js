@@ -109,7 +109,7 @@ MathEq.Feedback = React.createClass({
             <div>
                 <div className="row" style={{marginTop:200, marginBottom:25}}>
                     <div className="col-xs-12" style={{fontSize:25}}>
-                        Your answer is {this.props.solution == this.props.response ? 'correct' : 'incorrect'}!
+                        {this.props.solution == this.props.response ? 'Correct' : 'Incorrect'}!
                     </div>
                 </div>
                 <div className="row" style={{marginBottom:25}}>
