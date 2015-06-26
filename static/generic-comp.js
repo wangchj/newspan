@@ -18,6 +18,11 @@ function shuffle(array) {
 }
 
 var Instruction = React.createClass({
+    getDefaultProps: function() {
+        return {
+            nextBtnLabel: 'Continue'
+        };
+    },
     render: function() {
         var style = this.props.style ? this.props.style : {};
         if(style) {
@@ -36,17 +41,18 @@ var Instruction = React.createClass({
                         border: '1px solid #e1e1e8',
                         borderRadius: 4
                     }}>
-                        {this.props.children ?
-                            this.props.children :
-                            this.props.practice ? 
-                                'For this practice set, letters will appear on the screen one at a time. Try to remember each letter in the order presented. After 2-3 letters have been shown, you will see a screen listing 12 possible letters with a check box beside each one. Your job is to select each letter in the order presented. To do this, use the mouse to select the box beside each letter. The letters you select will appear at the bottom of the screen.' :
-                                'In this task you will try to memorize letters you see on the screen, just like what we have practiced.'
+                        {this.props.children}
+                        {//this.props.children ?
+                         //   this.props.children :
+                         //   this.props.practice ? 
+                         //       'For this practice set, letters will appear on the screen one at a time. Try to remember each letter in the order presented. After 2-3 letters have been shown, you will see a screen listing 12 possible letters with a check box beside each one. Your job is to select each letter in the order presented. To do this, use the mouse to select the box beside each letter. The letters you select will appear at the bottom of the screen.' :
+                         //       'In this task you will try to memorize letters you see on the screen, just like what we have practiced.'
                         }
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-2 col-xs-offset-5">
-                        <button className="btn btn-default" onClick={this.props.onComplete}>Start</button>
+                        <button className="btn btn-default" onClick={this.props.onComplete}>{this.props.nextBtnLabel}</button>
                     </div>
                 </div>
             </div>
