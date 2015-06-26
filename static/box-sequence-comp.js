@@ -113,13 +113,23 @@ BoxSequence.Slide = React.createClass({
 });
 
 /**
- * @prop rows     integer       Number of rows.
- * @prop cols     integer       Number of columns.
- * @prop colored  array<point>  An array specified which box should be color-filled.
- * @prop cellText array<object> Cell text with format {loc: [x, y], text:'text'}.
+ * @prop rows        integer       Number of rows.
+ * @prop cols        integer       Number of columns.
+ * @prop colored     array<point>  An array specified which box should be color-filled.
+ * @prop cellText    array<object> Cell text with format {loc: [x, y], text:'text'}.
+ * @prop borderColor string        Color code of border. 
+ * @prop loColor     string        Color code of non-highlighted cell.
+ * @prop hiColor     string        Color code of highlighted cell.
  * @prop onCellClick callback
  */
 BoxSequence.Slide.Figure = React.createClass({
+    getDefaultProps: function() {
+        return {
+            borderColor: '#555',
+            loColor: '#ffffff',
+            hiColor: '#005997',
+        };
+    },
     componentDidMount: function() {
         var svg = $('svg');
         var width = svg.width();
@@ -177,8 +187,8 @@ BoxSequence.Slide.Figure = React.createClass({
                             return (
                                 <g key={index} onClick={this.onCellClick.bind(this, cell)} onTouchStart={this.onCellClick.bind(this, cell)}>
                                     <rect x={x0 + width * cell[0]} y={y0 + width * cell[1]} width={width} height={width}
-                                        stroke="black"
-                                        fill={this.cellIsColored(cell) ? 'black' : 'white'}>
+                                        stroke={this.props.borderColor}
+                                        fill={this.cellIsColored(cell) ? this.props.hiColor : this.props.loColor}>
                                     </rect>
                                     {/*<circle
                                         cx={x0 + (width * cell[0] + width * (cell[0] + 1)) / 2}
@@ -196,8 +206,8 @@ BoxSequence.Slide.Figure = React.createClass({
                             return (
                                 <g key={index} onClick={this.onCellClick.bind(this, cell)} onTouchStart={this.onCellClick.bind(this, cell)}>
                                     <rect key={index} x={x0 + width * cell[0]} y={y0 + width * cell[1]}
-                                        width={width} height={width} stroke="black"
-                                        fill={this.cellIsColored(cell) ? 'black' : 'white'}>
+                                        width={width} height={width} stroke={this.props.borderColor}
+                                        fill={this.cellIsColored(cell) ? this.props.hiColor : this.props.loColor}>
                                     </rect>
                                 </g>
                             );

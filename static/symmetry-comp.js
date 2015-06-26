@@ -42,7 +42,7 @@ var SymmetryTest = React.createClass({
                     <div>
                         <div className="row" style={{marginBottom:25}}>
                             <div className="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2">
-                                <BoxSequence.Slide.Figure rows={8} cols={8} colored={this.props.colored} />
+                                <BoxSequence.Slide.Figure rows={8} cols={8} colored={this.props.colored} borderColor={'#000'} hiColor={'#000'} />
                             </div>
                         </div>
                         <div className="row">
