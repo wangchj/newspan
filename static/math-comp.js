@@ -40,6 +40,7 @@ var MathEq = React.createClass({
 
 /**
  * @prop equation string
+ * @prop tra      object
  * @prop onSubmit callback
  */
 MathEq.Equation = React.createClass({
@@ -86,6 +87,22 @@ MathEq.Equation = React.createClass({
                         <button className="btn btn-default pull-left" onClick={this.submitFalse}>False</button>
                     </div>
                 </div>
+                {
+                    this.props.tra ? <MathEq.Tra tra={this.props.tra} /> : null
+                }
+            </div>
+        );
+    }
+});
+
+/*
+ * @prop tra object Task Running Accuracy
+ */
+MathEq.Tra = React.createClass({
+    render: function() {
+        return (
+            <div style={{position:'fixed', bottom:20, left:0, width:'100%', textAlign:'center'}}>
+                <b>Math Accuracy</b> <br/> Correct: {this.props.tra.correct} | Incorrect: {this.props.tra.total - this.props.tra.correct} | Total: {this.props.tra.total}
             </div>
         );
     }

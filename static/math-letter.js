@@ -64,7 +64,7 @@ var data = [
                 {equation: '32*2/32=8', answer:false},
                 {equation: '2*2*2*2=16', answer:true},
                 {equation: '2^5=32', answer:true},
-                {equation: '-1*-16=16', answer:false},
+                {equation: '-1*-16=16', answer:true},
                 {equation: '7+11+2=21', answer:false}
             ]
         },
@@ -97,68 +97,68 @@ var data = [
         }
     ],
     //Second block
-    // [
-    //     //Problem 1
-    //     {
-    //         type: 'math-letter',
-    //         letters: ['D', 'L', 'P'],
-    //         equations: [
-    //             {equation: '(9*2)-10=8', answer:true},
-    //             {equation: '(3+4)*5=30', answer:false},
-    //             {equation: '5*4*3=60', answer:true}
-    //         ]
-    //     },
-    //     //Problem 2
-    //     {
-    //         type: 'math-letter',
-    //         letters: ['P', 'L', 'D', 'F'],
-    //         equations: [
-    //             {equation: '2/2/1=2', answer:false},
-    //             {equation: '4*1*25=100', answer:true},
-    //             {equation: '100/4*4=50', answer:false},
-    //             {equation: '100/4/25=1', answer:true}
-    //         ]
-    //     },
-    //     //Problem 3
-    //     {
-    //         type: 'math-letter',
-    //         letters: ['P', 'R', 'S', 'Y', 'N'],
-    //         equations: [
-    //             {equation: '32*2/32=8', answer:false},
-    //             {equation: '2*2*2*2=16', answer:true},
-    //             {equation: '2^5=32', answer:true},
-    //             {equation: '-1*-16=16', answer:false},
-    //             {equation: '7+11+2=21', answer:false}
-    //         ]
-    //     },
-    //     //Problem 4
-    //     {
-    //         type: 'math-letter',
-    //         letters: ['Q', 'X', 'Z', 'D', 'C', 'V'],
-    //         equations: [
-    //             {equation: '64/2/2=8', answer:false},
-    //             {equation: '10+0*0+10=100', answer:false},
-    //             {equation: '2^0+100=100', answer:false},
-    //             {equation: '1-2-3-4=-8', answer:true},
-    //             {equation: '-20*20/2=200', answer:false},
-    //             {equation: '20*20/2=200', answer:true}
-    //         ]
-    //     },
-    //     //Problem 5
-    //     {
-    //         type: 'math-letter',
-    //         letters: ['S', 'F', 'G', 'H', 'J', 'K', 'L'],
-    //         equations: [
-    //             {equation: '(1+20)*(2-(1+1)=12', answer:false},
-    //             {equation: '(21+30)*(32-2^5)=0', answer:true},
-    //             {equation: '4+4+4+4=15', answer:true},
-    //             {equation: '3+2+2*5=40', answer:false},
-    //             {equation: '(4*3)/(1+2)=3', answer:false},
-    //             {equation: '7+7+7+7+7+7=40', answer:false},
-    //             {equation: '1+2+3+4+5=16', answer:false}
-    //         ]
-    //     }
-    // ]
+    [
+        //Problem 1
+        {
+            type: 'math-letter',
+            letters: ['D', 'L', 'P'],
+            equations: [
+                {equation: '(9*2)-10=8', answer:true},
+                {equation: '(3+4)*5=30', answer:false},
+                {equation: '5*4*3=60', answer:true}
+            ]
+        },
+        //Problem 2
+        {
+            type: 'math-letter',
+            letters: ['P', 'L', 'D', 'F'],
+            equations: [
+                {equation: '2/2/1=2', answer:false},
+                {equation: '4*1*25=100', answer:true},
+                {equation: '100/4*4=50', answer:false},
+                {equation: '100/4/25=1', answer:true}
+            ]
+        },
+        //Problem 3
+        {
+            type: 'math-letter',
+            letters: ['P', 'R', 'S', 'Y', 'N'],
+            equations: [
+                {equation: '32*2/32=8', answer:false},
+                {equation: '2*2*2*2=16', answer:true},
+                {equation: '2^5=32', answer:true},
+                {equation: '-1*-16=16', answer:false},
+                {equation: '7+11+2=21', answer:false}
+            ]
+        },
+        //Problem 4
+        {
+            type: 'math-letter',
+            letters: ['Q', 'X', 'Z', 'D', 'C', 'V'],
+            equations: [
+                {equation: '64/2/2=8', answer:false},
+                {equation: '10+0*0+10=100', answer:false},
+                {equation: '2^0+100=100', answer:false},
+                {equation: '1-2-3-4=-8', answer:true},
+                {equation: '-20*20/2=200', answer:false},
+                {equation: '20*20/2=200', answer:true}
+            ]
+        },
+        //Problem 5
+        {
+            type: 'math-letter',
+            letters: ['S', 'F', 'G', 'H', 'J', 'K', 'L'],
+            equations: [
+                {equation: '(1+20)*(2-(1+1)=12', answer:false},
+                {equation: '(21+30)*(32-2^5)=0', answer:true},
+                {equation: '4+4+4+4=15', answer:true},
+                {equation: '3+2+2*5=40', answer:false},
+                {equation: '(4*3)/(1+2)=3', answer:false},
+                {equation: '7+7+7+7+7+7=40', answer:false},
+                {equation: '1+2+3+4+5=16', answer:false}
+            ]
+        }
+    ]
 ];
 
 var Demo = React.createClass({
@@ -184,7 +184,7 @@ var Demo = React.createClass({
                     <p style={{textAlign:'center'}}>[Instruction for non-practice section]</p>
                 </Instruction>);
             case 3:
-                return <Assessment blocks={data} onComplete={this.advance} />
+                return <Assessment blocks={data} keepTra={true} onComplete={this.advance} />
             case 4:
                 return <div style={{marginTop:200, fontSize:25}}>Congrats, you have finished the task. Have a candy!</div>
         }

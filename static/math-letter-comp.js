@@ -6,26 +6,31 @@
 
 /**
  * A math-letter sequence problem.
- * @prop problem object
+ *
+ * @prop problem object required
+ * @prop tra     object optional
+ *   Task Running accuracy which is a running accuracy of all blocks. This object has the format
+ *   {correct: integer, total: integer}, which are correct count and total count.
  * @prop feedback boolean
  * @prop onComplete callback
  */
 var MathLetter = React.createClass({
     getInitialState: function() {
-        return {stage: 0}
+        return {stage: 0, tra: this.props.tra};
     },
     advance: function() {
         if(this.state.stage < 1 || (this.state.stage == 1 && this.props.feedback))
             this.setState({stage: this.state.stage + 1});
         else
-            this.props.onComplete();
+            this.props.onComplete(this.state.tra);
     },
     /**
      * When MathLetter.Sequence component is completed.
      * @param mathRes array<object> An array of object of user responses to math problems.
      */
-    onSequenceComplete: function(mathRes) {
+    onSequenceComplete: function(mathRes, tra) {
         this.mathRes = mathRes;
+        this.state.tra = tra;
         this.advance();
     },
     /**
@@ -42,7 +47,7 @@ var MathLetter = React.createClass({
     render: function() {
         switch(this.state.stage) {
             case 0:
-                return <MathLetter.Sequence problem={this.props.problem} onComplete={this.onSequenceComplete} />
+                return <MathLetter.Sequence problem={this.props.problem} tra={this.props.tra} onComplete={this.onSequenceComplete} />
             case 1:
                 return <LetterRecall letters={this.props.problem.letters} onSubmitResponse={this.onSubmitRecall} />;
             case 2:
@@ -60,6 +65,7 @@ var MathLetter = React.createClass({
 /**
  * Displays a sequence of alternating math equations and letters.
  * @prop problem object An object with fields {type, letters, equations}.
+ * @prop tra     object See MathLetter component.
  * @prop onComplete callback
  */
 MathLetter.Sequence = React.createClass({
@@ -68,7 +74,7 @@ MathLetter.Sequence = React.createClass({
         //{res: boolean, startTIme: integer, endTime: integer}
         this.mathRes = [];
 
-        return {count: 0};
+        return {count: 0, tra: this.props.tra};
     },
     componentDidUpdate: function() {
         if(this.state.count % 2 != 0) {
@@ -81,20 +87,34 @@ MathLetter.Sequence = React.createClass({
     },
     onMathSubmit: function(res, startTime, endTime) {
         this.mathRes.push({res: res, startTime: startTime, endTime: endTime});
+        this.adjustTra(res);
         this.advance();
+    },
+    adjustTra: function(res) {
+        if(!this.state.tra)
+            return;
+
+        var i = Math.floor(this.state.count / 2);
+        var a = this.props.problem.equations[i].answer;
+        var tra = this.state.tra;
+        if(res == a)
+            tra.correct++;
+        tra.total++;
+        this.setState({tra: tra});
     },
     advance: function() {
         if(this.state.count < (this.props.problem.letters.length * 2 - 1)) {
             this.setState({count: this.state.count + 1});
         }
         else
-            this.props.onComplete(this.mathRes);
+            this.props.onComplete(this.mathRes, this.state.tra);
     },
     render: function() {
         if(this.state.count % 2 == 0) {
             return (
                 <MathEq.Equation key={this.state.count}
                     equation={this.props.problem.equations[Math.floor(this.state.count / 2)].equation}
+                    tra={this.state.tra}
                     onSubmit={this.onMathSubmit} />
             );
         }

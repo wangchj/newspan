@@ -317,7 +317,7 @@ var Demo = React.createClass({
                     </Instruction>
                 );
             case 5: //Math practice block
-                return <Block block={practice1} practice={true} randomize={true} onComplete={this.advance}/>
+                return <Block block={practice1} practice={true} randomize={true} tra={{correct:0, total:0}} onComplete={this.advance}/>
             case 6:
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
@@ -362,7 +362,7 @@ var Demo = React.createClass({
                     </Instruction>
                 );
             case 8: //Math and letter practice block
-                return <Block block={practice2} practice={true} randomize={true} onComplete={this.advance}/>
+                return <Block block={practice2} practice={true} randomize={true} tra={{correct:0, total:0}} onComplete={this.advance}/>
             case 9: //After practice interlude
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Continue'>
@@ -403,7 +403,7 @@ var Demo = React.createClass({
                     </Instruction>
                 );
             case 11: //The task
-                return <Assessment blocks={task} randomize={true} onComplete={this.advance} />
+                return <Assessment blocks={task} randomize={true} keepTra={true} onComplete={this.advance} />
             case 12: //End of task
                 return <div>You have completed the task. Thank you.</div>
         }
