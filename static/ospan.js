@@ -245,7 +245,7 @@ var Demo = React.createClass({
     },
     render:function(){
         switch(this.state.progress) {
-            case 0:
+            case 0: //Welcome screen
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>
@@ -260,7 +260,7 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 1:
+            case 1: //Letters practice instruction
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -284,8 +284,8 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 2:
-                return <Block block={this.generateRandomBlock()} practice={true} onComplete={this.advance} />
+            case 2: //Letters practice block
+                return <Block block={this.generateRandomBlock()} practice={true} onComplete={this.advance} randomize={true} />
             case 3:
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
@@ -294,7 +294,7 @@ var Demo = React.createClass({
                         <p>Please click CONTINUE to move to next part of the task.</p>
                     </Instruction>
                 );
-            case 4:
+            case 4: //Math practice instruction
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -316,8 +316,8 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 5:
-                return <Block block={shuffle(practice1)} practice={true} onComplete={this.advance}/>
+            case 5: //Math practice block
+                return <Block block={practice1} practice={true} randomize={true} onComplete={this.advance}/>
             case 6:
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
@@ -326,7 +326,7 @@ var Demo = React.createClass({
                         <p>Please click CONTINUE to move to next part of the task.</p>
                     </Instruction>
                 );
-            case 7:
+            case 7: //Math and letter practice instruction
                 return (
                     <Instruction practice={false} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -361,9 +361,9 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 8:
-                return <Block block={practice2} practice={true} onComplete={this.advance}/>
-            case 9:
+            case 8: //Math and letter practice block
+                return <Block block={practice2} practice={true} randomize={true} onComplete={this.advance}/>
+            case 9: //After practice interlude
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>
@@ -381,7 +381,7 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 10:
+            case 10: //Task instruction
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -402,9 +402,9 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 11:
-                return <Assessment blocks={task} onComplete={this.advance} />
-            case 12:
+            case 11: //The task
+                return <Assessment blocks={task} randomize={true} onComplete={this.advance} />
+            case 12: //End of task
                 return <div>You have completed the task. Thank you.</div>
         }
     }

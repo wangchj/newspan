@@ -133,15 +133,19 @@ var Demographics = React.createClass({
 /**
  * A set of problems.
  * @prop block      array   The set of problems to render
+ * @prop randomize  boolean If the problems should be shuffled.
  * @prop practice   boolean True if this block is a practice; false if this this block is to be recorded.
  * @prop onComplete callback 
  */
 var Block = React.createClass({
     getInitialState: function() {
-        return {progress: 0};
+        return {
+            block: this.props.randomize ? shuffle(this.props.block) : this.props.block,
+            progress: 0
+        };
     },
     advance: function() {
-        if(this.state.progress == this.props.block.length - 1) {
+        if(this.state.progress == this.state.block.length - 1) {
             this.props.onComplete();
         }
         else {
@@ -149,61 +153,61 @@ var Block = React.createClass({
         }
     },
     render: function() {
-        switch(this.props.block[this.state.progress].type) {
+        var block = this.state.block;
+        var progress = this.state.progress;
+
+        switch(block[progress].type) {
             case 'letter':
-                return (<LetterSequence key={this.state.progress} letters={this.props.block[this.state.progress].problem}
-                    onComplete={this.advance} report={this.props.practice} />
+                return (
+                    <LetterSequence key={progress} letters={block[progress].problem}
+                        onComplete={this.advance} report={this.props.practice} />
                 );
             case 'math':
                 return (
-                    <MathEq key={this.state.progress}
-                        equation={this.props.block[this.state.progress].problem}
-                        solution={this.props.block[this.state.progress].answer}
+                    <MathEq key={progress} equation={block[progress].problem}
+                        solution={block[progress].answer}
                         feedback={this.props.practice} onComplete={this.advance} />
                 );
             case 'math-letter':
                 return (
-                    <MathLetter key={this.state.progress}
-                        problem={this.props.block[this.state.progress]}
+                    <MathLetter key={progress} problem={block[progress]}
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
             case 'squares':
                 return (
-                    <BoxSequence key={this.state.progress}
-                        sequence={this.props.block[this.state.progress].problem}
+                    <BoxSequence key={progress} sequence={block[progress].problem}
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
             case 'symmetry':
                 return (
-                    <SymmetryTest key={this.state.progress}
-                        colored={this.props.block[this.state.progress].problem}
+                    <SymmetryTest key={progress} colored={block[progress].problem}
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
             case 'symmetry-squares':
                 return (
-                    <SymmetryBoxSequence key={this.state.progress}
-                    problem={this.props.block[this.state.progress]}
-                    feedback={this.props.practice}
-                    onComplete={this.advance} />
+                    <SymmetryBoxSequence key={progress}
+                        problem={block[progress]}
+                        feedback={this.props.practice}
+                        onComplete={this.advance} />
                 );
             case 'sentence':
                 return (
-                    <SentenceQuestion key={this.state.progress}
-                    sentence={this.props.block[this.state.progress].sentence}
-                    sol={this.props.block[this.state.progress].sol}
-                    feedback={this.props.practice}
-                    onComplete={this.advance} />
+                    <SentenceQuestion key={progress}
+                        sentence={block[progress].sentence}
+                        sol={block[progress].sol}
+                        feedback={this.props.practice}
+                        onComplete={this.advance} />
                 );
             case 'sentence-letter':
                 return (
-                    <SentenceLetter key={this.state.progress}
-                    sentences={this.props.block[this.state.progress].sentences}
-                    letters={this.props.block[this.state.progress].letters}
-                    feedback={this.props.practice}
-                    onComplete={this.advance} />
+                    <SentenceLetter key={progress}
+                        sentences={block[progress].sentences}
+                        letters={block[progress].letters}
+                        feedback={this.props.practice}
+                        onComplete={this.advance} />
                 );
         }
     }
@@ -211,7 +215,9 @@ var Block = React.createClass({
 
 /**
  * A set of blocks to be presented to the user.
- * @prop blocks array An array of blocks to render.
+ *
+ * @prop blocks     array    An array of blocks to render.
+ * @prop randomize  boolean 
  * @prop onComplete callback
  */
 var Assessment = React.createClass({
@@ -227,7 +233,10 @@ var Assessment = React.createClass({
         }
     },
     render: function() {
-        return <Block key={this.state.progress} block={this.props.blocks[this.state.progress]} onComplete={this.advance} practice={false} />
+        return (
+            <Block key={this.state.progress} block={this.props.blocks[this.state.progress]} onComplete={this.advance}
+                randomize={this.props.randomize} practice={false} />
+        );
     }
 });
 

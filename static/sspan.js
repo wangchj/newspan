@@ -48,7 +48,7 @@ var Demo = React.createClass({
     },
     render:function(){
         switch(this.state.progress) {
-            case 0:
+            case 0: //Welcome screen
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>
@@ -64,7 +64,7 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 1:
+            case 1: //Squares practice
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -91,9 +91,9 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 2:
-                return <Block block={this.getSequenceBlock()} practice={true} onComplete={this.advance} />
-            case 3:
+            case 2: //Squares practice block
+                return <Block block={this.getSequenceBlock()} practice={true} randomize={true} onComplete={this.advance} />
+            case 3: //End of squares practice
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>You have completed the practice.</p>
@@ -101,7 +101,7 @@ var Demo = React.createClass({
                         <p>Please click CONTINUE to move to next part of the task.</p>
                     </Instruction>
                 );
-            case 4:
+            case 4: //Symmetry practice instruction
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -124,9 +124,9 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 5:
-                return <Block block={this.getSymmetryBlock(3)} practice={true} onComplete={this.advance}/>
-            case 6:
+            case 5: //Symmetry practice block 
+                return <Block block={this.getSymmetryBlock(3)} practice={true} randomize={true} onComplete={this.advance}/>
+            case 6: //End of symmetry practice
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>You have completed the practice.</p>
@@ -134,7 +134,7 @@ var Demo = React.createClass({
                         <p>Please click CONTINUE to move to next part of the task.</p>
                     </Instruction>
                 );
-            case 7:
+            case 7: //Symmetry and squares practice instruction
                 return (
                     <Instruction practice={false} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -171,9 +171,9 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 8:
-                return <Block block={this.getCombinedBlock(2, 4)} practice={true} onComplete={this.advance}/>
-            case 9:
+            case 8: //Symmetry and squares practice block
+                return <Block block={this.getCombinedBlock(2, 4)} practice={true} randomize={true} onComplete={this.advance}/>
+            case 9: //End of practice instruction
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>
@@ -192,7 +192,7 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 10:
+            case 10: //Task instruction
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -214,9 +214,9 @@ var Demo = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 11:
-                return <Assessment blocks={this.getAssessment(3, 3, 7)} onComplete={this.advance} />
-            case 12:
+            case 11: //Task
+                return <Assessment blocks={this.getAssessment(3, 3, 7)} randomize={true} onComplete={this.advance} />
+            case 12: //End of task
                 return <div>You have completed the task. Thank you.</div>
         }
     }
