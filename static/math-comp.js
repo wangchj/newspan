@@ -73,8 +73,8 @@ MathEq.Equation = React.createClass({
 
         return (
             <div style={{visibility:'hidden', marginTop:200}} id="component">
-                <div className="row" style={{marginBottom:50}}>
-                    <div className="col-xs-12" id="equation" style={{fontSize:25}}
+                <div className="row" style={{marginBottom:60}}>
+                    <div className="col-xs-12" id="equation" style={{fontSize:35}}
                         dangerouslySetInnerHTML={{__html: '`' + equation + '`'}}>
                     </div>
                 </div>

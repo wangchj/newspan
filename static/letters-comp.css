@@ -1,10 +1,10 @@
 .flash-letter {
     margin-top:200px;
-    font-size:60px;
+    font-size:75px;
 }
 
 .recall-letter, .recall-num {
-    font-size:35px;
+    font-size:45px;
     cursor: pointer;
 }
 
