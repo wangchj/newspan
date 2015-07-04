@@ -217,7 +217,7 @@ var Demo = React.createClass({
             case 11: //Task
                 return <Assessment blocks={this.getAssessment(3, 3, 7)} randomize={true} keepTra={true} onComplete={this.advance} />
             case 12: //End of task
-                return <div>You have completed the task. Thank you.</div>
+                return <div style={{fontSize:25, marginTop:100}}>You have completed the task. Thank you.</div>
         }
     }
 });
