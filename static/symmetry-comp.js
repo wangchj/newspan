@@ -21,8 +21,19 @@ var SymmetryTest = React.createClass({
      */
     onRespond: function(res) {
         var endTime = new Date().getTime();
-        this.res = {res: res, startTime: this.startTime, endTime: endTime}
+        this.res = {res: res, startTime: this.startTime, endTime: endTime};
+        this.adjustTra(res);
         this.advance();
+    },
+    adjustTra: function(res) {
+        if(!this.props.tra)
+            return;
+        
+        this.tra = this.props.tra;
+
+        if(res == SymmetryTest.figureIsSymmetric(this.props.colored))
+            this.tra.correct++;
+        this.tra.total++;
     },
     advance: function() {
         if(this.state.stage == 0 && this.props.feedback)
@@ -33,7 +44,7 @@ var SymmetryTest = React.createClass({
     },
     onComplete:function() {
         if(this.props.onComplete)
-            this.props.onComplete(this.res);
+            this.props.onComplete(this.res, this.tra);
     },
     render: function(){
         switch(this.state.stage) {
@@ -53,6 +64,9 @@ var SymmetryTest = React.createClass({
                                 <button className="btn btn-default pull-left" onClick={this.onRespond.bind(this, false)}>False</button>
                             </div>
                         </div>
+                        {
+                            this.props.tra ? <SymmetryTest.Tra tra={this.props.tra} /> : null
+                        }
                     </div>
                 )
             case 1:
@@ -158,6 +172,19 @@ var SymmetryTest = React.createClass({
                     return false;
             return true;
         }
+    }
+});
+
+/*
+ * @prop tra object Task Running Accuracy
+ */
+SymmetryTest.Tra = React.createClass({
+    render: function() {
+        return (
+            <div style={{position:'fixed', bottom:20, left:0, width:'100%', textAlign:'center'}}>
+                <b>Symmetry Accuracy</b> <br/> Correct: {this.props.tra.correct} | Incorrect: {this.props.tra.total - this.props.tra.correct} | Total: {this.props.tra.total}
+            </div>
+        );
     }
 });
 

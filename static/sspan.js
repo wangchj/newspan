@@ -172,7 +172,7 @@ var Demo = React.createClass({
                     </Instruction>
                 );
             case 8: //Symmetry and squares practice block
-                return <Block block={this.getCombinedBlock(2, 4)} practice={true} randomize={true} onComplete={this.advance}/>
+                return <Block block={this.getCombinedBlock(2, 4)} practice={true} randomize={true} keepTra={true} onComplete={this.advance}/>
             case 9: //End of practice instruction
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Continue'>
@@ -215,7 +215,7 @@ var Demo = React.createClass({
                     </Instruction>
                 );
             case 11: //Task
-                return <Assessment blocks={this.getAssessment(3, 3, 7)} randomize={true} onComplete={this.advance} />
+                return <Assessment blocks={this.getAssessment(3, 3, 7)} randomize={true} keepTra={true} onComplete={this.advance} />
             case 12: //End of task
                 return <div>You have completed the task. Thank you.</div>
         }

@@ -140,8 +140,8 @@ var Demographics = React.createClass({
  */
 var Block = React.createClass({
     getInitialState: function() {
-        this.tra = this.props.tra;
-
+        this.tra = this.props.tra ? this.props.tra : this.props.keepTra ? {correct:0, total:0} : null;
+        
         return {
             block: this.props.randomize ? shuffle(this.props.block) : this.props.block,
             progress: 0
@@ -195,6 +195,7 @@ var Block = React.createClass({
                 return (
                     <SymmetryBoxSequence key={progress}
                         problem={block[progress]}
+                        tra={this.tra}
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );

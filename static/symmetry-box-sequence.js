@@ -38,13 +38,13 @@ var Demo = React.createClass({
                     <p style={{marginTop:100, textAlign:'center'}}>[Instruction]</p>
                 </Instruction>);
             case 1:
-                return <Block block={this.generateRandomBlock(2, 4)} practice={true} onComplete={this.advance}/>
+                return <Block block={this.generateRandomBlock(2, 4)} practice={true} keepTra={true} onComplete={this.advance}/>
             case 2:
                 return (<Instruction practice={true} onComplete={this.advance}>
                     <p style={{marginTop:100, textAlign:'center'}}>[Instruction for non-practice section]</p>
                 </Instruction>);
             case 3:
-                return <Assessment blocks={this.generateRandomAssessment(3, 3, 7)} onComplete={this.advance} />
+                return <Assessment blocks={this.generateRandomAssessment(3, 3, 7)} keepTra={true} onComplete={this.advance} />
             case 4:
                 return <div style={{marginTop:200, fontSize:25}}>Congrats, you have finished the task. Have an energy bar!</div>
         }

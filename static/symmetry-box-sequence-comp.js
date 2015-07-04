@@ -6,6 +6,7 @@
 
 /**
  * A symmetry square sequence recall problem.
+ *
  * @prop problem object The problem with format {type:string, sequence:array<point>, syms:array<figure>}
  * @prop feedback boolean
  * @prop onComplete callback
@@ -18,14 +19,15 @@ var SymmetryBoxSequence = React.createClass({
         if(this.state.stage < 1 || (this.state.stage == 1 && this.props.feedback))
             this.setState({stage: this.state.stage + 1});
         else if(this.props.onComplete)
-            this.props.onComplete();
+            this.props.onComplete(this.tra);
     },
     /**
      * When sequence component is completed.
      * @param symRes array<object> An array of object of user responses to symmetry problems.
      */
-    onSequenceComplete: function(symRes) {
+    onSequenceComplete: function(symRes, tra) {
         this.symRes = symRes;
+        this.tra = tra
         this.advance();
     },
     /**
@@ -42,7 +44,7 @@ var SymmetryBoxSequence = React.createClass({
     render: function() {
         switch(this.state.stage) {
             case 0:
-                return <SymmetryBoxSequence.Sequence problem={this.props.problem} onComplete={this.onSequenceComplete} />
+                return <SymmetryBoxSequence.Sequence problem={this.props.problem} tra={this.props.tra} onComplete={this.onSequenceComplete} />
             case 1:
                 return <BoxSequence.Recall sequence={this.props.problem.sequence} onComplete={this.onSubmitRecall} />
             case 2:
@@ -70,7 +72,9 @@ var SymmetryBoxSequence = React.createClass({
 
 /**
  * Displays a sequence of alternating symmetry and square locations.
+ *
  * @prop problem object An object with fields {type, sequence, syms}.
+ * @prop tra     object
  * @prop onComplete callback
  */
 SymmetryBoxSequence.Sequence = React.createClass({
@@ -78,7 +82,6 @@ SymmetryBoxSequence.Sequence = React.createClass({
         //An array of math responses, each of which has the format 
         //{res: boolean, startTIme: integer, endTime: integer}
         this.symRes = [];
-
         return {count: 0};
     },
     onBoxSlideComplete: function() {
@@ -88,8 +91,9 @@ SymmetryBoxSequence.Sequence = React.createClass({
     /**
      * @param res object Response {res: boolean, startTime: integer, endTime: integer}
      */
-    onSymmetrySubmit: function(res) {
+    onSymmetrySubmit: function(res, tra) {
         this.symRes.push(res);
+        this.tra = tra;
         this.advance();
     },
     advance: function() {
@@ -97,13 +101,14 @@ SymmetryBoxSequence.Sequence = React.createClass({
             this.setState({count: this.state.count + 1});
         }
         else
-            this.props.onComplete(this.symRes);
+            this.props.onComplete(this.symRes, this.tra);
     },
     render: function() {
         if(this.state.count % 2 == 0) {
             return (
                 <SymmetryTest key={this.state.count}
                     colored={this.props.problem.syms[Math.floor(this.state.count / 2)]}
+                    tra={this.props.tra}
                     onComplete={this.onSymmetrySubmit} />
             );
         }
@@ -136,7 +141,8 @@ SymmetryBoxSequence.Feedback = React.createClass({
         var res = 0;
 
         for(var i = 0; i < this.props.problem.sequence.length; i++) {
-            if(this.props.recallRes.selects[i][0] == this.props.problem.sequence[i][0] &&
+            if(this.props.recallRes.selects[i] && 
+                this.props.recallRes.selects[i][0] == this.props.problem.sequence[i][0] &&
                 this.props.recallRes.selects[i][1] == this.props.problem.sequence[i][1])
                 res++;
         }
