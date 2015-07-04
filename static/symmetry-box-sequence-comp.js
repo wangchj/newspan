@@ -7,13 +7,20 @@
 /**
  * A symmetry square sequence recall problem.
  *
- * @prop problem object The problem with format {type:string, sequence:array<point>, syms:array<figure>}
- * @prop feedback boolean
+ * @prop problem    object   The problem with format {type:string, sequence:array<point>, syms:array<figure>}
+ * @prop tra        object   Task Running Accuracy.
+ * @prop traLow     number   Lower threshold for TRA. If the TRA is below this, the task is stopped. Default 90%
+ * @prop feedback   boolean
  * @prop onComplete callback
  */
 var SymmetryBoxSequence = React.createClass({
+    getDefaultProps: function() {
+        return {
+            traLow: 0.9
+        };
+    },
     getInitialState: function() {
-        return {stage: 0}
+        return {stage: 0};
     },
     advance: function() {
         if(this.state.stage < 1 || (this.state.stage == 1 && this.props.feedback))
@@ -44,7 +51,10 @@ var SymmetryBoxSequence = React.createClass({
     render: function() {
         switch(this.state.stage) {
             case 0:
-                return <SymmetryBoxSequence.Sequence problem={this.props.problem} tra={this.props.tra} onComplete={this.onSequenceComplete} />
+                return (
+                    <SymmetryBoxSequence.Sequence problem={this.props.problem} tra={this.props.tra} traLow={this.props.traLow}
+                        onComplete={this.onSequenceComplete} />
+                );
             case 1:
                 return <BoxSequence.Recall sequence={this.props.problem.sequence} onComplete={this.onSubmitRecall} />
             case 2:
@@ -73,8 +83,9 @@ var SymmetryBoxSequence = React.createClass({
 /**
  * Displays a sequence of alternating symmetry and square locations.
  *
- * @prop problem object An object with fields {type, sequence, syms}.
- * @prop tra     object
+ * @prop problem    object   An object with fields {type, sequence, syms}.
+ * @prop tra        object
+ * @prop traLow     number   Lower threshold for TRA. If the TRA is below this, the task is stopped. Default 90%
  * @prop onComplete callback
  */
 SymmetryBoxSequence.Sequence = React.createClass({
@@ -82,7 +93,7 @@ SymmetryBoxSequence.Sequence = React.createClass({
         //An array of math responses, each of which has the format 
         //{res: boolean, startTIme: integer, endTime: integer}
         this.symRes = [];
-        return {count: 0};
+        return {count: 0, lowTra: false};
     },
     onBoxSlideComplete: function() {
         //clearInterval(this.timer);
@@ -93,6 +104,10 @@ SymmetryBoxSequence.Sequence = React.createClass({
      */
     onSymmetrySubmit: function(res, tra) {
         this.symRes.push(res);
+
+        if(this.props.tra && tra.total != 0 && tra.correct / tra.total < this.props.traLow)
+            return this.setState({lowTra:true});
+
         this.tra = tra;
         this.advance();
     },
@@ -104,6 +119,9 @@ SymmetryBoxSequence.Sequence = React.createClass({
             this.props.onComplete(this.symRes, this.tra);
     },
     render: function() {
+        if(this.state.lowTra)
+            return <LowTra type={'symmetry'} traLow={this.props.traLow} />
+
         if(this.state.count % 2 == 0) {
             return (
                 <SymmetryTest key={this.state.count}

@@ -178,7 +178,7 @@ var Demo = React.createClass({
                     <p style={{textAlign:'center'}}>[Instruction]</p>
                 </Instruction>);
             case 1:
-                return <Block block={practice} practice={true} onComplete={this.advance}/>
+                return <Block block={practice} practice={true} keepTra={true} onComplete={this.advance}/>
             case 2:
                 return (<Instruction practice={true} onComplete={this.advance} style={{marginTop:40}}>
                     <p style={{textAlign:'center'}}>[Instruction for non-practice section]</p>

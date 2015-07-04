@@ -252,6 +252,18 @@ var Assessment = React.createClass({
 });
 
 /**
+ * Message when the TRA is too low.
+ *
+ * @prop type   string The problem type.
+ * @prop traLow number The lower threshold.
+ */
+var LowTra = React.createClass({
+    render: function() {
+        return <div style={{fontSize:25, marginTop:100}}>Your correctness for {this.props.type} responses is below {this.props.traLow * 100}%. You get no candy.</div>
+    }
+});
+
+/**
  * Checks if the array of points contains a specific point.
  * @param array array<array>   An array of array which is a point.
  * @param point array<integer> An array containing two elements [x, y].

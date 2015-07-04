@@ -5,6 +5,7 @@
 
 /*
  * @prop colored    array<point>  An array specified which box should be color-filled.
+ * @prop tra        object   Task Running Accuracy.
  * @prop feedback   boolean       If feedback should be displayed.
  * @prop onComplete callback
  */

@@ -66,15 +66,25 @@ var MathLetter = React.createClass({
  * Displays a sequence of alternating math equations and letters.
  * @prop problem object An object with fields {type, letters, equations}.
  * @prop tra     object See MathLetter component.
+ * @prop traLow  number Lower threshold for TRA. If the TRA is below this, the task is stopped. Default 90%
  * @prop onComplete callback
  */
 MathLetter.Sequence = React.createClass({
+    getDefaultProps: function() {
+        return {
+            traLow: 0.9
+        };
+    },
     getInitialState: function() {
         //An array of math responses, each of which has the format 
         //{res: boolean, startTIme: integer, endTime: integer}
         this.mathRes = [];
 
-        return {count: 0, tra: this.props.tra};
+        return {
+            count:  0,
+            tra:    this.props.tra,
+            lowTra: false
+        };
     },
     componentDidUpdate: function() {
         if(this.state.count % 2 != 0) {
@@ -88,6 +98,11 @@ MathLetter.Sequence = React.createClass({
     onMathSubmit: function(res, startTime, endTime) {
         this.mathRes.push({res: res, startTime: startTime, endTime: endTime});
         this.adjustTra(res);
+
+        if(this.props.tra && this.state.tra.total != 0 &&
+            this.state.tra.correct / this.state.tra.total < this.props.traLow)
+            return this.setState({lowTra:true});
+
         this.advance();
     },
     adjustTra: function(res) {
@@ -110,6 +125,9 @@ MathLetter.Sequence = React.createClass({
             this.props.onComplete(this.mathRes, this.state.tra);
     },
     render: function() {
+        if(this.state.lowTra)
+            return <LowTra type={'math'} traLow={this.props.traLow} />
+
         if(this.state.count % 2 == 0) {
             return (
                 <MathEq.Equation key={this.state.count}
