@@ -102,6 +102,11 @@ BoxSequence.Slide = React.createClass({
     render: function() {
         return (
             <div>
+                <div className="row" style={{marginBottom:20}}>
+                    <div className="col-xs-12" style={{fontSize:20, textAlign:'center'}}>
+                        &nbsp;
+                    </div>
+                </div>
                 <div className="row">
                     <div className="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2">
                         <BoxSequence.Slide.Figure rows={4} cols={4} colored={this.props.colored} />
