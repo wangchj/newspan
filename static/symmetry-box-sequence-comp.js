@@ -93,7 +93,11 @@ SymmetryBoxSequence.Sequence = React.createClass({
         //An array of math responses, each of which has the format 
         //{res: boolean, startTIme: integer, endTime: integer}
         this.symRes = [];
-        return {count: 0, lowTra: false};
+        return {
+            count: 0,
+            showLowTra: false,
+            showedLowTra: false
+        };
     },
     onBoxSlideComplete: function() {
         //clearInterval(this.timer);
@@ -104,11 +108,17 @@ SymmetryBoxSequence.Sequence = React.createClass({
      */
     onSymmetrySubmit: function(res, tra) {
         this.symRes.push(res);
-
-        if(this.props.tra && tra.total != 0 && tra.correct / tra.total < this.props.traLow)
-            return this.setState({lowTra:true});
-
         this.tra = tra;
+
+        if(this.props.tra && tra.total != 0 && tra.total > 2 &&
+            !this.state.showedLowTra &&
+            tra.correct / tra.total < this.props.traLow)
+            return this.setState({showLowTra:true, showedLowTra: true});
+
+        this.advance();
+    },
+    onLowTraComplete: function() {
+        this.state.showLowTra = false;
         this.advance();
     },
     advance: function() {
@@ -119,8 +129,8 @@ SymmetryBoxSequence.Sequence = React.createClass({
             this.props.onComplete(this.symRes, this.tra);
     },
     render: function() {
-        if(this.state.lowTra)
-            return <LowTra type={'symmetry'} traLow={this.props.traLow} />
+        if(this.state.showLowTra)
+            return <LowTra type={'symmetry'} traLow={this.props.traLow} onComplete={this.onLowTraComplete} />
 
         if(this.state.count % 2 == 0) {
             return (

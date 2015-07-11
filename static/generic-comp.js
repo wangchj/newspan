@@ -256,10 +256,28 @@ var Assessment = React.createClass({
  *
  * @prop type   string The problem type.
  * @prop traLow number The lower threshold.
+ * @onComplete callback
  */
 var LowTra = React.createClass({
+    onComplete: function() {
+        if(this.props.onComplete)
+            this.props.onComplete();
+    },
     render: function() {
-        return <div style={{fontSize:25, marginTop:100}}>Your correctness for {this.props.type} responses is below {this.props.traLow * 100}%. You get no candy.</div>
+        return (
+            <div>
+                <div className="row">
+                    <div className="col-xs-12" style={{fontSize:25, marginTop:100}}>
+                        Your accuracy for {this.props.type} responses is low. Please answer these questions accuraly.
+                    </div>
+                </div>
+                <div className="row" style={{marginTop:25}}>
+                    <div className="col-xs-12" style={{textAlign:'center'}}>
+                        <button onClick={this.onComplete}>Got it</button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 });
 

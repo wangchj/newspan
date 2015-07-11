@@ -83,7 +83,8 @@ MathLetter.Sequence = React.createClass({
         return {
             count:  0,
             tra:    this.props.tra,
-            lowTra: false
+            showLowTra: false,
+            showedLowTra: false
         };
     },
     componentDidUpdate: function() {
@@ -99,10 +100,15 @@ MathLetter.Sequence = React.createClass({
         this.mathRes.push({res: res, startTime: startTime, endTime: endTime});
         this.adjustTra(res);
 
-        if(this.props.tra && this.state.tra.total != 0 &&
+        if(this.props.tra && this.state.tra.total > 2 &&
+            !this.state.showedLowTra &&
             this.state.tra.correct / this.state.tra.total < this.props.traLow)
-            return this.setState({lowTra:true});
+            return this.setState({showLowTra:true, showedLowTra:true});
 
+        this.advance();
+    },
+    onLowTraComplete: function() {
+        this.state.showLowTra = false;
         this.advance();
     },
     adjustTra: function(res) {
@@ -125,8 +131,8 @@ MathLetter.Sequence = React.createClass({
             this.props.onComplete(this.mathRes, this.state.tra);
     },
     render: function() {
-        if(this.state.lowTra)
-            return <LowTra type={'math'} traLow={this.props.traLow} />
+        if(this.state.showLowTra)
+            return <LowTra type={'math'} traLow={this.props.traLow} onComplete={this.onLowTraComplete}/>
 
         if(this.state.count % 2 == 0) {
             return (
