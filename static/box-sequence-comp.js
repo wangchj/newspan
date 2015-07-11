@@ -279,6 +279,11 @@ BoxSequence.Recall = React.createClass({
 
         return (
             <div>
+                <div className="row" style={{marginBottom:20}}>
+                    <div className="col-xs-12" style={{fontSize:20, textAlign:'center'}}>
+                        Please recall the order of the blue boxes
+                    </div>
+                </div>
                 <div className="row" style={{marginBottom:25}}>
                     <div className="col-md-6 col-md-offset-3 col-xs-8 col-xs-offset-2">
                         <BoxSequence.Slide.Figure rows={4} cols={4} cellText={cellText} onCellClick={this.onCellClick} />
