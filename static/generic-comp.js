@@ -268,12 +268,16 @@ var LowTra = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12" style={{fontSize:25, marginTop:100}}>
-                        Your accuracy for {this.props.type} responses is low. Please answer these questions accuraly.
+                        {
+                            this.props.type === 'math' ? 
+                                'Please try to solve each math problem correctly, as quickly as you can.' :
+                                'Please try to identify each symmetric and asymmetric figure correctly, as quickly as you can.'
+                        }
                     </div>
                 </div>
                 <div className="row" style={{marginTop:25}}>
                     <div className="col-xs-12" style={{textAlign:'center'}}>
-                        <button onClick={this.onComplete}>Got it</button>
+                        <button className="btn btn-default" onClick={this.onComplete}>Got it</button>
                     </div>
                 </div>
             </div>
