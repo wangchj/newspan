@@ -75,7 +75,6 @@ var LetterRecall = React.createClass({
         return res;
     },
     letterClicked: function(index, event) {
-        console.log(this.state.selects);
 
         var i = this.state.selects.indexOf(index);
 
@@ -94,7 +93,6 @@ var LetterRecall = React.createClass({
                 }
             }
         }
-        console.log(this.state.selects);
     },
     clearSelects: function() {
         for(var i = 0; i < this.state.selects.length; i++) {
@@ -120,7 +118,6 @@ var LetterSequenceReport = React.createClass({
 
         //Response letter sequence
         var response = selections.map(function(sequenceNum) {return challenge[sequenceNum];});
-        console.log(response);
         var correctCount = 0;
 
         //Calculate correct count
