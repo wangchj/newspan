@@ -1,6 +1,5 @@
 /**
  * @prop equation string     The equation of this problem.
- * @prop solution boolean    The correct answer to this problem, either the equation is true or false.
  * @prop feedback boolean    Whether to display feedback to the user.
  * @prop onComplete callback The callback when this component is finished.
  */
@@ -30,10 +29,22 @@ var MathEq = React.createClass({
                 return <MathEq.Equation equation={this.props.equation} onSubmit={this.handleSubmit} />
             case 1:
                 return (
-                    <MathEq.Feedback equation={this.props.equation} solution={this.props.solution}
-                        response={this.response} startTime={this.startTime} endTime={this.endTime}
+                    <MathEq.Feedback equation={this.props.equation} response={this.response}
+                        startTime={this.startTime} endTime={this.endTime}
                         showTime={true} onComplete={this.complete} />
                 );
+        }
+    },
+    statics: {
+        /**
+         * Gets the correct answer of the equation.
+         *
+         * @param equation string the question
+         * @returns true if the equation is true, false otherwise.
+         */
+        getAnswer: function(equation) {
+            var p = equation.indexOf('=');
+            return eval(equation.substring(0, p)) == equation.substring(p + 1);
         }
     }
 });
@@ -110,7 +121,6 @@ MathEq.Tra = React.createClass({
 
 /**
  * @prop equation   string  The problem.
- * @prop solution   boolean The correct answer of the problem.
  * @prop response   boolean User's response.
  * @prop startTime  integer See return value of getTime() of JavaScript's Date object.
  * @prop endTime    integer
@@ -126,7 +136,7 @@ MathEq.Feedback = React.createClass({
             <div>
                 <div className="row" style={{marginTop:200, marginBottom:25}}>
                     <div className="col-xs-12" style={{fontSize:25}}>
-                        {this.props.solution == this.props.response ? 'Correct' : 'Incorrect'}!
+                        {MathEq.getAnswer(this.props.equation) == this.props.response ? 'Correct' : 'Incorrect'}!
                     </div>
                 </div>
                 <div className="row" style={{marginBottom:25}}>

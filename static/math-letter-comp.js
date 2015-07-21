@@ -116,7 +116,7 @@ MathLetter.Sequence = React.createClass({
             return;
 
         var i = Math.floor(this.state.count / 2);
-        var a = this.props.problem.equations[i].answer;
+        var a = MathEq.getAnswer(this.props.problem.equations[i]);
         var tra = this.state.tra;
         if(res == a)
             tra.correct++;
@@ -137,7 +137,7 @@ MathLetter.Sequence = React.createClass({
         if(this.state.count % 2 == 0) {
             return (
                 <MathEq.Equation key={this.state.count}
-                    equation={this.props.problem.equations[Math.floor(this.state.count / 2)].equation}
+                    equation={this.props.problem.equations[Math.floor(this.state.count / 2)]}
                     tra={this.state.tra}
                     onSubmit={this.onMathSubmit} />
             );
@@ -162,7 +162,7 @@ MathLetter.Feedback = React.createClass({
     getMathCorrectCount: function() {
         var res = 0;
         for(var i = 0; i < this.props.problem.equations.length; i++) {
-            if(this.props.mathRes[i].res == this.props.problem.equations[i].answer)
+            if(this.props.mathRes[i].res == MathEq.getAnswer(this.props.problem.equations[i]))
                 res++;
         }
         return res;

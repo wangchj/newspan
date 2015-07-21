@@ -1,11 +1,11 @@
 //Practice block
 var practice1 = [
-    {type: 'math', problem: '(2*4)+1=5', answer: false},
-    {type: 'math', problem: '(24/2)-6=1', answer: false},
-    {type: 'math', problem: '(10/2)+2=6', answer: false},
-    {type: 'math', problem: '(2*3)-3=3', answer: true},
-    {type: 'math', problem: '(2*2)+2=6', answer: true},
-    {type: 'math', problem: '(7/7)+7=8', answer: true}
+    {type: 'math', problem: '(2*4)+1=5'},
+    {type: 'math', problem: '(24/2)-6=1'},
+    {type: 'math', problem: '(10/2)+2=6'},
+    {type: 'math', problem: '(2*3)-3=3'},
+    {type: 'math', problem: '(2*2)+2=6'},
+    {type: 'math', problem: '(7/7)+7=8'}
 ];
 
 var practice2 = [
@@ -13,27 +13,27 @@ var practice2 = [
         type: 'math-letter',
         letters: ['G', 'H'],
         equations: [
-            {equation: '(10*2)-10=10', answer:true},
-            {equation: '(1*2)+1=2', answer:false}
+            '(10*2)-10=10',
+            '(1*2)+1=2'
         ]
     },
     {
         type: 'math-letter',
         letters: ['P', 'F', 'D'],
         equations: [
-            {equation: '(5*2)-10=10', answer:false},
-            {equation: '(10*3)+1=15', answer:false},
-            {equation: '(10/5)+5=7', answer:true}
+            '(5*2)-10=10',
+            '(10*3)+1=15',
+            '(10/5)+5=7'
         ]
     },
     {
         type: 'math-letter',
         letters: ['V', 'R', 'S', 'N'],
         equations: [
-            {equation: '(6*2)-10=3', answer:false},
-            {equation: '(6/3)+3=5', answer:true},
-            {equation: '(7*2)-7=7', answer:true},
-            {equation: '(8*2)-1=16', answer:false}
+            '(6*2)-10=3',
+            '(6/3)+3=5',
+            '(7*2)-7=7',
+            '(8*2)-1=16'
         ]
     }
 ];
@@ -46,9 +46,9 @@ var task = [
             type: 'math-letter',
             letters: ['D', 'L', 'P'],
             equations: [
-                {equation: '(9*2)-10=8', answer:true},
-                {equation: '(3*4)+5=30', answer:false},
-                {equation: '(5*4)-19=1', answer:true}
+                '(9*2)-10=8',
+                '(3*4)+5=30',
+                '(5*4)-19=1'
             ]
         },
         //Problem 2
@@ -56,10 +56,10 @@ var task = [
             type: 'math-letter',
             letters: ['P', 'L', 'D', 'F'],
             equations: [
-                {equation: '(25*2)-10=20', answer:false},
-                {equation: '(10*10)-10=90', answer:true},
-                {equation: '(4*5)+5=15', answer:false},
-                {equation: '(10/5)+5=7', answer:true}
+                '(25*2)-10=20',
+                '(10*10)-10=90',
+                '(4*5)+5=15',
+                '(10/5)+5=7'
             ]
         },
         //Problem 3
@@ -67,11 +67,11 @@ var task = [
             type: 'math-letter',
             letters: ['P', 'R', 'S', 'Y', 'N'],
             equations: [
-                {equation: '(10/2)+6=4', answer:false},
-                {equation: '(8*3)-8=16', answer:true},
-                {equation: '(6/2)-1=2', answer:true},
-                {equation: '(3*12)+3=12', answer:false},
-                {equation: '(6*8)-2=20', answer:false}
+                '(10/2)+6=4',
+                '(8*3)-8=16',
+                '(6/2)-1=2',
+                '(3*12)+3=12',
+                '(6*8)-2=20'
             ]
         },
         //Problem 4
@@ -79,12 +79,12 @@ var task = [
             type: 'math-letter',
             letters: ['Q', 'X', 'Z', 'D', 'C', 'V'],
             equations: [
-                {equation: '(3*5)-10=8', answer:false},
-                {equation: '(15*2)-15=0', answer:false},
-                {equation: '(5*2)-3=5', answer:false},
-                {equation: '(10/2)+6=11', answer:true},
-                {equation: '(4/2)-1=10', answer:false},
-                {equation: '(8*6)+5=53', answer:true}
+                '(3*5)-10=8',
+                '(15*2)-15=0',
+                '(5*2)-3=5',
+                '(10/2)+6=11',
+                '(4/2)-1=10',
+                '(8*6)+5=53'
             ]
         },
         //Problem 5
@@ -92,13 +92,13 @@ var task = [
             type: 'math-letter',
             letters: ['S', 'F', 'G', 'H', 'J', 'K', 'L'],
             equations: [
-                {equation: '(10/5)-2=1', answer:false},
-                {equation: '(12/3)-4=0', answer:true},
-                {equation: '(4*4)+4=20', answer:true},
-                {equation: '(12/4)-3=4', answer:false},
-                {equation: '(25*2)-10=20', answer:false},
-                {equation: '(8*6)-8=30', answer:false},
-                {equation: '(5/5)+2=1', answer:false}
+                '(10/5)-2=1',
+                '(12/3)-4=0',
+                '(4*4)+4=20',
+                '(12/4)-3=4',
+                '(25*2)-10=20',
+                '(8*6)-8=30',
+                '(5/5)+2=1'
             ]
         }
     ],
@@ -109,9 +109,9 @@ var task = [
             type: 'math-letter',
             letters: ['G', 'W', 'J'],
             equations: [
-                {equation: '(9*2)-10=8', answer:true},
-                {equation: '(3*4)+5=30', answer:false},
-                {equation: '(5*4)-3=17', answer:true}
+                '(9*2)-10=8',
+                '(3*4)+5=30',
+                '(5*4)-3=17'
             ]
         },
         //Problem 2
@@ -119,10 +119,10 @@ var task = [
             type: 'math-letter',
             letters: ['D', 'L', 'T', 'Q'],
             equations: [
-                {equation: '(25*2)-10=20', answer:false},
-                {equation: '(4*1)+20=24', answer:true},
-                {equation: '(4*5)+5=15', answer:false},
-                {equation: '(10/5)+5=7', answer:true}
+                '(25*2)-10=20',
+                '(4*1)+20=24',
+                '(4*5)+5=15',
+                '(10/5)+5=7'
             ]
         },
         //Problem 3
@@ -130,11 +130,11 @@ var task = [
             type: 'math-letter',
             letters: ['R', 'F', 'V', 'S', 'W'],
             equations: [
-                {equation: '(10/2)+6=4', answer:false},
-                {equation: '(8*3)-8=16', answer:true},
-                {equation: '(6/2)-1=2', answer:true},
-                {equation: '(3*12)+3=12', answer:false},
-                {equation: '(6*8)-2=20', answer:false}
+                '(10/2)+6=4',
+                '(8*3)-8=16',
+                '(6/2)-1=2',
+                '(3*12)+3=12',
+                '(6*8)-2=20'
             ]
         },
         //Problem 4
@@ -142,12 +142,12 @@ var task = [
             type: 'math-letter',
             letters: ['T', 'X', 'G', 'D', 'C', 'V'],
             equations: [
-                {equation: '(13*2)-10=14', answer:false},
-                {equation: '(15*2)-20=0', answer:false},
-                {equation: '(5*2)-3=5', answer:false},
-                {equation: '(10*8)+2=82', answer:true},
-                {equation: '(4/2)-1=10', answer:false},
-                {equation: '(8*6)+5=53', answer:true}
+                '(13*2)-10=14',
+                '(15*2)-20=0',
+                '(5*2)-3=5',
+                '(10*8)+2=82',
+                '(4/2)-1=10',
+                '(8*6)+5=53'
             ]
         },
         //Problem 5
@@ -155,13 +155,13 @@ var task = [
             type: 'math-letter',
             letters: ['R', 'W', 'V', 'H', 'Q', 'K', 'P'],
             equations: [
-                {equation: '(10/5)-2=1', answer:false},
-                {equation: '(3*3)-5=4', answer:true},
-                {equation: '(4/4)+4=5', answer:true},
-                {equation: '(12/4)-3=4', answer:false},
-                {equation: '(25*2)-10=20', answer:false},
-                {equation: '(8/2)+4=6', answer:false},
-                {equation: '(5/5)+2=1', answer:false}
+                '(10/5)-2=1',
+                '(3*3)-5=4',
+                '(4/4)+4=5',
+                '(12/4)-3=4',
+                '(25*2)-10=20',
+                '(8/2)+4=6',
+                '(5/5)+2=1'
             ]
         }
     ],
@@ -171,9 +171,9 @@ var task = [
             type: 'math-letter',
             letters: ['V', 'R', 'L'],
             equations: [
-                {equation: '(9*2)-10=8', answer:true},
-                {equation: '(16/2)-5=30', answer:false},
-                {equation: '(5*4)+3=23', answer:true}
+                '(9*2)-10=8',
+                '(16/2)-5=30',
+                '(5*4)+3=23'
             ]
         },
         //Problem 2
@@ -181,10 +181,10 @@ var task = [
             type: 'math-letter',
             letters: ['Y', 'L', 'K', 'P'],
             equations: [
-                {equation: '(25*2)-10=20', answer:false},
-                {equation: '(4*1)+6=10', answer:true},
-                {equation: '(4*5)+5=15', answer:false},
-                {equation: '(10/5)+5=7', answer:true}
+                '(25*2)-10=20',
+                '(4*1)+6=10',
+                '(4*5)+5=15',
+                '(10/5)+5=7'
             ]
         },
         //Problem 3
@@ -192,11 +192,11 @@ var task = [
             type: 'math-letter',
             letters: ['D', 'N', 'G', 'T', 'K'],
             equations: [
-                {equation: '(10/2)+6=4', answer:false},
-                {equation: '(8*3)-8=16', answer:true},
-                {equation: '(6/2)-1=2', answer:true},
-                {equation: '(3*12)+3=12', answer:false},
-                {equation: '(6*8)-2=20', answer:false}
+                '(10/2)+6=4',
+                '(8*3)-8=16',
+                '(6/2)-1=2',
+                '(3*12)+3=12',
+                '(6*8)-2=20'
             ]
         },
         //Problem 4
@@ -204,12 +204,12 @@ var task = [
             type: 'math-letter',
             letters: ['H', 'X', 'R', 'D', 'C', 'V'],
             equations: [
-                {equation: '(12*2)-10=8', answer:false},
-                {equation: '(15/5)-5=0', answer:false},
-                {equation: '(5*2)-3=5', answer:false},
-                {equation: '(20/2)+2=12', answer:true},
-                {equation: '(4/2)-1=10', answer:false},
-                {equation: '(8*6)+5=53', answer:true}
+                '(12*2)-10=8',
+                '(15/5)-5=0',
+                '(5*2)-3=5',
+                '(20/2)+2=12',
+                '(4/2)-1=10',
+                '(8*6)+5=53'
             ]
         },
         //Problem 5
@@ -217,13 +217,13 @@ var task = [
             type: 'math-letter',
             letters: ['Y', 'C', 'D', 'G', 'K', 'T', 'M'],
             equations: [
-                {equation: '(10/5)-2=1', answer:false},
-                {equation: '(12/12)-0=1', answer:true},
-                {equation: '(30/2)+0=15', answer:true},
-                {equation: '(12/4)-3=4', answer:false},
-                {equation: '(25*2)-10=20', answer:false},
-                {equation: '(8*5)+4=30', answer:false},
-                {equation: '(5/5)+2=1', answer:false}
+                '(10/5)-2=1',
+                '(12/12)-0=1',
+                '(30/2)+0=15',
+                '(12/4)-3=4',
+                '(25*2)-10=20',
+                '(8*5)+4=30',
+                '(5/5)+2=1'
             ]
         }
     ]

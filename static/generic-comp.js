@@ -169,7 +169,6 @@ var Block = React.createClass({
             case 'math':
                 return (
                     <MathEq key={progress} equation={block[progress].problem}
-                        solution={block[progress].answer}
                         feedback={this.props.practice} onComplete={this.advance} />
                 );
             case 'math-letter':

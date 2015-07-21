@@ -1,56 +1,56 @@
 //Practice block
 var practice = [
     //Problem 1
-    {type: 'math', problem: '(2+4)*1=6', answer: true},
+    {type: 'math', problem: '(2+4)*1=6'},
     //Problem 2
-    {type: 'math', problem: '(24/2)-6=1', answer: false},
+    {type: 'math', problem: '(24/2)-6=1'},
     //Problem 3
-    {type: 'math', problem: '(10/2)+1=6', answer: true},
+    {type: 'math', problem: '(10/2)+1=6'},
     //Problem 4
-    {type: 'math', problem: '(2*3)-3=3', answer: true},
+    {type: 'math', problem: '(2*3)-3=3'},
     //Problem 5
-    {type: 'math', problem: '(2+2)*2=8', answer: true}
+    {type: 'math', problem: '(2+2)*2=8'}
 ];
 
 var data = [
     //First block
     [
         //Problem 1
-        {type: 'math', problem: '(2+3)*1=5', answer: true},
+        {type: 'math', problem: '(2+3)*1=5'},
         //Problem 2
-        {type: 'math', problem: '(24/2)-6=0', answer: false},
+        {type: 'math', problem: '(24/2)-6=0'},
         //Problem 3
-        {type: 'math', problem: '(4/2)+1=3', answer: true},
+        {type: 'math', problem: '(4/2)+1=3'},
         //Problem 4
-        {type: 'math', problem: '(4*3)-3=9', answer: true},
+        {type: 'math', problem: '(4*3)-3=9'},
         //Problem 5
-        {type: 'math', problem: '(5+2)*2=20', answer: true}
+        {type: 'math', problem: '(5+2)*2=20'}
     ],
     //Second block
     [
         //Problem 1
-        {type: 'math', problem: '(18/3)+4=12', answer: false},
+        {type: 'math', problem: '(18/3)+4=12'},
         //Problem 2
-        {type: 'math', problem: '(6*8)+5=53', answer: true},
+        {type: 'math', problem: '(6*8)+5=53'},
         //Problem 3
-        {type: 'math', problem: '(10*2)-6=14', answer: true},
+        {type: 'math', problem: '(10*2)-6=14'},
         //Problem 4
-        {type: 'math', problem: '(5*8)-10=30', answer: true},
+        {type: 'math', problem: '(5*8)-10=30'},
         //Problem 5
-        {type: 'math', problem: '(7*3)-8=5', answer: false}
+        {type: 'math', problem: '(7*3)-8=5'}
     ],
     //Third block
     [
         //Problem 1
-        {type: 'math', problem: '(17-2)-3=10', answer: false},
+        {type: 'math', problem: '(17-2)-3=10'},
         //Problem 2
-        {type: 'math', problem: '(18-9)-2=2', answer: false},
+        {type: 'math', problem: '(18-9)-2=2'},
         //Problem 3
-        {type: 'math', problem: '(50/2)+2=27', answer: true},
+        {type: 'math', problem: '(50/2)+2=27'},
         //Problem 4
-        {type: 'math', problem: '(2*3)+4=0', answer: false},
+        {type: 'math', problem: '(2*3)+4=0'},
         //Problem 5
-        {type: 'math', problem: '(4+6)+12=22', answer: true}
+        {type: 'math', problem: '(4+6)+12=22'}
     ]
 ];
 
@@ -76,7 +76,7 @@ var MathDemo = React.createClass({
                 </Instruction>
                 );
             case 1:
-                return <Block block={practice} solution={false} practice={true} onComplete={this.advance}/>
+                return <Block block={practice} practice={true} onComplete={this.advance}/>
             case 2:
                 return (<Instruction practice={true} onComplete={this.advance}  style={{marginTop:40}}>
                     <p style={{textAlign:'center'}}>[Instruction for non-practice section]</p>
