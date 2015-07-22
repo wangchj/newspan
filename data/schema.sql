@@ -1,5 +1,6 @@
 create table Tasks (
     taskId integer primary key,
+    name text not null,
     createTime text not null,
     json text not null
 );
