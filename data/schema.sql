@@ -8,8 +8,8 @@ create table Participants (
     partId integer primary key
 );
 
-create table Reponses (
-    reponseId integer primary key,
+create table Responses (
+    responseId integer primary key,
     taskId integer not null,
     partId integer not null,
     datetime text not null,
