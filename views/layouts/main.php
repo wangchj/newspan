@@ -48,7 +48,13 @@ AppAsset::register($this);
                         </li>
                         <li class="<?=$controller->id === 'responses' ? 'active' : ''?>"><a href="<?=Url::to(['responses/index'])?>">Responses</a></li>
                         <li class="<?=$controller->id === 'participants' ? 'active' : ''?>"><a href="<?=Url::to(['participants/index'])?>">Participants</a></li>
-                        <li><a href="<?=Url::to(['site/logout'])?>" data-method="post">Logout (admin)</a></li>
+                        <li>
+                            <?php if(Yii::$app->user->isGuest):?>
+                                <a href="<?=Url::to(['site/login'])?>">Login</a>
+                            <?php else:?>
+                                <a href="<?=Url::to(['site/logout'])?>" data-method="post">Logout</a>
+                            <?php endif;?>
+                        </li>
                     </ul>
                 </div>
             </div>
