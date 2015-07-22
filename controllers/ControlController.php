@@ -8,6 +8,8 @@ use yii\web\Controller;
 
 class ControlController extends Controller
 {
+    public $layout = 'control';
+    
     public function behaviors()
     {
         return [

@@ -8,6 +8,8 @@ use yii\web\Controller;
 
 class ResponsesController extends Controller
 {
+    public $layout = 'control';
+    
     public function behaviors()
     {
         return [

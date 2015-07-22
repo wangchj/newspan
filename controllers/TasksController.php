@@ -9,6 +9,8 @@ use app\models\Task;
 
 class TasksController extends Controller
 {
+    public $layout = 'control';
+    
     public function behaviors()
     {
         return [
