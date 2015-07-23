@@ -80,6 +80,11 @@ AppAsset::register($this);
     </footer>
 
 <?php $this->endBody() ?>
+
+<?php if (isset($this->blocks['TheEnd'])): ?>
+    <?= $this->blocks['TheEnd'] ?>
+<?php endif; ?>
+
 </body>
 </html>
 <?php $this->endPage() ?>
