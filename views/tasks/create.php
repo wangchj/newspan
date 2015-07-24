@@ -12,5 +12,6 @@ CreateTaskAsset::register($this);
 <div id="comp"></div>
 
 <?php $this->beginBlock('TheEnd');?>
+    <script type="text/javascript">var taskType = '<?=$type?>';</script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
 <?php $this->endBlock();?>

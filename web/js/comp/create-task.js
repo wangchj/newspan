@@ -6,8 +6,10 @@ var CreateTask = React.createClass({
             blockPos: null
         };
 
+        var blocks = this.getBlocksTemplate(taskType);
+
         return {
-            blocks: [[]],
+            blocks: blocks,
             //showAddModal: false
         };
     },
@@ -17,16 +19,21 @@ var CreateTask = React.createClass({
     },
     onAddProbClick: function(blockPos) {
         this.addProb.blockPos = blockPos;
-        $('#addModal').modal('show');
+        $(ProbForm.domIdSel).modal('show');
+    },
+    onProbDel: function(blockPos, probId) {
+        var block = this.state.blocks[blockPos];
+        block.splice(probId, 1);
+        this.setState({blocks:this.state.blocks});
     },
     onAddProbModalSaveClick: function() {
         console.log('on Add Prob Modal Save Click');
 
-        var type = $('#addModal #probType').val();
+        var type = $(ProbForm.domIdSel + ' #probType').val();
         switch(type) {
             case 'ml':
-                var eqStr = $('#addModal #ml-equations').val().trim();
-                var leStr = $('#addModal #ml-letters').val().trim();
+                var eqStr = $(ProbForm.domIdSel + ' #ml-equations').val().trim();
+                var leStr = $(ProbForm.domIdSel + ' #ml-letters').val().trim();
 
                 if(eqStr && leStr) {
                     var eq = eqStr.split(',').map(function(str){return str.trim()});
@@ -42,7 +49,7 @@ var CreateTask = React.createClass({
                             equations: eq
                         });
                         this.setState({blocks: this.state.blocks});
-                        $('#addModal').modal('hide');
+                        $(ProbForm.domIdSel).modal('hide');
                     }
                 }
                 break;
@@ -55,11 +62,68 @@ var CreateTask = React.createClass({
     render: function() {
         return (
             <div>
-                <BlockList blocks={this.state.blocks} onAddProbClick={this.onAddProbClick}/>
+                <BlockList blocks={this.state.blocks} onAddProbClick={this.onAddProbClick} onProbDel={this.onProbDel}/>
                 <CreateTask.Buttons onAddBlock={this.addBlock}/>
-                <AddProblemModal onSaveClick={this.onAddProbModalSaveClick}/>
+                <ProbForm onSaveClick={this.onAddProbModalSaveClick}/>
             </div>
         );
+    },
+    getBlocksTemplate: function(type) {
+        switch(type) {
+            case 'ospan':
+                return [
+                    [
+                        {id: 0, type: 'letter', problem: ['G', 'H']},
+                        {id: 1, type: 'letter', problem: ['P', 'F', 'D']},
+                        {id: 2, type: 'letter', problem: ['V', 'R', 'S', 'N']}
+                    ],
+                    [
+                        {id: 0, type: 'math', problem: '(2*4)+1=5'},
+                        {id: 1, type: 'math', problem: '(24/2)-6=1'},
+                        {id: 2, type: 'math', problem: '(10/2)+2=6'},
+                        {id: 3, type: 'math', problem: '(2*3)-3=3'},
+                        {id: 4, type: 'math', problem: '(2*2)+2=6'},
+                        {id: 5, type: 'math', problem: '(7/7)+7=8'}
+                    ],
+                    [
+                        {
+                            id: 0,
+                            type: 'math-letter',
+                            letters: ['G', 'H'],
+                            equations: [
+                                '(10*2)-10=10',
+                                '(1*2)+1=2'
+                            ]
+                        },
+                        {
+                            id: 1,
+                            type: 'math-letter',
+                            letters: ['P', 'F', 'D'],
+                            equations: [
+                                '(5*2)-10=10',
+                                '(10*3)+1=15',
+                                '(10/5)+5=7'
+                            ]
+                        },
+                        {
+                            id: 2,
+                            type: 'math-letter',
+                            letters: ['V', 'R', 'S', 'N'],
+                            equations: [
+                                '(6*2)-10=3',
+                                '(6/3)+3=5',
+                                '(7*2)-7=7',
+                                '(8*2)-1=16'
+                            ]
+                        }
+                    ],
+                    []
+                ];
+            case 'sspan':
+                return [[]];
+            case 'rspan':
+                return [[]];
+        }
     }
 });
 
@@ -73,7 +137,10 @@ CreateTask.Buttons = React.createClass({
     render: function() {
         return (
             <div>
-                <button className="btn btn-default" onClick={this.addBlock}>New Block</button> <button className="btn btn-default">Finish</button>
+                {
+                    //<button className="btn btn-default" onClick={this.addBlock}>New Block</button>
+                }
+                <button className="btn btn-default">Finish</button>
             </div>
         );
     }
@@ -82,11 +149,12 @@ CreateTask.Buttons = React.createClass({
 var BlockList = React.createClass({
     propTypes: {
         blocks: React.PropTypes.array.isRequired,
-        onAddProbClick: React.PropTypes.func.isRequired
+        onAddProbClick: React.PropTypes.func.isRequired,
+        onProbDel: React.PropTypes.func.isRequired
     },
     render: function() {
         var blocks = this.props.blocks.map(function(block, index){
-            return <Block blockPos={index} block={block} onAddProbClick={this.props.onAddProbClick} />
+            return <Block blockPos={index} block={block} onAddProbClick={this.props.onAddProbClick} onProbDel={this.props.onProbDel}/>
         }.bind(this));
 
         return <div>{blocks}</div>
@@ -97,13 +165,14 @@ var Block = React.createClass({
     propTypes: {
         blockPos: React.PropTypes.number.isRequired,
         block: React.PropTypes.array.isRequired,
-        onAddProbClick: React.PropTypes.func.isRequired
+        onAddProbClick: React.PropTypes.func.isRequired,
+        onProbDel: React.PropTypes.func.isRequired
     },
     render: function() {
         return (
             <div className="panel panel-default">
                 <Block.Heading blockPos={this.props.blockPos} />
-                <Block.Body blockPos={this.props.blockPos} block={this.props.block} />
+                <Block.Body blockPos={this.props.blockPos} block={this.props.block} onProbDel={this.props.onProbDel}/>
                 <Block.Footer blockPos={this.props.blockPos} onAddProbClick={this.props.onAddProbClick}/>
             </div>
         )
@@ -127,11 +196,12 @@ Block.Heading = React.createClass({
 Block.Body = React.createClass({
     propTypes: {
         blockPos: React.PropTypes.number.isRequired,
-        block: React.PropTypes.array.isRequired
+        block: React.PropTypes.array.isRequired,
+        onProbDel: React.PropTypes.func.isRequired
     },
     render: function() {
         var res = this.props.block.length > 0 ?
-            <Block.Table blockPos={this.props.blockPos} block={this.props.block}/> :
+            <Block.Table blockPos={this.props.blockPos} block={this.props.block} onProbDel={this.props.onProbDel} /> :
             <div className="panel-body">There is currently no problem in this block.</div>
         return res;
     }
@@ -140,14 +210,15 @@ Block.Body = React.createClass({
 Block.Table = React.createClass({
     propTypes: {
         blockPos: React.PropTypes.number.isRequired,
-        block: React.PropTypes.array.isRequired
+        block: React.PropTypes.array.isRequired,
+        onProbDel: React.PropTypes.func.isRequired
     },
     render: function() {
         return (
             <table className="table">
                 <tbody>
                     {this.props.block.map(function(p, i){
-                        return <Block.Table.Row blockPos={this.props.blockPos} problem={p}/>
+                        return <Block.Table.Row blockPos={this.props.blockPos} problem={p} onProbDel={this.props.onProbDel}/>
                     }.bind(this))}
                 </tbody>
             </table>
@@ -158,16 +229,81 @@ Block.Table = React.createClass({
 Block.Table.Row = React.createClass({
     propTypes: {
         blockPos: React.PropTypes.number.isRequired,
-        problem: React.PropTypes.object.isRequired
+        problem: React.PropTypes.object.isRequired,
+        onProbDel: React.PropTypes.func.isRequired
+    },
+    onProbDel: function() {
+        this.props.onProbDel(this.props.blockPos, this.props.problem.id);
     },
     render: function() {
         return (
             <tr>
-                <td>{this.props.problem.id + 1}</td>
-                <td>{this.props.problem.type}</td>
-                <td>Problem Details</td>
-                <td>Edit Remove Buttons?</td>
+                <td style={{width:50}}>{this.props.problem.id + 1}</td>
+                <td style={{width:120}}>{this.props.problem.type}</td>
+                <td>{this.getProblemWidget()}</td>
+                <td>
+                    <button type="button" className="close pull-right" aria-label="Close" onClick={this.onProbDel}><span aria-hidden="true">&times;</span></button>
+                </td>
             </tr>
+        )
+    },
+    getProblemWidget: function() {
+        switch(this.props.problem.type) {
+            case 'math':
+                return <Block.Table.Row.MathWidget equation={this.props.problem.problem} />
+            case 'letter':
+                return <Block.Table.Row.LettersWidget letters={this.props.problem.problem} />
+            case 'math-letter':
+                return <Block.Table.Row.MathLetterWidget equations={this.props.problem.equations} letters={this.props.problem.letters}/>
+            case 'squares':
+                return <div>Square widget</div>
+            case 'symmetry':
+                return <div>Symmetry widget</div>
+            case 'symmetry-squares':
+                return <div>Symmetry squares widget</div>
+            case 'sentence':
+                return <div>Sentence widget</div>
+            case 'sentence-letter':
+                return <div>Sentence letter widget</div>
+        }
+    }
+});
+
+Block.Table.Row.MathWidget = React.createClass({
+    propTypes: {
+        equation: React.PropTypes.string.isRequired
+    },
+    render: function() {
+        return <span className="inline-item">{this.props.equation}</span>
+    }
+});
+
+Block.Table.Row.LettersWidget = React.createClass({
+    propTypes: {
+        letters: React.PropTypes.array.isRequired
+    },
+    render: function() {
+        var str = this.props.letters.toString().replace(/,/g, ', ');
+        return <span className="inline-item">{str}</span>
+    }
+});
+
+Block.Table.Row.MathLetterWidget = React.createClass({
+    propTypes: {
+        equations: React.PropTypes.string.isRequired,
+        letters: React.PropTypes.array.isRequired
+    },
+    render: function() {
+        var ec = this.props.equations.map(function(equation) {
+            return <Block.Table.Row.MathWidget equation={equation} />
+        });
+
+        var lc = <Block.Table.Row.LettersWidget letters={this.props.letters} />
+
+        return (
+            <div>
+                {lc}{ec}
+            </div>
         )
     }
 });
@@ -190,18 +326,22 @@ Block.Footer = React.createClass({
 });
 
 
-var AddProblemModal = React.createClass({
+var ProbForm = React.createClass({
     propTypes: {
         onSaveClick: React.PropTypes.func.isRequired
     },
+    statics: {
+        domId: 'probForm',
+        domIdSel: '#probForm'
+    },
     render: function() {
         return (
-            <div className="modal fade" id="addModal" tabindex="-1" role="dialog" labelledby="myModalLabel">
+            <div className="modal fade" id={ProbForm.domId} tabindex="-1" role="dialog" labelledby="myModalLabel">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
-                        <AddProblemModal.Header />
-                        <AddProblemModal.Body />
-                        <AddProblemModal.Footer onSaveClick={this.props.onSaveClick} />
+                        <ProbForm.Header />
+                        <ProbForm.Body />
+                        <ProbForm.Footer onSaveClick={this.props.onSaveClick} />
                     </div>
                 </div>
             </div>
@@ -209,7 +349,7 @@ var AddProblemModal = React.createClass({
     }
 });
 
-AddProblemModal.Header = React.createClass({
+ProbForm.Header = React.createClass({
     render: function() {
         return (
             <div className="modal-header">
@@ -220,10 +360,10 @@ AddProblemModal.Header = React.createClass({
     }
 });
 
-AddProblemModal.Body = React.createClass({
+ProbForm.Body = React.createClass({
     getInitialState: function() {
         return {
-            type: 'ml'
+            type: 'l'
         }
     },
     onTypeChange: function(event) {
@@ -237,34 +377,80 @@ AddProblemModal.Body = React.createClass({
                     <div className="form-group">
                         <label for="probType">Type</label>
                         <select className="form-control" id="probType" onChange={this.onTypeChange}>
+                            <option value="l">Letter Sequence</option>
+                            <option value="m">Math Equation</option>
                             <option value="ml">Math and Letters</option>
+                            <option value="s">Square Sequence</option>
+                            <option value="sy">Symmetry</option>
                             <option value="ss">Symmetry and Squares</option>
+                            <option value="r">Reading</option>
+                            <option value="rl">Reading and Letters</option>
                         </select>
                     </div>
-                    <AddProblemModal.SpecialPane type={this.state.type} />
+                    <ProbForm.SpecialPane type={this.state.type} />
                 </form>
             </div>
         )
     }
 });
 
-AddProblemModal.SpecialPane = React.createClass({
+ProbForm.SpecialPane = React.createClass({
     propTypes: {
         type: React.PropTypes.string.isRequired
     },
     render: function() {
         switch(this.props.type) {
+            case 'l':
+                return <ProbForm.LPane/>
+            case 'm':
+                return <ProbForm.MPane/>
             case 'ml':
-                return <AddProblemModal.MLPane />
+                return <ProbForm.MLPane/>
+            case 's':
+                return <div>Squares</div>
+            case 'sy':
+                return <div>Symmetry</div>
             case 'ss':
-                return <AddProblemModal.SSPane />
+                return <ProbForm.SSPane/>
+            case 'r':
+                return <div>Reading</div>
+            case 'rl':
+                return <div>Reading and Letters</div>
             default:
                 return null;
         }
     }
 });
 
-AddProblemModal.MLPane = React.createClass({
+ProbForm.LPane = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <div className="form-group">
+                    <label for="ml-letters">Letters</label>
+                    <input type="text" className="form-control" id="ml-letters" />
+                    <div>A sequence of letters. For example: <code>X,Y,Z</code></div>
+                </div>
+            </div>
+        )
+    }
+});
+
+ProbForm.MPane = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <div className="form-group">
+                    <label for="ml-equation">Equation</label>
+                    <input className="form-control" id="ml-equation"/>
+                    <div>An equation, such as <code>(2*2)+2=2</code></div>
+                </div>
+            </div>
+        )
+    }
+});
+
+ProbForm.MLPane = React.createClass({
     render: function() {
         return (
             <div>
@@ -283,7 +469,15 @@ AddProblemModal.MLPane = React.createClass({
     }
 });
 
-AddProblemModal.SSPane = React.createClass({
+ProbForm.SPane = React.createClass({
+    render: function() {
+        return (
+            <div>SSPane</div>
+        )
+    }
+});
+
+ProbForm.SSPane = React.createClass({
     render: function() {
         return (
             <div>SSPane</div>
@@ -292,7 +486,7 @@ AddProblemModal.SSPane = React.createClass({
 });
 
 
-AddProblemModal.Footer = React.createClass({
+ProbForm.Footer = React.createClass({
     propTypes: {
         onSaveClick: React.PropTypes.func.isRequired
     },

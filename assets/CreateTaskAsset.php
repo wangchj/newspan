@@ -7,7 +7,9 @@ class CreateTaskAsset extends AssetBundle
 {
     public $basePath = '@webroot';
     public $baseUrl = '@web';
-    public $css = [];
+    public $css = [
+        'css/bootplus.css'
+    ];
     public $js = [
         'https://fb.me/react-0.13.3.js',
         'https://fb.me/JSXTransformer-0.13.3.js',

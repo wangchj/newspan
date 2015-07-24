@@ -34,8 +34,8 @@ class TasksController extends Controller
         return $this->render('index', ['tasks'=>$tasks]);
     }
 
-    public function actionCreate()
+    public function actionCreate($type)
     {
-        return $this->render('create');
+        return $this->render('create', ['type'=>$type]);
     }
 }
