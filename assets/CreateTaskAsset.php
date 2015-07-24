@@ -13,7 +13,7 @@ class CreateTaskAsset extends AssetBundle
     public $js = [
         'https://fb.me/react-0.13.3.js',
         'https://fb.me/JSXTransformer-0.13.3.js',
-        //'js/comp/create-task.js'
+        'js/models.js'
     ];
     public $depends = [
         'app\assets\AppAsset'

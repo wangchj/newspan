@@ -31,7 +31,7 @@ var CreateTask = React.createClass({
 
         var type = $(ProbForm.domIdSel + ' #probType').val();
         switch(type) {
-            case 'ml':
+            case EQLS.typeId:
                 var eqStr = $(ProbForm.domIdSel + ' #ml-equations').val().trim();
                 var leStr = $(ProbForm.domIdSel + ' #ml-letters').val().trim();
 
@@ -44,7 +44,7 @@ var CreateTask = React.createClass({
                         var i = this.addProb.blockPos;
                         this.state.blocks[i].push({
                             id: this.state.blocks[i].length,
-                            type: 'math-letter',
+                            type: EQLS.typeId,
                             letters: le,
                             equations: eq
                         });
@@ -73,22 +73,22 @@ var CreateTask = React.createClass({
             case 'ospan':
                 return [
                     [
-                        {id: 0, type: 'letter', problem: ['G', 'H']},
-                        {id: 1, type: 'letter', problem: ['P', 'F', 'D']},
-                        {id: 2, type: 'letter', problem: ['V', 'R', 'S', 'N']}
+                        {id: 0, type: LS.typeId, problem: ['G', 'H']},
+                        {id: 1, type: LS.typeId, problem: ['P', 'F', 'D']},
+                        {id: 2, type: LS.typeId, problem: ['V', 'R', 'S', 'N']}
                     ],
                     [
-                        {id: 0, type: 'math', problem: '(2*4)+1=5'},
-                        {id: 1, type: 'math', problem: '(24/2)-6=1'},
-                        {id: 2, type: 'math', problem: '(10/2)+2=6'},
-                        {id: 3, type: 'math', problem: '(2*3)-3=3'},
-                        {id: 4, type: 'math', problem: '(2*2)+2=6'},
-                        {id: 5, type: 'math', problem: '(7/7)+7=8'}
+                        {id: 0, type: EQ.typeId, problem: '(2*4)+1=5'},
+                        {id: 1, type: EQ.typeId, problem: '(24/2)-6=1'},
+                        {id: 2, type: EQ.typeId, problem: '(10/2)+2=6'},
+                        {id: 3, type: EQ.typeId, problem: '(2*3)-3=3'},
+                        {id: 4, type: EQ.typeId, problem: '(2*2)+2=6'},
+                        {id: 5, type: EQ.typeId, problem: '(7/7)+7=8'}
                     ],
                     [
                         {
                             id: 0,
-                            type: 'math-letter',
+                            type: EQLS.typeId,
                             letters: ['G', 'H'],
                             equations: [
                                 '(10*2)-10=10',
@@ -97,7 +97,7 @@ var CreateTask = React.createClass({
                         },
                         {
                             id: 1,
-                            type: 'math-letter',
+                            type: EQLS.typeId,
                             letters: ['P', 'F', 'D'],
                             equations: [
                                 '(5*2)-10=10',
@@ -107,7 +107,7 @@ var CreateTask = React.createClass({
                         },
                         {
                             id: 2,
-                            type: 'math-letter',
+                            type: EQLS.typeId,
                             letters: ['V', 'R', 'S', 'N'],
                             equations: [
                                 '(6*2)-10=3',
@@ -249,21 +249,21 @@ Block.Table.Row = React.createClass({
     },
     getProblemWidget: function() {
         switch(this.props.problem.type) {
-            case 'math':
+            case EQ.typeId:
                 return <Block.Table.Row.MathWidget equation={this.props.problem.problem} />
-            case 'letter':
+            case LS.typeId:
                 return <Block.Table.Row.LettersWidget letters={this.props.problem.problem} />
-            case 'math-letter':
+            case EQLS.typeId:
                 return <Block.Table.Row.MathLetterWidget equations={this.props.problem.equations} letters={this.props.problem.letters}/>
-            case 'squares':
+            case SQ.typeId:
                 return <div>Square widget</div>
-            case 'symmetry':
+            case SY.typeId:
                 return <div>Symmetry widget</div>
-            case 'symmetry-squares':
+            case SYSQ.typeId:
                 return <div>Symmetry squares widget</div>
-            case 'sentence':
+            case RS.typeId:
                 return <div>Sentence widget</div>
-            case 'sentence-letter':
+            case RSLS.typeId:
                 return <div>Sentence letter widget</div>
         }
     }
@@ -363,7 +363,7 @@ ProbForm.Header = React.createClass({
 ProbForm.Body = React.createClass({
     getInitialState: function() {
         return {
-            type: 'l'
+            type: LS.typeId
         }
     },
     onTypeChange: function(event) {
@@ -377,14 +377,14 @@ ProbForm.Body = React.createClass({
                     <div className="form-group">
                         <label for="probType">Type</label>
                         <select className="form-control" id="probType" onChange={this.onTypeChange}>
-                            <option value="l">Letter Sequence</option>
-                            <option value="m">Math Equation</option>
-                            <option value="ml">Math and Letters</option>
-                            <option value="s">Square Sequence</option>
-                            <option value="sy">Symmetry</option>
-                            <option value="ss">Symmetry and Squares</option>
-                            <option value="r">Reading</option>
-                            <option value="rl">Reading and Letters</option>
+                            <option value={LS.typeId}>Letter Sequence</option>
+                            <option value={EQ.typeId}>Math Equation</option>
+                            <option value={EQLS.typeId}>Math and Letters</option>
+                            <option value={SQ.typeId}>Square Sequence</option>
+                            <option value={SY.typeId}>Symmetry</option>
+                            <option value={SYSQ.typeId}>Symmetry and Squares</option>
+                            <option value={RS.typeId}>Reading</option>
+                            <option value={RSLS.typeId}>Reading and Letters</option>
                         </select>
                     </div>
                     <ProbForm.SpecialPane type={this.state.type} />
@@ -400,21 +400,21 @@ ProbForm.SpecialPane = React.createClass({
     },
     render: function() {
         switch(this.props.type) {
-            case 'l':
-                return <ProbForm.LPane/>
-            case 'm':
-                return <ProbForm.MPane/>
-            case 'ml':
-                return <ProbForm.MLPane/>
-            case 's':
+            case LS.typeId:
+                return <ProbForm.LSPane/>
+            case EQ.typeId:
+                return <ProbForm.EQPane/>
+            case EQLS.typeId:
+                return <ProbForm.EQLSPane/>
+            case SQ.typeId:
                 return <div>Squares</div>
-            case 'sy':
+            case SY.typeId:
                 return <div>Symmetry</div>
-            case 'ss':
+            case SYSQ.typeId:
                 return <ProbForm.SSPane/>
-            case 'r':
+            case RS.typdId:
                 return <div>Reading</div>
-            case 'rl':
+            case RSLS.typeId:
                 return <div>Reading and Letters</div>
             default:
                 return null;
@@ -422,13 +422,13 @@ ProbForm.SpecialPane = React.createClass({
     }
 });
 
-ProbForm.LPane = React.createClass({
+ProbForm.LSPane = React.createClass({
     render: function() {
         return (
             <div>
                 <div className="form-group">
-                    <label for="ml-letters">Letters</label>
-                    <input type="text" className="form-control" id="ml-letters" />
+                    <label for="ls-letters">Letters</label>
+                    <input type="text" className="form-control" id="ls-letters" />
                     <div>A sequence of letters. For example: <code>X,Y,Z</code></div>
                 </div>
             </div>
@@ -436,13 +436,13 @@ ProbForm.LPane = React.createClass({
     }
 });
 
-ProbForm.MPane = React.createClass({
+ProbForm.EQPane = React.createClass({
     render: function() {
         return (
             <div>
                 <div className="form-group">
-                    <label for="ml-equation">Equation</label>
-                    <input className="form-control" id="ml-equation"/>
+                    <label for="eq-equation">Equation</label>
+                    <input className="form-control" id="eq-equation"/>
                     <div>An equation, such as <code>(2*2)+2=2</code></div>
                 </div>
             </div>
@@ -450,18 +450,18 @@ ProbForm.MPane = React.createClass({
     }
 });
 
-ProbForm.MLPane = React.createClass({
+ProbForm.EQLSPane = React.createClass({
     render: function() {
         return (
             <div>
                 <div className="form-group">
-                    <label for="ml-equations">Equations</label>
-                    <textarea className="form-control" id="ml-equations"></textarea>
+                    <label for="eqls-equations">Equations</label>
+                    <textarea className="form-control" id="eqls-equations"></textarea>
                     <div>Equations separated by commas <code>,</code>. For example: <code>(2*2)+2=2, (4/2)-1=1</code></div>
                 </div>
                 <div className="form-group">
-                    <label for="ml-letters">Letters</label>
-                    <input type="text" className="form-control" id="ml-letters" />
+                    <label for="eqls-letters">Letters</label>
+                    <input type="text" className="form-control" id="eqls-letters" />
                     <div>A sequence of letters. For example: <code>X,Y,Z</code></div>
                 </div>
             </div>
@@ -469,7 +469,7 @@ ProbForm.MLPane = React.createClass({
     }
 });
 
-ProbForm.SPane = React.createClass({
+ProbForm.SQPane = React.createClass({
     render: function() {
         return (
             <div>SSPane</div>
@@ -477,7 +477,7 @@ ProbForm.SPane = React.createClass({
     }
 });
 
-ProbForm.SSPane = React.createClass({
+ProbForm.SYSQPane = React.createClass({
     render: function() {
         return (
             <div>SSPane</div>
