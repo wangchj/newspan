@@ -3,11 +3,30 @@ use yii\web\View;
 use app\assets\CreateTaskAsset;
 
 /* @var $this yii\web\View */
-$this->title = 'New Task';
+
+switch($type) {
+    case 'ospan':
+        $this->title = 'New Operation Span Task';
+        break;
+    case 'sspan':
+        $this->title = 'New Symmetry Span Task';
+        break;
+    case 'rspan': 
+        $this->title = 'New Reading Span Task';
+        break;
+}
+
 CreateTaskAsset::register($this);
 ?>
 
-<h1>New Task</h1>
+<h1><?=$this->title?></h1>
+
+<form>
+    <div class="form-group">
+        <label for="taskName">Task Name</label>
+        <input class="form-control"/>
+    </div>
+</form>
 
 <div id="comp"></div>
 
