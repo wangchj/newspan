@@ -6,7 +6,6 @@ var EQ = {
         return eval(equation.substring(0, p)) == equation.substring(p + 1);
     },
     isValid: function(equation) {
-        console.log(equation);
         return /^[()0-9+\-*\/]+=\d+$/.test(equation);
     }
 };
