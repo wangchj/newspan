@@ -1,38 +1,82 @@
 var task = [];
 
 var CreateTask = React.createClass({
+    statics: {
+        editMode: {add: 0, edit: 1}
+    },
     getInitialState: function() {
-        this.addProb = {
-            blockPos: null
-        };
-
         var blocks = this.getBlocksTemplate(taskType);
 
         return {
             blocks: blocks,
-            edProb: null
+            //Edit problem context {mode, prob, blockId, probId, subId, ssubId}
+            editContext: {mode: CreateTask.editMode.add}
         };
     },
     addBlock: function() {
         this.state.blocks.push([]);
         this.setState({blocks: this.state.blocks});
     },
-    onAddProbClick: function(blockPos) {
-        this.addProb.blockPos = blockPos;
-        $(ProbForm.domIdSel).modal('show');
+    /**
+     * @param mode integer One of values of editMode.
+     * @param blockId integer Position of the block.
+     * @param probId integer Position of the problem in the block.
+     * @param subid integer  Sub id
+     * @param ssubid integer Sub-sub id
+     */
+    showProbForm: function(mode, blockId, probId, subId, ssubId) {
+        if(mode == CreateTask.editMode.add) {
+            this.setState({editContext:{mode: CreateTask.editMode.add, blockId: blockId}});
+            $(ProbForm.domIdSel).modal('show');
+        }
+        else {
+            var block = this.state.blocks[blockId];
+            var prob = block[probId];
+            var ec = {
+                mode: CreateTask.editMode.edit,
+                blockId: blockId,
+                probId: probId,
+                subId: subId,
+                ssubId: ssubId
+            };
+
+            switch(prob.type) {
+                case EQLS.typeId:
+                    prob = subId == 0 ? {type: LS.typeId, letters: prob.letters} : {type: EQ.typeId, equation: prob.equations[ssubId]};
+                    break;
+                case SYSQ.typeId:
+                    prob = subId == 0 ? {type: SQ.typeId, sequence: prob.sequence} : {type: SY.typeId, symmetry: prob.symmetries[ssubId]};
+                    break;
+                case RSLS.typeId:
+                    //TODO
+                    //prob = subId == 0 ? {type: LS.typeId, letters: prob.letters} : {type: RS.typeId, sentence: prop.sentences[ssubId]}
+                    break;
+            }
+
+            ec.prob = prob;
+
+            this.setState({editContext: ec});
+            $(ProbForm.domIdSel).modal('show');
+        }
     },
-    onProbDel: function(blockPos, probId) {
-        var block = this.state.blocks[blockPos];
+    onAddProbClick: function(blockId) {
+        this.showProbForm(CreateTask.editMode.add, blockId);
+    },
+    onProbEdit: function(blockId, probId, subId, ssubId) {
+        console.log('Top level onProbEdit', blockId, probId, subId, ssubId);
+        this.showProbForm(CreateTask.editMode.edit, blockId, probId, subId, ssubId);
+    },
+    onProbDel: function(blockId, probId) {
+        var block = this.state.blocks[blockId];
         block.splice(probId, 1);
         this.setState({blocks:this.state.blocks});
     },
     onProbFormSave: function() {
-        console.log('Prob Form Save Click');
-
-        if(this.state.edProb)
-            this.probFormSaveEdit();
-        else
+        if(this.state.editContext.mode === CreateTask.editMode.add)
             this.probFormSaveNew();
+        else
+            this.probFormSaveEdit();
+
         
     },
     probFormSaveNew: function() {
@@ -55,12 +99,12 @@ var CreateTask = React.createClass({
 
         if(str && str.length > 0) {
             var a = str.split(',').map(function(str){return str.trim()}),
-                i = this.addProb.blockPos;
+                i = this.state.editContext.blockId;
 
             this.state.blocks[i].push({
                 id: this.state.blocks[i].length,
                 type: LS.typeId,
-                problem: a
+                letters: a
             });
 
             this.setState({blocks: this.state.blocks});
@@ -71,12 +115,12 @@ var CreateTask = React.createClass({
         var eq = $(ProbForm.domIdSel + ' #equation').val().trim();
 
         if(EQ.isValid(eq)) {
-            var i = this.addProb.blockPos;
+            var i = this.state.editContext.blockId;
 
             this.state.blocks[i].push({
                 id: this.state.blocks[i].length,
                 type: EQ.typeId,
-                problem: eq
+                equation: eq
             });
 
             this.setState({blocks: this.state.blocks});
@@ -93,7 +137,7 @@ var CreateTask = React.createClass({
 
             if(eq && eq.length > 0 && le && le.length > 0 && eq.length == le.length) {
                 console.log(eq, le);
-                var i = this.addProb.blockPos;
+                var i = this.state.editContext.blockId;
                 this.state.blocks[i].push({
                     id: this.state.blocks[i].length,
                     type: EQLS.typeId,
@@ -111,9 +155,9 @@ var CreateTask = React.createClass({
     render: function() {
         return (
             <div>
-                <BlockList blocks={this.state.blocks} onAddProbClick={this.onAddProbClick} onProbDel={this.onProbDel}/>
+                <BlockList blocks={this.state.blocks} onAddProbClick={this.onAddProbClick} onProbEdit={this.onProbEdit} onProbDel={this.onProbDel}/>
                 <CreateTask.Buttons onAddBlock={this.addBlock}/>
-                <ProbForm prob={this.state.edProb} onSaveClick={this.onProbFormSave}/>
+                <ProbForm editContext={this.state.editContext} onSaveClick={this.onProbFormSave}/>
             </div>
         );
     },
@@ -122,17 +166,17 @@ var CreateTask = React.createClass({
             case 'ospan':
                 return [
                     [
-                        {id: 0, type: LS.typeId, problem: ['G', 'H']},
-                        {id: 1, type: LS.typeId, problem: ['P', 'F', 'D']},
-                        {id: 2, type: LS.typeId, problem: ['V', 'R', 'S', 'N']}
+                        {id: 0, type: LS.typeId, letters: ['G', 'H']},
+                        {id: 1, type: LS.typeId, letters: ['P', 'F', 'D']},
+                        {id: 2, type: LS.typeId, letters: ['V', 'R', 'S', 'N']}
                     ],
                     [
-                        {id: 0, type: EQ.typeId, problem: '(2*4)+1=5'},
-                        {id: 1, type: EQ.typeId, problem: '(24/2)-6=1'},
-                        {id: 2, type: EQ.typeId, problem: '(10/2)+2=6'},
-                        {id: 3, type: EQ.typeId, problem: '(2*3)-3=3'},
-                        {id: 4, type: EQ.typeId, problem: '(2*2)+2=6'},
-                        {id: 5, type: EQ.typeId, problem: '(7/7)+7=8'}
+                        {id: 0, type: EQ.typeId, equation: '(2*4)+1=5'},
+                        {id: 1, type: EQ.typeId, equation: '(24/2)-6=1'},
+                        {id: 2, type: EQ.typeId, equation: '(10/2)+2=6'},
+                        {id: 3, type: EQ.typeId, equation: '(2*3)-3=3'},
+                        {id: 4, type: EQ.typeId, equation: '(2*2)+2=6'},
+                        {id: 5, type: EQ.typeId, equation: '(7/7)+7=8'}
                     ],
                     [
                         {
@@ -199,11 +243,12 @@ var BlockList = React.createClass({
     propTypes: {
         blocks: React.PropTypes.array.isRequired,
         onAddProbClick: React.PropTypes.func.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired
     },
     render: function() {
         var blocks = this.props.blocks.map(function(block, index){
-            return <Block key={index} blockPos={index} block={block} onAddProbClick={this.props.onAddProbClick} onProbDel={this.props.onProbDel}/>
+            return <Block key={index} blockId={index} block={block} onAddProbClick={this.props.onAddProbClick} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel}/>
         }.bind(this));
 
         return <div>{blocks}</div>
@@ -212,17 +257,22 @@ var BlockList = React.createClass({
 
 var Block = React.createClass({
     propTypes: {
-        blockPos: React.PropTypes.number.isRequired,
+        blockId: React.PropTypes.number.isRequired,
         block: React.PropTypes.array.isRequired,
         onAddProbClick: React.PropTypes.func.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired
+    },
+    onProbEdit: function(blockId, probId, subId, ssubId) {
+        console.log('Block.onProbEdit', blockId, probId, subId, ssubId);
+        this.props.onProbEdit(this.props.blockId, probId, subId, ssubId);
     },
     render: function() {
         return (
             <div className="panel panel-default">
-                <Block.Heading blockPos={this.props.blockPos} />
-                <Block.Body blockPos={this.props.blockPos} block={this.props.block} onProbDel={this.props.onProbDel}/>
-                <Block.Footer blockPos={this.props.blockPos} onAddProbClick={this.props.onAddProbClick}/>
+                <Block.Heading blockId={this.props.blockId} />
+                <Block.Body blockId={this.props.blockId} block={this.props.block} onProbEdit={this.onProbEdit} onProbDel={this.props.onProbDel}/>
+                <Block.Footer blockId={this.props.blockId} onAddProbClick={this.props.onAddProbClick}/>
             </div>
         )
     }
@@ -231,12 +281,12 @@ var Block = React.createClass({
 
 Block.Heading = React.createClass({
     propTypes: {
-        blockPos: React.PropTypes.number.isRequired
+        blockId: React.PropTypes.number.isRequired
     },
     render: function() {
         return (
             <div className="panel-heading">
-                <h2 className="panel-title">Block {this.props.blockPos + 1}</h2>
+                <h2 className="panel-title">Block {this.props.blockId + 1}</h2>
             </div>
         )
     }
@@ -244,13 +294,14 @@ Block.Heading = React.createClass({
 
 Block.Body = React.createClass({
     propTypes: {
-        blockPos: React.PropTypes.number.isRequired,
+        blockId: React.PropTypes.number.isRequired,
         block: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired
     },
     render: function() {
         var res = this.props.block.length > 0 ?
-            <Block.Table blockPos={this.props.blockPos} block={this.props.block} onProbDel={this.props.onProbDel} /> :
+            <Block.Table blockId={this.props.blockId} block={this.props.block} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel} /> :
             <div className="panel-body">There is currently no problem in this block.</div>
         return res;
     }
@@ -258,8 +309,9 @@ Block.Body = React.createClass({
 
 Block.Table = React.createClass({
     propTypes: {
-        blockPos: React.PropTypes.number.isRequired,
+        blockId: React.PropTypes.number.isRequired,
         block: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired
     },
     render: function() {
@@ -267,7 +319,7 @@ Block.Table = React.createClass({
             <table className="table">
                 <tbody>
                     {this.props.block.map(function(p, i){
-                        return <Block.Table.Row key={i} blockPos={this.props.blockPos} problem={p} onProbDel={this.props.onProbDel}/>
+                        return <Block.Table.Row key={i} blockId={this.props.blockId} problem={p} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel}/>
                     }.bind(this))}
                 </tbody>
             </table>
@@ -277,12 +329,25 @@ Block.Table = React.createClass({
 
 Block.Table.Row = React.createClass({
     propTypes: {
-        blockPos: React.PropTypes.number.isRequired,
+        blockId: React.PropTypes.number.isRequired,
         problem: React.PropTypes.object.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired
     },
+    // onProbEdit: function(e) {
+    //     console.log('Block.Table.Row clicked');
+    //     console.log(e);
+    //     console.log(e.target);
+    //     console.log(e.detail);
+
+    //     //this.props.onProbEdit(this.props.blockId, this.props.key);
+    // },
+    onProbEdit: function(blockId, probId, subId, ssubId) {
+        console.log('Row.onProbEdit', blockId, probId, subId, ssubId);
+        this.props.onProbEdit(null, this.props.problem.id, subId, ssubId);
+    },
     onProbDel: function() {
-        this.props.onProbDel(this.props.blockPos, this.props.problem.id);
+        this.props.onProbDel(this.props.blockId, this.props.problem.id);
     },
     render: function() {
         return (
@@ -311,11 +376,11 @@ Block.Table.Row = React.createClass({
     getProblemWidget: function() {
         switch(this.props.problem.type) {
             case EQ.typeId:
-                return <Block.Table.Row.MathWidget equation={this.props.problem.problem} />
+                return <Block.Table.Row.MathWidget onProbEdit={this.onProbEdit} equation={this.props.problem.equation} />
             case LS.typeId:
-                return <Block.Table.Row.LettersWidget letters={this.props.problem.problem} />
+                return <Block.Table.Row.LettersWidget onProbEdit={this.onProbEdit} letters={this.props.problem.letters} />
             case EQLS.typeId:
-                return <Block.Table.Row.MathLetterWidget equations={this.props.problem.equations} letters={this.props.problem.letters}/>
+                return <Block.Table.Row.MathLetterWidget onProbEdit={this.onProbEdit} equations={this.props.problem.equations} letters={this.props.problem.letters}/>
             case SQ.typeId:
                 return <div>Square widget</div>
             case SY.typeId:
@@ -332,34 +397,37 @@ Block.Table.Row = React.createClass({
 
 Block.Table.Row.MathWidget = React.createClass({
     propTypes: {
-        equation: React.PropTypes.string.isRequired
+        equation: React.PropTypes.string.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired
     },
     render: function() {
-        return <span className="inline-item">{this.props.equation}</span>
+        return <span className="inline-item" style={{cursor:'pointer'}} onClick={this.props.onProbEdit.bind(null, null, null, null, null)}>{this.props.equation}</span>
     }
 });
 
 Block.Table.Row.LettersWidget = React.createClass({
     propTypes: {
-        letters: React.PropTypes.array.isRequired
+        letters: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired
     },
     render: function() {
         var str = this.props.letters.toString().replace(/,/g, ', ');
-        return <span className="inline-item">{str}</span>
+        return <span className="inline-item" style={{cursor:'pointer'}} onClick={this.props.onProbEdit.bind(null, null, null, null, null)}>{str}</span>
     }
 });
 
 Block.Table.Row.MathLetterWidget = React.createClass({
     propTypes: {
         equations: React.PropTypes.array.isRequired,
-        letters: React.PropTypes.array.isRequired
+        letters: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired
     },
     render: function() {
-        var ec = this.props.equations.map(function(equation, i) {
-            return <Block.Table.Row.MathWidget key={i} equation={equation} />
-        });
+        var lc = <Block.Table.Row.LettersWidget letters={this.props.letters} onProbEdit={this.props.onProbEdit.bind(null, null, null, 0, null)}/>
 
-        var lc = <Block.Table.Row.LettersWidget letters={this.props.letters} />
+        var ec = this.props.equations.map(function(equation, i) {
+            return <Block.Table.Row.MathWidget key={i} equation={equation} onProbEdit={this.props.onProbEdit.bind(null, null, null, 1, i)}/>
+        }.bind(this));
 
         return (
             <div>
@@ -371,11 +439,11 @@ Block.Table.Row.MathLetterWidget = React.createClass({
 
 Block.Footer = React.createClass({
     propTypes: {
-        blockPos: React.PropTypes.number.isRequired,
+        blockId: React.PropTypes.number.isRequired,
         onAddProbClick: React.PropTypes.func.isRequired
     },
     onAddProbClick: function() {
-        this.props.onAddProbClick(this.props.blockPos);
+        this.props.onAddProbClick(this.props.blockId);
     },
     render: function() {
         return (
@@ -389,7 +457,7 @@ Block.Footer = React.createClass({
 
 var ProbForm = React.createClass({
     propTypes: {
-        prob: React.PropTypes.object,
+        editContext: React.PropTypes.object.isRequired,
         onSaveClick: React.PropTypes.func.isRequired
     },
     statics: {
@@ -401,8 +469,8 @@ var ProbForm = React.createClass({
             <div className="modal fade" id={ProbForm.domId} tabIndex="-1" role="dialog" labelledby="myModalLabel">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
-                        <ProbForm.Header prob={this.props.prob}/>
-                        <ProbForm.Body prob={this.props.prob}/>
+                        <ProbForm.Header editContext={this.props.editContext}/>
+                        <ProbForm.Body editContext={this.props.editContext}/>
                         <ProbForm.Footer onSaveClick={this.props.onSaveClick} />
                     </div>
                 </div>
@@ -413,14 +481,14 @@ var ProbForm = React.createClass({
 
 ProbForm.Header = React.createClass({
     propTypes: {
-        prob: React.PropTypes.object
+        editContext: React.PropTypes.object.isRequired
     },
     render: function() {
         return (
             <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 {
-                    this.props.prob ? 
+                    this.props.editContext.mode === CreateTask.editMode.add ? 
                         <h4 className="modal-title" id="myModalLabel">New Problem</h4> :
                         <h4 className="modal-title" id="myModalLabel">Edit Problem</h4>
                 }
@@ -431,7 +499,7 @@ ProbForm.Header = React.createClass({
 
 ProbForm.Body = React.createClass({
     propTypes: {
-        prob: React.PropTypes.object
+        editContext: React.PropTypes.object.isRequired
     },
     getInitialState: function() {
         return {
@@ -439,7 +507,6 @@ ProbForm.Body = React.createClass({
         }
     },
     onTypeChange: function(event) {
-        console.log('Type changed', event.target.value);
         this.setState({type: event.target.value});
     },
     render: function() {
@@ -447,7 +514,7 @@ ProbForm.Body = React.createClass({
             <div className="modal-body">
                 <form>
                     {
-                        this.props.prob ? null :
+                        this.props.editContext.mode === CreateTask.editMode.edit ? null :
                         <div className="form-group">
                             <label htmlFor="probType">Type</label>
                             <select className="form-control" id="probType" onChange={this.onTypeChange}>
@@ -463,7 +530,7 @@ ProbForm.Body = React.createClass({
                         </div>
                     }
 
-                    <ProbForm.SpecialPane prob={this.props.prob} type={this.props.prob ? this.props.prob.type : this.state.type} />
+                    <ProbForm.SpecialPane editContext={this.props.editContext} type={this.props.editContext.mode === CreateTask.editMode.add ? this.state.type : this.props.editContext.prob.type}/>
                 </form>
             </div>
         )
@@ -472,12 +539,13 @@ ProbForm.Body = React.createClass({
 
 ProbForm.SpecialPane = React.createClass({
     propTypes: {
-        type: React.PropTypes.string.isRequired
+        type: React.PropTypes.string.isRequired,
+        editContext: React.PropTypes.object.isRequired
     },
     render: function() {
         switch(this.props.type) {
             case LS.typeId:
-                return <ProbForm.LSPane/>
+                return <ProbForm.LSPane editContext={this.props.editContext}/>
             case EQ.typeId:
                 return <ProbForm.EQPane/>
             case EQLS.typeId:
@@ -499,12 +567,25 @@ ProbForm.SpecialPane = React.createClass({
 });
 
 ProbForm.LSPane = React.createClass({
+    propTypes: {
+        editContext: React.PropTypes.object.isRequired
+    },
+    getInitialState: function() {
+        return {val: this.props.editContext.prob ? this.props.editContext.prob.letters : ''};
+    },
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({val: nextProps.editContext.prob ? nextProps.editContext.prob.letters : ''});
+    },
+    onChange: function(event) {
+        this.setState({val: event.target.value});
+    },
     render: function() {
+        console.log(this.props.editContext.prob);
         return (
             <div>
                 <div className="form-group">
                     <label htmlFor="letters">Letters</label>
-                    <input type="text" className="form-control" id="letters" />
+                    <input type="text" className="form-control" id="letters" value={this.state.val} onChange={this.onChange}/>
                     <div>A sequence of letters. For example: <code>X,Y,Z</code></div>
                 </div>
             </div>
