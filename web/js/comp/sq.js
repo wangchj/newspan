@@ -128,6 +128,17 @@ BoxSequence.Slide = React.createClass({
  * @prop onCellClick callback
  */
 BoxSequence.Slide.Figure = React.createClass({
+    propTypes: {
+        rows: React.PropTypes.number.isRequired,
+        cols: React.PropTypes.number.isRequired,
+        colored: React.PropTypes.array,
+        cellText: React.PropTypes.array,
+        borderColor: React.PropTypes.string,
+        loColor: React.PropTypes.string,
+        hiColor: React.PropTypes.string,
+        class: React.PropTypes.string,
+        onCellClick: React.PropTypes.func
+    },
     getDefaultProps: function() {
         return {
             borderColor: '#555',
@@ -136,7 +147,7 @@ BoxSequence.Slide.Figure = React.createClass({
         };
     },
     componentDidMount: function() {
-        var svg = $('svg');
+        var svg = this.props.class ? $('') : $('svg.' + this.props.class);
         var width = svg.width();
         svg.height(width);
     },
@@ -185,7 +196,7 @@ BoxSequence.Slide.Figure = React.createClass({
         var viewBoxH = this.props.rows * width + y0;
 
         return (
-            <svg style={{width:'100%'}} viewBox={'0 0 ' + viewBoxH + ' ' + viewBoxH}>
+            <svg className={this.props.class} style={{width:'100%'}} viewBox={'0 0 ' + viewBoxH + ' ' + viewBoxH}>
                 {
                     cells.map(function(cell, index) {
                         if(this.cellTextIndex(cell) != -1)
