@@ -225,7 +225,13 @@ var CreateTask = React.createClass({
         }
     },
     probFormSaveEditSQ: function() {
-
+        var editContext = this.state.editContext;
+        var blockId = editContext.blockId;
+        var probId = editContext.probId;
+        var json = $(ProbForm.domIdSel + ' #squares').val().trim();
+        this.state.blocks[blockId][probId].squares = JSON.parse(json);
+        this.setState({blocks: this.state.blocks});
+        $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveEditSY: function() {
 
@@ -506,9 +512,9 @@ Block.Table.Row = React.createClass({
             case EQLS.typeId:
                 return <Block.Table.Row.MathLetterWidget onProbEdit={this.onProbEdit} equations={this.props.problem.equations} letters={this.props.problem.letters}/>
             case SQ.typeId:
-                return <Block.Table.Row.SquaresWidget squares={this.props.problem.squares}/>
+                return <Block.Table.Row.SquaresWidget squares={this.props.problem.squares} onProbEdit={this.onProbEdit}/>
             case SY.typeId:
-                return <Block.Table.Row.SymmetryWidget symmetry={this.props.problem.symmetry}/>
+                return <Block.Table.Row.SymmetryWidget symmetry={this.props.problem.symmetry} onProbEdit={this.onProbEdit}/>
             case SYSQ.typeId:
                 return <Block.Table.Row.SymmetrySquaresWidget squares={this.props.problem.squares} symmetries={this.props.problem.symmetries}/>
             case RS.typeId:
@@ -563,16 +569,21 @@ Block.Table.Row.MathLetterWidget = React.createClass({
 
 Block.Table.Row.SquaresWidget = React.createClass({
     propTypes: {
-        squares: React.PropTypes.array.isRequired
+        squares: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired
     },
     render: function() {
-        return <Block.Table.Row.SquaresWidget.Figure squares={this.props.squares}/>
+        return <Block.Table.Row.SquaresWidget.Figure squares={this.props.squares} onProbEdit={this.props.onProbEdit}/>
     }
 });
 
 Block.Table.Row.SquaresWidget.Figure = React.createClass({
     propTypes: {
-        squares: React.PropTypes.array.isRequired
+        squares: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired
+    },
+    onClick: function() {
+        this.props.onProbEdit(null, null, null, null);
     },
     render: function() {
         var text = this.props.squares.map(function(cell, i){
@@ -581,7 +592,7 @@ Block.Table.Row.SquaresWidget.Figure = React.createClass({
 
         return (
             <div style={{display:'inline-block', width:100, marginRight:15}}>
-                <BoxSequence.Slide.Figure class="row-figure" rows={4} cols={4} cellText={text}/>
+                <BoxSequence.Slide.Figure class="row-figure" rows={4} cols={4} cellText={text} onCellClick={this.onClick}/>
             </div>
         );
     }
@@ -589,21 +600,26 @@ Block.Table.Row.SquaresWidget.Figure = React.createClass({
 
 Block.Table.Row.SymmetryWidget = React.createClass({
     propTypes: {
-        symmetry: React.PropTypes.array.isRequired
+        symmetry: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired
     },
     render: function() {
-        return <Block.Table.Row.SymmetryWidget.Figure symmetry={this.props.symmetry}/>
+        return <Block.Table.Row.SymmetryWidget.Figure symmetry={this.props.symmetry} onProbEdit={this.props.onProbEdit}/>
     }
 });
 
 Block.Table.Row.SymmetryWidget.Figure = React.createClass({
     propTypes: {
-        symmetry: React.PropTypes.array.isRequired
+        symmetry: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired
+    },
+    onClick: function() {
+        this.props.onProbEdit(null, null, null, null);
     },
     render: function() {
         return (
             <div style={{display:'inline-block', width:100, marginRight:15, marginBottom:8, marginTop:8}}>
-                <BoxSequence.Slide.Figure class="row-figure" rows={8} cols={8} colored={this.props.symmetry} borderColor={'#000'} hiColor={'#000'}/>
+                <BoxSequence.Slide.Figure class="row-figure" rows={8} cols={8} colored={this.props.symmetry} borderColor={'#000'} hiColor={'#000'} onCellClick={this.onClick}/>
                 <div style={{textAlign:'center', width:'100%', fontSize:12}}>{SY.isSymmetric(this.props.symmetry) ? 'Symmetric' : 'Asymmetric'}</div>
             </div>
         );
@@ -836,16 +852,71 @@ ProbForm.SQPane = React.createClass({
     propTypes: {
         editContext: React.PropTypes.object.isRequired
     },
+    getInitialState: function() {
+        var slots = new Array(4 * 4);
+        
+        if(this.props.editContext.prob)
+            for(var i = 0; i < this.props.editContext.prob.squares.length; i++)
+                slots[i] = this.props.editContext.prob.squares[i];
+
+        return {slots: slots};
+    },
+    componentWillReceiveProps: function(nextProps) {
+        var slots = new Array(4 * 4);
+        
+        if(nextProps.editContext.prob)
+            for(var i = 0; i < nextProps.editContext.prob.squares.length; i++)
+                slots[i] = nextProps.editContext.prob.squares[i];
+
+        this.setState({slots: slots});
+    },
+    onCellClick: function(cell) {
+        var index = this.indexOf(cell);
+        var slots = this.state.slots;
+
+        if(index == -1) {
+            for(var i = 0; i < slots.length; i++) {
+                if(!slots[i]) {
+                    slots[i] = cell;
+                    this.setState({slots: slots});
+                    break;
+                }
+            }
+        }
+        else {
+            slots[index] = null;
+            this.setState({slots: slots});
+        }
+    },
     render: function() {
+        var slots = this.state.slots,
+            cellText = [],
+            trunc = [];
+
+        for(var i = 0; i < slots.length; i++)
+            cellText.push({loc: slots[i], text: i + 1});
+
+        for(var i = 0; i < slots.length; i++)
+            if(slots[i])
+                trunc.push(slots[i]);
+
         return (
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-xs-6 col-xs-offset-3">
-                        <BoxSequence.Slide.Figure rows={4} cols={4}/>
+                        <input type="hidden" id="squares" value={JSON.stringify(trunc)}/>
+                        <BoxSequence.Slide.Figure rows={4} cols={4} cellText={cellText} onCellClick={this.onCellClick}/>
                     </div>
                 </div>
             </div>
         )
+    },
+    indexOf: function(cell) {
+        var s = this.state.slots;
+        for(var i = 0; i < s.length; i++)
+            if(s[i] && s[i][0] == cell[0] && s[i][0] == cell[0] && s[i][1] == cell[1])
+                return i;
+        return -1;
     }
 });
 
