@@ -32,5 +32,7 @@ CreateTaskAsset::register($this);
 
 <?php $this->beginBlock('TheEnd');?>
     <script type="text/javascript">var taskType = '<?=$type?>';</script>
+    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
+    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
 <?php $this->endBlock();?>

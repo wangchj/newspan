@@ -300,7 +300,26 @@ var CreateTask = React.createClass({
                     [],[],[]
                 ];
             case 'sspan':
-                return [[]];
+                return [
+                    [
+                        {id: 0, type: SQ.typeId, squares: SQ.makeRandomFigure(2)},
+                        {id: 1, type: SQ.typeId, squares: SQ.makeRandomFigure(3)},
+                        {id: 2, type: SQ.typeId, squares: SQ.makeRandomFigure(4)}
+                    ],
+                    [
+                        {id: 0, type: SY.typeId, symmetry: SY.makeFigure()},
+                        {id: 1, type: SY.typeId, symmetry: SY.makeFigure()},
+                        {id: 2, type: SY.typeId, symmetry: SY.makeFigure()}
+                    ],
+                    [
+                        {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(2), symmetries: SYSQ.makeSymmetryFigures(2)},
+                        {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
+                        {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)}
+                    ],
+                    [],
+                    [],
+                    []
+                ];
             case 'rspan':
                 return [[]];
         }
@@ -469,11 +488,11 @@ Block.Table.Row = React.createClass({
             case EQLS.typeId:
                 return <Block.Table.Row.MathLetterWidget onProbEdit={this.onProbEdit} equations={this.props.problem.equations} letters={this.props.problem.letters}/>
             case SQ.typeId:
-                return <div>Square widget</div>
+                return <Block.Table.Row.SquaresWidget squares={this.props.problem.squares}/>
             case SY.typeId:
-                return <div>Symmetry widget</div>
+                return <Block.Table.Row.SymmetryWidget symmetry={this.props.problem.symmetry}/>
             case SYSQ.typeId:
-                return <div>Symmetry squares widget</div>
+                return <Block.Table.Row.SymmetrySquaresWidget squares={this.props.problem.squares} symmetries={this.props.problem.symmetries}/>
             case RS.typeId:
                 return <div>Sentence widget</div>
             case RSLS.typeId:
@@ -521,6 +540,76 @@ Block.Table.Row.MathLetterWidget = React.createClass({
                 {lc}{ec}
             </div>
         )
+    }
+});
+
+Block.Table.Row.SquaresWidget = React.createClass({
+    propTypes: {
+        squares: React.PropTypes.array.isRequired
+    },
+    render: function() {
+        return <Block.Table.Row.SquaresWidget.Figure squares={this.props.squares}/>
+    }
+});
+
+Block.Table.Row.SquaresWidget.Figure = React.createClass({
+    propTypes: {
+        squares: React.PropTypes.array.isRequired
+    },
+    render: function() {
+        var text = this.props.squares.map(function(cell, i){
+            return {loc: cell, text: i + 1};
+        });
+
+        return (
+            <div style={{display:'inline-block', width:100, marginRight:15}}>
+                <BoxSequence.Slide.Figure class="row-figure" rows={4} cols={4} cellText={text}/>
+            </div>
+        );
+    }
+});
+
+Block.Table.Row.SymmetryWidget = React.createClass({
+    propTypes: {
+        symmetry: React.PropTypes.array.isRequired
+    },
+    render: function() {
+        return <Block.Table.Row.SymmetryWidget.Figure symmetry={this.props.symmetry}/>
+    }
+});
+
+Block.Table.Row.SymmetryWidget.Figure = React.createClass({
+    propTypes: {
+        symmetry: React.PropTypes.array.isRequired
+    },
+    render: function() {
+        return (
+            <div style={{display:'inline-block', width:100, marginRight:15, marginBottom:8, marginTop:8}}>
+                <BoxSequence.Slide.Figure class="row-figure" rows={8} cols={8} colored={this.props.symmetry} borderColor={'#000'} hiColor={'#000'}/>
+                <div style={{textAlign:'center', width:'100%', fontSize:12}}>{SY.isSymmetric(this.props.symmetry) ? 'Symmetric' : 'Asymmetric'}</div>
+            </div>
+        );
+    }
+});
+
+Block.Table.Row.SymmetrySquaresWidget = React.createClass({
+    propTypes: {
+        squares: React.PropTypes.array.isRequired,
+        symmetries: React.PropTypes.array.isRequired
+    },
+    render: function() {
+        var squares = <Block.Table.Row.SquaresWidget.Figure squares={this.props.squares}/>
+
+        var symmetries = this.props.symmetries.map(function(symmetry, i) {
+            return <Block.Table.Row.SymmetryWidget.Figure key={i} symmetry={symmetry}/>
+        }.bind(this));
+
+        return (
+            <div>
+                <div style={{display:'inline-block'}}>{squares}<div dangerouslySetInnerHTML={{__html: '&nbsp;'}}/></div>
+                {symmetries}
+            </div>
+        );
     }
 });
 
@@ -638,7 +727,7 @@ ProbForm.SpecialPane = React.createClass({
             case EQLS.typeId:
                 return <ProbForm.EQLSPane/>
             case SQ.typeId:
-                return <ProbForm.SQPane/>
+                return <ProbForm.SQPane editContext={this.props.editContext}/>
             case SY.typeId:
                 return <ProbForm.SYPane/>
             case SYSQ.typeId:
@@ -726,9 +815,18 @@ ProbForm.EQLSPane = React.createClass({
 });
 
 ProbForm.SQPane = React.createClass({
+    propTypes: {
+        editContext: React.PropTypes.object.isRequired
+    },
     render: function() {
         return (
-            <div>Squares</div>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-xs-6 col-xs-offset-3">
+                        <BoxSequence.Slide.Figure rows={4} cols={4}/>
+                    </div>
+                </div>
+            </div>
         )
     }
 });

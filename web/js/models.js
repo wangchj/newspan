@@ -22,17 +22,149 @@ var EQLS = {
 
 var SQ = {
     typeId: 'sq',
-    typeLabel: 'Square Sequence'
+    typeLabel: 'Square Sequence',
+    /**
+     * @param length How many squares are to be in the generated sequence.
+     * @returns An array of arrays, where each array represent a point [x, y].
+     */
+    makeRandomFigure: function(length) {
+        var res = [];
+        while(res.length < length) {
+            var x = Math.floor(Math.random() * 4);
+            var y = Math.floor(Math.random() * 4);
+            var p = [x, y];
+            if(!arrayHasPoint(res, p))
+                res.push(p);
+        }
+        return res;
+    }
 };
 
 var SY = {
     typeId: 'sy',
-    typeLabel: 'Symmetry'
+    typeLabel: 'Symmetry',
+    getRandomPoint: function(array) {
+        var p = [0, 0];
+        do {
+            p[0] = Math.floor(Math.random() * 8);
+            p[1] = Math.floor(Math.random() * 8);
+        } while(arrayHasPoint(array, p));
+        return p;
+    },
+    /**
+     * Generate a random symmetric figure.
+     * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
+     */
+    makeSymmetricFigure: function(density) {
+        if(density < 0) throw 'Figure density cannot be a negative number';
+        if(density > 30) throw 'Figure density cannot be higher than 30';
+
+        var points = [];
+
+        while(points.length < density * 2) {
+            var x = Math.floor(Math.random() * 4);
+            var y = Math.floor(Math.random() * 8);
+            var p = [x, y];
+
+            if(!arrayHasPoint(p)) {
+                points.push(p);
+                points.push(this.getMirror(p));
+            }
+        }
+
+        return points;
+    },
+    /**
+     * Generate a asymmetric figure by mutating a random symmetric figure.
+     * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
+     */
+    makeAsymmetricFigure: function(density) {
+        var points = SymmetryTest.generateSymmetricFigure(density);
+
+        for(var i = 0; i < 3; i++) {
+            var op = Math.floor(Math.random() * (i == 0 ? 2 : 3));
+            switch(op) {
+                case 0:
+                    points.push(SymmetryTest.getRandomPoint(points));
+                    break;
+                case 1:
+                    var index = Math.floor(Math.random() * points.length);
+                    points.splice(index, 1);
+                    break;
+            }
+        }
+
+        return points;
+    },
+    /**
+     * Generate a totally random figure.
+     * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
+     */
+    makeRandomFigure: function(density) {
+        if(density < 0) throw 'Figure density cannot be a negative number';
+        if(density > 30) throw 'Figure density cannot be higher than 30';
+
+        var points = [];
+        while(points.length < density * 2) {
+            points.push(SymmetryTest.getRandomPoint(points));
+        }
+        return points;
+    },
+    makeFigure: function() {
+        var density = Math.floor(Math.random() * 18) + 12; 
+        switch(Math.floor(Math.random() * 5)) {
+            case 0:
+            case 1:
+                return SymmetryTest.generateSymmetricFigure(density);
+            case 2:
+            case 3:
+                return SymmetryTest.generateAsymmetricFigure(density);
+            case 4:
+                return SymmetryTest.generateRandomFigure(density);
+        }
+
+        return SymmetryTest.generateSymmetricFigure(density);
+    },
+    getMirror: function(p) {
+        return [7 - p[0], p[1]];
+    },
+    /**
+     * Checks a figure, represented by array, is symmetric.
+     * Throws if array is null or undefined.
+     */
+    isSymmetric: function(array) {
+        if(!array)
+            throw 'Figure array is undefined';
+
+        for(var i = 0; i < array.length; i++)
+            if(!arrayHasPoint(array, SymmetryTest.getMirror(array[i])))
+                return false;
+        return true;
+    }
 };
 
 var SYSQ = {
     typeId: 'sysq',
-    typeLabel: 'Symmetry Squares'
+    typeLabel: 'Symmetry Squares',
+    /**
+     * Make a random computer generated problem.
+     * @param length integer The length of the sequence.
+     * @returns An object {type, squares, symmetries}
+     */
+    makeProblem: function(length) {
+        var squares = SQ.makeRandomFigure(length);
+        var symmetries = this.makeSymmetryFigures(length);
+        
+        return {type:this.typeId, squares:squares, symmetries:symmetries};
+    },
+    makeSymmetryFigures: function(length) {
+        var symmetries = [];
+
+        for(var i = 0; i < length; i++)
+            symmetries.push(SY.makeFigure());
+
+        return symmetries;
+    }
 };
 
 var RS = {
