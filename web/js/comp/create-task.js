@@ -188,7 +188,16 @@ var CreateTask = React.createClass({
         }
     },
     probFormSaveEditEQ: function() {
+        var editContext = this.state.editContext;
+        var blockId = editContext.blockId;
+        var probId = editContext.probId;
+        var equation = $(ProbForm.domIdSel + ' #equation').val().trim();
 
+        if(EQ.isValid(equation)) {
+            this.state.blocks[blockId][probId].equation = equation;
+            this.setState({blocks: this.state.blocks});
+            $(ProbForm.domIdSel).modal('hide');
+        }
     },
     probFormSaveEditEQLS: function() {
 
@@ -603,7 +612,7 @@ ProbForm.SpecialPane = React.createClass({
             case LS.typeId:
                 return <ProbForm.LSPane editContext={this.props.editContext}/>
             case EQ.typeId:
-                return <ProbForm.EQPane/>
+                return <ProbForm.EQPane editContext={this.props.editContext}/>
             case EQLS.typeId:
                 return <ProbForm.EQLSPane/>
             case SQ.typeId:
@@ -650,12 +659,24 @@ ProbForm.LSPane = React.createClass({
 });
 
 ProbForm.EQPane = React.createClass({
+    propTypes: {
+        editContext: React.PropTypes.object.isRequired
+    },
+    getInitialState: function() {
+        return {val: this.props.editContext.prob ? this.props.editContext.prob.equation : ''};
+    },
+    componentWillReceiveProps: function(nextProps) {
+        this.setState({val: nextProps.editContext.prob ? nextProps.editContext.prob.equation : ''});
+    },
+    onChange: function(event) {
+        this.setState({val: event.target.value});
+    },
     render: function() {
         return (
             <div>
                 <div className="form-group">
                     <label htmlFor="equation">Equation</label>
-                    <input className="form-control" id="equation"/>
+                    <input className="form-control" id="equation" value={this.state.val} onChange={this.onChange}/>
                     <div>An equation, such as <code>(2*2)+2=2</code></div>
                 </div>
             </div>
