@@ -297,7 +297,7 @@ var CreateTask = React.createClass({
                             ]
                         }
                     ],
-                    []
+                    [],[],[]
                 ];
             case 'sspan':
                 return [[]];
