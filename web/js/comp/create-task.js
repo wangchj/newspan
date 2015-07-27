@@ -200,7 +200,29 @@ var CreateTask = React.createClass({
         }
     },
     probFormSaveEditEQLS: function() {
+        var editContext = this.state.editContext;
+        var blockId = editContext.blockId;
+        var probId = editContext.probId;
+        var subId = editContext.subId;
+        var ssubId = editContext.ssubId;
 
+        //This feature is currently not supported, so we just return.
+        if(subId == null || subId == undefined) return;
+
+        //Edit letters
+        if(subId == 0) {
+            this.probFormSaveEditLS();
+        }
+        //Edit one of the equations
+        else if(subId == 1) {
+            var equation = $(ProbForm.domIdSel + ' #equation').val().trim();
+
+            if(EQ.isValid(equation)) {
+                this.state.blocks[blockId][probId].equations[ssubId] = equation;
+                this.setState({blocks: this.state.blocks});
+                $(ProbForm.domIdSel).modal('hide');
+            }
+        }
     },
     probFormSaveEditSQ: function() {
 
