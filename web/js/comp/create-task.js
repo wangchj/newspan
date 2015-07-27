@@ -75,9 +75,7 @@ var CreateTask = React.createClass({
         if(this.state.editContext.mode === CreateTask.editMode.add)
             this.probFormSaveNew();
         else
-            this.probFormSaveEdit();
-
-        
+            this.probFormSaveEdit();  
     },
     probFormSaveNew: function() {
         var type = $(ProbForm.domIdSel + ' #probType').val();
@@ -150,6 +148,64 @@ var CreateTask = React.createClass({
         }
     },
     probFormSaveEdit: function() {
+        var editContext = this.state.editContext;
+        var block = this.state.blocks[editContext.blockId];
+        var prob = block[editContext.probId];
+
+        switch(prob.type) {
+            case LS.typeId:
+                return this.probFormSaveEditLS();
+            case EQ.typeId:
+                return this.probFormSaveEditEQ();
+            case EQLS.typeId:
+                return this.probFormSaveEditEQLS();
+            case SQ.typeId:
+                return this.probFormSaveEditSQ();
+            case SY.typeId:
+                return this.probFormSaveEditSY();
+            case SYSQ.typeId:
+                return this.probFormSaveEditSYSQ();
+            case RS.typeId:
+                return this.probFormSaveEditRS();
+            case RSLS.typeId:
+                return this.probFormSaveEditRSLS();
+        }
+    },
+    probFormSaveEditLS: function() {
+        var editContext = this.state.editContext;
+        var blockId = editContext.blockId;
+        var probId = editContext.probId;
+
+        var str = $(ProbForm.domIdSel + ' #letters').val().trim();
+        
+        if(str && str.length > 0) {
+            var a = str.split(',').map(function(str){return str.trim()});
+            if(a.length > 0) {
+                this.state.blocks[blockId][probId].letters = a;
+                this.setState({blocks: this.state.blocks});
+                $(ProbForm.domIdSel).modal('hide');
+            }
+        }
+    },
+    probFormSaveEditEQ: function() {
+
+    },
+    probFormSaveEditEQLS: function() {
+
+    },
+    probFormSaveEditSQ: function() {
+
+    },
+    probFormSaveEditSY: function() {
+
+    },
+    probFormSaveEditSYSQ: function() {
+
+    },
+    probFormSaveEditRS: function() {
+
+    },
+    probFormSaveEditRSLS: function() {
 
     },
     render: function() {
