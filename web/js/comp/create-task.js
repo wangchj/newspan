@@ -86,10 +86,12 @@ var CreateTask = React.createClass({
                 return this.probFormSaveNewEQ();
             case EQLS.typeId:
                 return this.probFormSaveNewEQLS();
-
-            case 'ss':
-                break;
-
+            case SQ.typeId:
+                return this.probFormSaveNewSQ();
+            case SY.typeId:
+                return this.probFormSaveNewSY();
+            case SYSQ.typeId:
+                return this.probFormSaveNewSYSQ();
         }
     },
     probFormSaveNewLS: function() {
@@ -146,6 +148,21 @@ var CreateTask = React.createClass({
                 $(ProbForm.domIdSel).modal('hide');
             }
         }
+    },
+    probFormSaveNewSQ: function() {
+        var editContext = this.state.editContext;
+        var blockId = editContext.blockId;
+        var json = $(ProbForm.domIdSel + ' #squares').val().trim();
+        this.state.blocks[blockId].push({
+            id: this.state.blocks[blockId].length,
+            type: SQ.typeId,
+            squares: JSON.parse(json)
+        });
+        this.setState({blocks: this.state.blocks});
+        $(ProbForm.domIdSel).modal('hide');
+    },
+    probFormSaveNewSY: function(){
+
     },
     probFormSaveEdit: function() {
         var editContext = this.state.editContext;
@@ -733,7 +750,7 @@ ProbForm.Body = React.createClass({
                         this.props.editContext.mode === CreateTask.editMode.edit ? null :
                         <div className="form-group">
                             <label htmlFor="probType">Type</label>
-                            <select className="form-control" id="probType" onChange={this.onTypeChange}>
+                            <select className="form-control" id="probType" value={this.state.type} onChange={this.onTypeChange}>
                                 <option value={LS.typeId}>Letter Sequence</option>
                                 <option value={EQ.typeId}>Math Equation</option>
                                 <option value={EQLS.typeId}>Math and Letters</option>
