@@ -63,7 +63,6 @@ var CreateTask = React.createClass({
         this.showProbForm(CreateTask.editMode.add, blockId);
     },
     onProbEdit: function(blockId, probId, subId, ssubId) {
-        console.log('Top level onProbEdit', blockId, probId, subId, ssubId);
         this.showProbForm(CreateTask.editMode.edit, blockId, probId, subId, ssubId);
     },
     onProbDel: function(blockId, probId) {
@@ -136,7 +135,6 @@ var CreateTask = React.createClass({
             var le = leStr.split(',').map(function(str){return str.trim()});
 
             if(eq && eq.length > 0 && le && le.length > 0 && eq.length == le.length) {
-                console.log(eq, le);
                 var i = this.state.editContext.blockId;
                 this.state.blocks[i].push({
                     id: this.state.blocks[i].length,
@@ -426,7 +424,6 @@ var Block = React.createClass({
         onProbDel: React.PropTypes.func.isRequired
     },
     onProbEdit: function(blockId, probId, subId, ssubId) {
-        console.log('Block.onProbEdit', blockId, probId, subId, ssubId);
         this.props.onProbEdit(this.props.blockId, probId, subId, ssubId);
     },
     render: function() {
@@ -496,16 +493,7 @@ Block.Table.Row = React.createClass({
         onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired
     },
-    // onProbEdit: function(e) {
-    //     console.log('Block.Table.Row clicked');
-    //     console.log(e);
-    //     console.log(e.target);
-    //     console.log(e.detail);
-
-    //     //this.props.onProbEdit(this.props.blockId, this.props.key);
-    // },
     onProbEdit: function(blockId, probId, subId, ssubId) {
-        console.log('Row.onProbEdit', blockId, probId, subId, ssubId);
         this.props.onProbEdit(null, this.props.problem.id, subId, ssubId);
     },
     onProbDel: function() {
@@ -822,7 +810,6 @@ ProbForm.LSPane = React.createClass({
         this.setState({val: event.target.value});
     },
     render: function() {
-        console.log(this.props.editContext.prob);
         return (
             <div>
                 <div className="form-group">
