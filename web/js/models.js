@@ -56,8 +56,8 @@ var SY = {
      * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
      */
     makeSymmetricFigure: function(density) {
-        if(density < 0) throw 'Figure density cannot be a negative number';
-        if(density > 30) throw 'Figure density cannot be higher than 30';
+        if(!density || density < 0 || density > 30)
+            density = Math.floor(Math.random() * 18) + 12;
 
         var points = [];
 
@@ -101,8 +101,8 @@ var SY = {
      * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
      */
     makeRandomFigure: function(density) {
-        if(density < 0) throw 'Figure density cannot be a negative number';
-        if(density > 30) throw 'Figure density cannot be higher than 30';
+        if(!density || density < 0 || density > 30)
+            density = Math.floor(Math.random() * 18) + 12;
 
         var points = [];
         while(points.length < density * 2) {
