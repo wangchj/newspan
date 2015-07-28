@@ -66,7 +66,7 @@ var SY = {
             var y = Math.floor(Math.random() * 8);
             var p = [x, y];
 
-            if(!arrayHasPoint(p)) {
+            if(!arrayHasPoint(points, p)) {
                 points.push(p);
                 points.push(this.getMirror(p));
             }
@@ -79,13 +79,13 @@ var SY = {
      * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
      */
     makeAsymmetricFigure: function(density) {
-        var points = SymmetryTest.generateSymmetricFigure(density);
+        var points = this.makeSymmetricFigure(density);
 
         for(var i = 0; i < 3; i++) {
             var op = Math.floor(Math.random() * (i == 0 ? 2 : 3));
             switch(op) {
                 case 0:
-                    points.push(SymmetryTest.getRandomPoint(points));
+                    points.push(this.getRandomPoint(points));
                     break;
                 case 1:
                     var index = Math.floor(Math.random() * points.length);
@@ -106,7 +106,7 @@ var SY = {
 
         var points = [];
         while(points.length < density * 2) {
-            points.push(SymmetryTest.getRandomPoint(points));
+            points.push(this.getRandomPoint(points));
         }
         return points;
     },
@@ -115,15 +115,15 @@ var SY = {
         switch(Math.floor(Math.random() * 5)) {
             case 0:
             case 1:
-                return SymmetryTest.generateSymmetricFigure(density);
+                return this.makeSymmetricFigure(density);
             case 2:
             case 3:
-                return SymmetryTest.generateAsymmetricFigure(density);
+                return this.makeAsymmetricFigure(density);
             case 4:
-                return SymmetryTest.generateRandomFigure(density);
+                return this.makeRandomFigure(density);
         }
 
-        return SymmetryTest.generateSymmetricFigure(density);
+        return this.makeSymmetricFigure(density);
     },
     getMirror: function(p) {
         return [7 - p[0], p[1]];
@@ -137,7 +137,7 @@ var SY = {
             throw 'Figure array is undefined';
 
         for(var i = 0; i < array.length; i++)
-            if(!arrayHasPoint(array, SymmetryTest.getMirror(array[i])))
+            if(!arrayHasPoint(array, this.getMirror(array[i])))
                 return false;
         return true;
     }
