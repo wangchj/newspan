@@ -68,6 +68,8 @@ var CreateTask = React.createClass({
     onProbDel: function(blockId, probId) {
         var block = this.state.blocks[blockId];
         block.splice(probId, 1);
+        for(var i = 0; i < this.state.blocks[blockId].length; i++)
+            this.state.blocks[blockId][i].id = i;
         this.setState({blocks:this.state.blocks});
     },
     onProbFormSave: function() {
