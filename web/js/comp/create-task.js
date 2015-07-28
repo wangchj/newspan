@@ -234,7 +234,13 @@ var CreateTask = React.createClass({
         $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveEditSY: function() {
-
+        var editContext = this.state.editContext;
+        var blockId = editContext.blockId;
+        var probId = editContext.probId;
+        var json = $(ProbForm.domIdSel + ' #symmetry').val().trim();
+        this.state.blocks[blockId][probId].squares = JSON.parse(json);
+        this.setState({blocks: this.state.blocks});
+        $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveEditSYSQ: function() {
 
@@ -763,7 +769,7 @@ ProbForm.SpecialPane = React.createClass({
             case SQ.typeId:
                 return <ProbForm.SQPane editContext={this.props.editContext}/>
             case SY.typeId:
-                return <ProbForm.SYPane/>
+                return <ProbForm.SYPane editContext={this.props.editContext}/>
             case SYSQ.typeId:
                 return <ProbForm.SYSQPane/>
             case RS.typdId:
@@ -871,7 +877,7 @@ ProbForm.SQPane = React.createClass({
         this.setState({slots: slots});
     },
     onCellClick: function(cell) {
-        var index = this.indexOf(cell);
+        var index = PointCollection.indexOf(this.state.slots, cell);
         var slots = this.state.slots;
 
         if(index == -1) {
@@ -910,20 +916,39 @@ ProbForm.SQPane = React.createClass({
                 </div>
             </div>
         )
-    },
-    indexOf: function(cell) {
-        var s = this.state.slots;
-        for(var i = 0; i < s.length; i++)
-            if(s[i] && s[i][0] == cell[0] && s[i][0] == cell[0] && s[i][1] == cell[1])
-                return i;
-        return -1;
     }
 });
 
 ProbForm.SYPane = React.createClass({
+    propTypes: {
+        editContext: React.PropTypes.object.isRequired
+    },
+    getInitialState: function() {
+        var colored = this.props.editContext.prob ? this.props.editContext.prob.symmetry : [];
+        return {colored: colored};
+    },
+    componentWillReceiveProps: function(nextProps) {
+        var colored = nextProps.editContext.prob ? nextProps.editContext.prob.symmetry : [];
+        this.setState({colored: colored});
+    },
+    onCellClick: function(cell) {
+        var i = PointCollection.indexOf(this.state.colored, cell);
+        if(i == -1)
+            this.state.colored.push(cell);
+        else
+            this.state.colored.splice(i, 1);
+        this.setState({colored: this.state.colored});
+    },
     render: function() {
         return (
-            <div>Symmetry</div>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-xs-6 col-xs-offset-3">
+                        <input type="hidden" id="symmetry" value={JSON.stringify(this.state.colored)}/>
+                        <BoxSequence.Slide.Figure rows={8} cols={8} colored={this.state.colored} borderColor={'#000'} hiColor={'#000'} onCellClick={this.onCellClick}/>
+                    </div>
+                </div>
+            </div>
         )
     }
 });
