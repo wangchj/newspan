@@ -25,6 +25,7 @@ var CreateTask = React.createClass({
      * @param ssubid integer Sub-sub id
      */
     showProbForm: function(mode, blockId, probId, subId, ssubId) {
+        console.log(blockId,probId,subId,ssubId);
         if(mode == CreateTask.editMode.add) {
             this.setState({editContext:{mode: CreateTask.editMode.add, blockId: blockId}});
             $(ProbForm.domIdSel).modal('show');
@@ -45,7 +46,7 @@ var CreateTask = React.createClass({
                     prob = subId == 0 ? {type: LS.typeId, letters: prob.letters} : {type: EQ.typeId, equation: prob.equations[ssubId]};
                     break;
                 case SYSQ.typeId:
-                    prob = subId == 0 ? {type: SQ.typeId, sequence: prob.sequence} : {type: SY.typeId, symmetry: prob.symmetries[ssubId]};
+                    prob = subId == 0 ? {type: SQ.typeId, squares: prob.squares} : {type: SY.typeId, symmetry: prob.symmetries[ssubId]};
                     break;
                 case RSLS.typeId:
                     //TODO
@@ -287,7 +288,27 @@ var CreateTask = React.createClass({
         $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveEditSYSQ: function() {
+        var editContext = this.state.editContext;
+        var blockId = editContext.blockId;
+        var probId = editContext.probId;
+        var subId = editContext.subId;
+        var ssubId = editContext.ssubId;
 
+        //This feature is currently not supported, so we just return.
+        if(subId == null || subId == undefined) return;
+
+        //Edit squares
+        if(subId == 0) {
+            this.probFormSaveEditSQ();
+        }
+        //Edit one of the equations
+        else if(subId == 1) {
+            var symmetry = $(ProbForm.domIdSel + ' #symmetry').val().trim();
+            this.state.blocks[blockId][probId].symmetries[ssubId] = JSON.parse(symmetry);
+            this.setState({blocks: this.state.blocks});
+            $(ProbForm.domIdSel).modal('hide');
+            
+        }
     },
     probFormSaveEditRS: function() {
 
@@ -556,7 +577,7 @@ Block.Table.Row = React.createClass({
             case SY.typeId:
                 return <Block.Table.Row.SymmetryWidget symmetry={this.props.problem.symmetry} onProbEdit={this.onProbEdit}/>
             case SYSQ.typeId:
-                return <Block.Table.Row.SymmetrySquaresWidget squares={this.props.problem.squares} symmetries={this.props.problem.symmetries}/>
+                return <Block.Table.Row.SymmetrySquaresWidget squares={this.props.problem.squares} symmetries={this.props.problem.symmetries} onProbEdit={this.onProbEdit}/>
             case RS.typeId:
                 return <div>Sentence widget</div>
             case RSLS.typeId:
@@ -669,13 +690,14 @@ Block.Table.Row.SymmetryWidget.Figure = React.createClass({
 Block.Table.Row.SymmetrySquaresWidget = React.createClass({
     propTypes: {
         squares: React.PropTypes.array.isRequired,
-        symmetries: React.PropTypes.array.isRequired
+        symmetries: React.PropTypes.array.isRequired,
+        onProbEdit: React.PropTypes.func.isRequired
     },
     render: function() {
-        var squares = <Block.Table.Row.SquaresWidget.Figure squares={this.props.squares}/>
+        var squares = <Block.Table.Row.SquaresWidget.Figure squares={this.props.squares} onProbEdit={this.props.onProbEdit.bind(null, null, null, 0, null)}/>
 
         var symmetries = this.props.symmetries.map(function(symmetry, i) {
-            return <Block.Table.Row.SymmetryWidget.Figure key={i} symmetry={symmetry}/>
+            return <Block.Table.Row.SymmetryWidget.Figure key={i} symmetry={symmetry} onProbEdit={this.props.onProbEdit.bind(null, null, null, 1, i)}/>
         }.bind(this));
 
         return (
@@ -972,6 +994,17 @@ ProbForm.SYPane = React.createClass({
             this.state.colored.splice(i, 1);
         this.setState({colored: this.state.colored});
     },
+    makeSymmetric: function() {
+        this.setState({colored: SY.makeSymmetricFigure()});
+    },
+    makeAsymetric: function() {
+        switch(Math.floor(Math.random() * 2)) {
+            case 0:
+                this.setState({colored: SY.makeAsymmetricFigure()});
+            case 1:
+                this.setState({colored: SY.makeRandomFigure()});
+        }
+    },
     render: function() {
         return (
             <div className="container-fluid">
@@ -979,6 +1012,12 @@ ProbForm.SYPane = React.createClass({
                     <div className="col-xs-6 col-xs-offset-3">
                         <input type="hidden" id="symmetry" value={JSON.stringify(this.state.colored)}/>
                         <BoxSequence.Slide.Figure rows={8} cols={8} colored={this.state.colored} borderColor={'#000'} hiColor={'#000'} onCellClick={this.onCellClick}/>
+                    </div>
+                </div>
+                <div className="row"><div className="col-xs-12"><hr/></div></div>
+                <div className="row">
+                    <div className="col-xs-12" style={{textAlign:'center'}}>
+                        <button type="button" className="btn btn-default" onClick={this.makeSymmetric}>Generate Symmetric</button> <button type="button" className="btn btn-default" onClick={this.makeAsymetric}>Generate Asymmetric</button>
                     </div>
                 </div>
             </div>
