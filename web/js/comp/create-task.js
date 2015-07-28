@@ -173,6 +173,24 @@ var CreateTask = React.createClass({
         this.setState({blocks: this.state.blocks});
         $(ProbForm.domIdSel).modal('hide');
     },
+    probFormSaveNewSYSQ: function() {
+        var length = $(ProbForm.domIdSel + ' #length').val().trim();
+        var blockId = this.state.editContext.blockId;
+
+        if(length && /^\d+$/.test(length)) {
+            length = parseInt(length);
+            
+            this.state.blocks[blockId].push({
+                id: this.state.blocks[blockId].length,
+                type: SYSQ.typeId,
+                squares: SQ.makeRandomFigure(length),
+                symmetries: SYSQ.makeSymmetryFigures(length)
+            });
+
+            this.setState({blocks: this.state.blocks});
+            $(ProbForm.domIdSel).modal('hide');
+        }
+    },
     probFormSaveEdit: function() {
         var editContext = this.state.editContext;
         var block = this.state.blocks[editContext.blockId];
@@ -971,7 +989,11 @@ ProbForm.SYPane = React.createClass({
 ProbForm.SYSQPane = React.createClass({
     render: function() {
         return (
-            <div>Symmetry Square</div>
+            <div className="form-group">
+                <label htmlFor="length">Number of Subproblems</label>
+                <input className="form-control" id="length" defaultValue={3}/>
+                <div>Length of square sequence and must be an integer</div>
+            </div>
         )
     }
 });
