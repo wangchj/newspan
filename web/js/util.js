@@ -42,3 +42,12 @@ function shuffle(array) {
 
     return array;
 }
+
+var PointCollection = {
+    indexOf: function(pointArray, point) {
+        for(var i = 0; i < pointArray.length; i++)
+            if(pointArray[i] && pointArray[i][0] == point[0] && pointArray[i][0] == point[0] && pointArray[i][1] == point[1])
+                return i;
+        return -1;
+    }
+};
