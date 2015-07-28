@@ -162,7 +162,16 @@ var CreateTask = React.createClass({
         $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveNewSY: function(){
-
+        var editContext = this.state.editContext;
+        var blockId = editContext.blockId;
+        var json = $(ProbForm.domIdSel + ' #symmetry').val().trim();
+        this.state.blocks[blockId].push({
+            id: this.state.blocks[blockId].length,
+            type: SY.typeId,
+            symmetry: JSON.parse(json)
+        });
+        this.setState({blocks: this.state.blocks});
+        $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveEdit: function() {
         var editContext = this.state.editContext;
