@@ -283,7 +283,7 @@ var CreateTask = React.createClass({
         var blockId = editContext.blockId;
         var probId = editContext.probId;
         var json = $(ProbForm.domIdSel + ' #symmetry').val().trim();
-        this.state.blocks[blockId][probId].squares = JSON.parse(json);
+        this.state.blocks[blockId][probId].symmetry = JSON.parse(json);
         this.setState({blocks: this.state.blocks});
         $(ProbForm.domIdSel).modal('hide');
     },
