@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use \DateTime;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -37,5 +38,18 @@ class TasksController extends Controller
     public function actionCreate($type)
     {
         return $this->render('create', ['type'=>$type]);
+    }
+
+    /**
+     * Ajax task save.
+     */
+    public function actionSave()
+    {
+        $task = new Task();
+        $task->name = $_POST['name'];
+        $task->type = $_POST['type'];
+        $task->json = json_encode($_POST['blocks']);
+        $task->createTime = (new DateTime())->format('c');
+        $task->save();
     }
 }

@@ -316,11 +316,59 @@ var CreateTask = React.createClass({
     probFormSaveEditRSLS: function() {
 
     },
+    onTaskSave: function() {
+        if(this.validateTask()) {
+            console.log('a');
+            $.ajax({
+                type: 'POST',
+                url: taskSaveUrl,
+                data: {
+                    name: this.refs.taskName.refs.input.getDOMNode().value.trim(),
+                    type:taskType,
+                    blocks: this.state.blocks
+                },
+                // data:
+                //     'name=' + this.refs.taskName.refs.input.getDOMNode().value.trim() + '&' +
+                //     'type=' + taskType + '&' +
+                //     'blocks=' + JSON.stringify(this.state.blocks),
+                // processData: false,
+                success: function(data, textStatus, jqXHR) {
+                    console.log('Ajax save success', textStatus);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log('Ajax save error', textStatus, errorThrown);
+                }
+            });
+        }
+    },
+    validateTask: function() {
+        //Reset error message
+        this.setState({error: null});
+
+        //Validate that name is not empty
+        var name = this.refs.taskName.refs.input.getDOMNode().value.trim();
+        if(!name || name == '') {
+            this.setState({error: 'Task name is empty'});
+            return false;
+        }
+
+        //Validate that every block has problem
+        for(var i = 0; i < this.state.blocks.length; i++) {
+            if(this.state.blocks[i].length == 0) {
+                this.setState({error: 'Block ' + (i + 1) + ' is empty'});
+                return false;
+            }
+        }
+
+        return true;
+    },
     render: function() {
         return (
             <div>
+                <CreateTask.TaskNameInput ref="taskName"/>
                 <BlockList blocks={this.state.blocks} onAddProbClick={this.onAddProbClick} onProbEdit={this.onProbEdit} onProbDel={this.onProbDel}/>
-                <CreateTask.Buttons onAddBlock={this.addBlock}/>
+                <CreateTask.Error error={this.state.error}/>
+                <CreateTask.Buttons onAddBlock={this.addBlock} onSave={this.onTaskSave}/>
                 <ProbForm editContext={this.state.editContext} onSaveClick={this.onProbFormSave}/>
             </div>
         );
@@ -421,9 +469,34 @@ var CreateTask = React.createClass({
     }
 });
 
+CreateTask.TaskNameInput = React.createClass({
+    render: function() {
+        return (
+            <form>
+                <div className="form-group">
+                    <label htmlFor="taskName">Task Name</label>
+                    <input ref="input" id="taskName" className="form-control"/>
+                </div>
+            </form>
+        )
+    }
+});
+
+CreateTask.Error = React.createClass({
+    propTypes: {
+        error: React.PropTypes.string
+    },
+    render: function() {
+        if(!this.props.error || this.props.error == '')
+            return null;
+        return <div className="alert alert-danger" role="alert">{this.props.error}</div>
+    }
+});
+
 CreateTask.Buttons = React.createClass({
     propTypes: {
-        onAddBlock: React.PropTypes.func.isRequired
+        //onAddBlock: React.PropTypes.func.isRequired
+        onSave: React.PropTypes.func.isRequired
     },
     onAddBlock: function() {
         this.props.onAddBlock();
@@ -434,7 +507,7 @@ CreateTask.Buttons = React.createClass({
                 {
                     //<button className="btn btn-default" onClick={this.onAddBlock}>New Block</button>
                 }
-                <button className="btn btn-default">Finish</button>
+                <button className="btn btn-default" onClick={this.props.onSave}>Finish</button>
             </div>
         );
     }
