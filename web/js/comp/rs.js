@@ -139,11 +139,6 @@ SentenceQuestion.Feedback = React.createClass({
                         Your answer is {this.props.res.res == this.props.sol ? 'correct' : 'incorrect'}.
                     </div>
                 </div>
-                <div className="row" style={{marginBottom:25}}>
-                    <div className="col-xs-12">
-                        Response Time (for researchers): {(this.props.res.endTime - this.props.res.startTime) / 1000} seconds
-                    </div>
-                </div>
                 <div className="row">
                     <button className="btn btn-default" onClick={this.onComplete}>Continue</button>
                 </div>

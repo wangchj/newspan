@@ -204,12 +204,7 @@ SymmetryTest.Feedback = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12" style={{fontSize:25, marginTop:200, marginBottom:25}}>
-                        Your answer is {SymmetryTest.figureIsSymmetric(this.props.colored) == this.props.res.res ? 'correct' : 'incorrect'}.
-                    </div>
-                </div>
-                <div className="row" style={{marginBottom:25}}>
-                    <div className="col-xs-12">
-                        Response Time (for researchers): {(this.props.res.endTime - this.props.res.startTime) / 1000} seconds
+                        Your answer is {SY.isSymmetric(this.props.colored) == this.props.res.res ? 'correct' : 'incorrect'}.
                     </div>
                 </div>
                 <div className="row">

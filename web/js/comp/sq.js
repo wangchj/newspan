@@ -344,11 +344,6 @@ BoxSequence.Feedback = React.createClass({
                         You recalled {this.getCorrectCount()} out of {this.props.sequence.length} squares correctly.
                     </div>
                 </div>
-                <div className="row" style={{marginBottom:25}}>
-                    <div className="col-xs-12">
-                        Response Time (for researchers): {(this.props.response.endTime - this.props.response.startTime) / 1000} seconds
-                    </div>
-                </div>
                 <div className="row">
                     <button className="btn btn-default" onClick={this.onComplete}>Continue</button>
                 </div>

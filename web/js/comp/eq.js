@@ -34,18 +34,6 @@ var MathEq = React.createClass({
                         showTime={true} onComplete={this.complete} />
                 );
         }
-    },
-    statics: {
-        /**
-         * Gets the correct answer of the equation.
-         *
-         * @param equation string the question
-         * @returns true if the equation is true, false otherwise.
-         */
-        getAnswer: function(equation) {
-            var p = equation.indexOf('=');
-            return eval(equation.substring(0, p)) == equation.substring(p + 1);
-        }
     }
 });
 
@@ -136,12 +124,7 @@ MathEq.Feedback = React.createClass({
             <div>
                 <div className="row" style={{marginTop:200, marginBottom:25}}>
                     <div className="col-xs-12" style={{fontSize:25}}>
-                        {MathEq.getAnswer(this.props.equation) == this.props.response ? 'Correct' : 'Incorrect'}!
-                    </div>
-                </div>
-                <div className="row" style={{marginBottom:25}}>
-                    <div className="col-xs-12">
-                        Response Time (for researchers): {(this.props.endTime - this.props.startTime) / 1000} seconds
+                        {EQ.getAnswer(this.props.equation) == this.props.response ? 'Correct' : 'Incorrect'}!
                     </div>
                 </div>
                 <div className="row">
