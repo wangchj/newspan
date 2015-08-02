@@ -13,7 +13,7 @@ use Yii;
  * @property string $createTime
  * @property string $json
  *
- * @property Responses[] $responses
+ * @property Response[] $responses
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -55,6 +55,6 @@ class Task extends \yii\db\ActiveRecord
      */
     public function getResponses()
     {
-        return $this->hasMany(Responses::className(), ['taskId' => 'taskId']);
+        return $this->hasMany(Response::className(), ['taskId' => 'taskId']);
     }
 }
