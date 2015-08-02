@@ -129,77 +129,12 @@ var LetterSequenceReport = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className="col-xs-6" style={{fontSize:35}}>
-                        Correct: {correctCount}/{solution.length} ({Math.round(correctCount/solution.length * 100)}%)
-                    </div>
-                    <div className="col-sx-6" style={{fontSize:35}}>
-                        Time: {(endTime - startTime) / 1000} Seconds
+                    <div className="col-xs-12" style={{fontSize:25, marginTop:200, marginBottom:25}}>
+                        You recalled {correctCount} out of {solution.length} letters correctly.
                     </div>
                 </div>
-
-                <div className="row" style={{margin:30}}>
-                    {
-                        challenge.map(function(letter, index){
-                            var solSeq = solution.indexOf(letter);
-                            var selSeq = selections.indexOf(index);
-
-                            //Not part of the solution and not selected
-                            if(solSeq == -1 && selSeq == -1) {
-                                return (
-                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
-                                        <div className="recall-num" style={{display:'inline-block', width:50}}></div>
-                                        <div className="recall-letter" style={{display:'inline-block'}}>{letter}</div>
-                                    </div>
-                                );
-                            }
-                            //Not part of the solution, but selected
-                            else if(solSeq == -1 && selSeq != -1) {
-                                return (
-                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
-                                        <div className="recall-num" style={{display:'inline-block', width:50, color:'red', textDecoration:'line-through'}}>
-                                            {selSeq + 1}
-                                        </div>
-                                        <div className="recall-letter" style={{display:'inline-block', color:'red', textDecoration:'line-through'}}>{letter}</div>
-                                    </div>
-                                );
-                            }
-                            //Part of the solution, but not selected
-                            else if(solSeq != -1 && selSeq == -1) {
-                                return (
-                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
-                                        <div className="recall-num" style={{display:'inline-block', width:50}}>{solSeq + 1}</div>
-                                        <div className="recall-letter" style={{display:'inline-block', color:'red'}}>{letter}</div>
-                                    </div>
-                                );
-                            }
-                            //Part of the solution, and incorrectly selected
-                            else if(solSeq != -1 && selSeq != -1 && solSeq != selSeq) {
-                                return (
-                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
-                                        <div className="recall-num" style={{display:'inline-block', width:50, color:'red', textDecoration:'line-through'}}>
-                                            {selSeq + 1}
-                                        </div>
-                                        <div className="recall-num" style={{display:'inline-block', width:50}}>
-                                            {solSeq + 1}
-                                        </div>
-                                        <div className="recall-letter" style={{display:'inline-block'}}>{letter}</div>
-                                    </div>
-                                );
-                            }
-                            else {
-                                return (
-                                    <div key={index} className="col-xs-4" style={{paddingTop:15, paddingBottom:15}}>
-                                        <div className="recall-num" style={{display:'inline-block', width:50}}>{solSeq + 1}</div>
-                                        <div className="recall-letter" style={{display:'inline-block'}}>{letter}</div>
-                                    </div>
-                                );
-                            }
-                        })
-                    }  
-                </div>
-
                 <div className="row">
-                    <div className="col-xs-2 col-xs-offset-5">
+                    <div className="col-xs-12">
                         <button className="btn btn-default" onClick={this.complete}>Continue</button>
                     </div>
                 </div>
