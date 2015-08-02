@@ -51,8 +51,7 @@ var OSpan = React.createClass({
                     </Instruction>
                 );
             case 2: //Letters practice block
-return <Instruction onComplete={this.advance}>A block</Instruction>
-                //return <Block block={this.props.blocks[0]} practice={true} onComplete={this.advance} randomize={true} />
+                return <Block block={this.props.blocks[0]} practice={true} onComplete={this.advance} randomize={true} />
             case 3:
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
@@ -84,8 +83,7 @@ return <Instruction onComplete={this.advance}>A block</Instruction>
                     </Instruction>
                 );
             case 5: //Math practice block
-return <Instruction onComplete={this.advance}>A block</Instruction>
-                //return <Block block={this.props.blocks[1]} practice={true} randomize={true} tra={{correct:0, total:0}} onComplete={this.advance}/>
+                return <Block block={this.props.blocks[1]} practice={true} randomize={true} tra={{correct:0, total:0}} onComplete={this.advance}/>
             case 6:
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
