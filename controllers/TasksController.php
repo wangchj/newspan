@@ -48,7 +48,7 @@ class TasksController extends Controller
         $task = new Task();
         $task->name = $_POST['name'];
         $task->type = $_POST['type'];
-        $task->json = json_encode($_POST['blocks']);
+        $task->json = $_POST['blocks'];
         $task->createTime = (new DateTime())->format('c');
         $task->save();
     }
