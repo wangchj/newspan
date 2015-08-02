@@ -12,7 +12,7 @@ $this->title = 'Mission Control';
     <tr>
         <th>#</th>
         <th>Name</th>
-        <th>type</th>
+        <th>Type</th>
         <th>Created Date</th>
         <th>Responses</th>
     </tr>
