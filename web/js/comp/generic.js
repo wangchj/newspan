@@ -142,36 +142,36 @@ var Block = React.createClass({
         var progress = this.state.progress;
 
         switch(block[progress].type) {
-            case 'letter':
+            case LS.typeId:
                 return (
-                    <LetterSequence key={progress} letters={block[progress].problem}
+                    <LetterSequence key={progress} letters={block[progress].letters}
                         onComplete={this.advance} report={this.props.practice} />
                 );
-            case 'math':
+            case EQ.typeId:
                 return (
-                    <MathEq key={progress} equation={block[progress].problem}
+                    <MathEq key={progress} equation={block[progress].equation}
                         feedback={this.props.practice} onComplete={this.advance} />
                 );
-            case 'math-letter':
+            case EQLS.typeId:
                 return (
                     <MathLetter key={progress} problem={block[progress]}
                         tra={this.tra}
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
-            case 'squares':
+            case SQ.typeId:
                 return (
-                    <BoxSequence key={progress} sequence={block[progress].problem}
+                    <BoxSequence key={progress} sequence={block[progress].squares}
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
-            case 'symmetry':
+            case SY.typeId:
                 return (
-                    <SymmetryTest key={progress} colored={block[progress].problem}
+                    <SymmetryTest key={progress} colored={block[progress].symmetry}
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
-            case 'symmetry-squares':
+            case SYSQ.typeId:
                 return (
                     <SymmetryBoxSequence key={progress}
                         problem={block[progress]}
@@ -179,7 +179,7 @@ var Block = React.createClass({
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
-            case 'sentence':
+            case RS.typeId:
                 return (
                     <SentenceQuestion key={progress}
                         sentence={block[progress].sentence}
@@ -187,7 +187,7 @@ var Block = React.createClass({
                         feedback={this.props.practice}
                         onComplete={this.advance} />
                 );
-            case 'sentence-letter':
+            case RSLS.typeId:
                 return (
                     <SentenceLetter key={progress}
                         sentences={block[progress].sentences}
