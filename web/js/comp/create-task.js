@@ -1,5 +1,3 @@
-var task = [];
-
 var CreateTask = React.createClass({
     statics: {
         editMode: {add: 0, edit: 1}
@@ -324,8 +322,8 @@ var CreateTask = React.createClass({
                 url: taskSaveUrl,
                 data: {
                     name: this.refs.taskName.refs.input.getDOMNode().value.trim(),
-                    type:taskType,
-                    blocks: this.state.blocks
+                    type: taskType,
+                    blocks: JSON.stringify(this.state.blocks)
                 },
                 // data:
                 //     'name=' + this.refs.taskName.refs.input.getDOMNode().value.trim() + '&' +
@@ -518,11 +516,17 @@ var BlockList = React.createClass({
         blocks: React.PropTypes.array.isRequired,
         onAddProbClick: React.PropTypes.func.isRequired,
         onProbEdit: React.PropTypes.func.isRequired,
-        onProbDel: React.PropTypes.func.isRequired
+        onProbDel: React.PropTypes.func.isRequired,
+        mode: React.PropTypes.string
+    },
+    getDefaultProps: function() {
+        return {
+            mode: 'edit'
+        };
     },
     render: function() {
         var blocks = this.props.blocks.map(function(block, index){
-            return <Block key={index} blockId={index} block={block} onAddProbClick={this.props.onAddProbClick} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel}/>
+            return <Block key={index} blockId={index} block={block} mode={this.props.mode} onAddProbClick={this.props.onAddProbClick} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel}/>
         }.bind(this));
 
         return <div>{blocks}</div>
@@ -535,7 +539,8 @@ var Block = React.createClass({
         block: React.PropTypes.array.isRequired,
         onAddProbClick: React.PropTypes.func.isRequired,
         onProbEdit: React.PropTypes.func.isRequired,
-        onProbDel: React.PropTypes.func.isRequired
+        onProbDel: React.PropTypes.func.isRequired,
+        mode: React.PropTypes.string
     },
     onProbEdit: function(blockId, probId, subId, ssubId) {
         this.props.onProbEdit(this.props.blockId, probId, subId, ssubId);
@@ -545,7 +550,7 @@ var Block = React.createClass({
             <div className="panel panel-default">
                 <Block.Heading blockId={this.props.blockId} />
                 <Block.Body blockId={this.props.blockId} block={this.props.block} onProbEdit={this.onProbEdit} onProbDel={this.props.onProbDel}/>
-                <Block.Footer blockId={this.props.blockId} onAddProbClick={this.props.onAddProbClick}/>
+                {this.props.mode === 'edit' ? <Block.Footer blockId={this.props.blockId} onAddProbClick={this.props.onAddProbClick}/> : null }
             </div>
         )
     }
@@ -1139,5 +1144,3 @@ ProbForm.Footer = React.createClass({
         )
     }
 });
-
-React.render(<CreateTask />, document.getElementById('comp'));

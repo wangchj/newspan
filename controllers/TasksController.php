@@ -52,4 +52,10 @@ class TasksController extends Controller
         $task->createTime = (new DateTime())->format('c');
         $task->save();
     }
+
+    public function actionView($taskId)
+    {
+        $task = Task::findOne($taskId);
+        return $this->render('view', ['task'=>$task]);
+    }
 }
