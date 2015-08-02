@@ -32,7 +32,7 @@ var SymmetryTest = React.createClass({
         
         this.tra = this.props.tra;
 
-        if(res == SymmetryTest.figureIsSymmetric(this.props.colored))
+        if(res == SY.isSymmetric(this.props.colored))
             this.tra.correct++;
         this.tra.total++;
     },
@@ -72,106 +72,6 @@ var SymmetryTest = React.createClass({
                 )
             case 1:
                 return (<SymmetryTest.Feedback colored={this.props.colored} res={this.res} onComplete={this.onComplete} />)
-        }
-    },
-    statics: {
-        getRandomPoint: function(array) {
-            var p = [0, 0];
-            do {
-                p[0] = Math.floor(Math.random() * 8);
-                p[1] = Math.floor(Math.random() * 8);
-            } while(arrayHasPoint(array, p));
-            return p;
-        },
-        /**
-         * Generate a random symmetric figure.
-         * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
-         */
-        generateSymmetricFigure: function(density) {
-            if(density < 0) throw 'Figure density cannot be a negative number';
-            if(density > 30) throw 'Figure density cannot be higher than 30';
-
-            var points = [];
-
-            while(points.length < density * 2) {
-                var x = Math.floor(Math.random() * 4);
-                var y = Math.floor(Math.random() * 8);
-                var p = [x, y];
-
-                if(!arrayHasPoint(p)) {
-                    points.push(p);
-                    points.push(this.getMirror(p));
-                }
-            }
-
-            return points;
-        },
-        /**
-         * Generate a asymmetric figure by mutating a random symmetric figure.
-         * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
-         */
-        generateAsymmetricFigure: function(density) {
-            var points = SymmetryTest.generateSymmetricFigure(density);
-
-            for(var i = 0; i < 3; i++) {
-                var op = Math.floor(Math.random() * (i == 0 ? 2 : 3));
-                switch(op) {
-                    case 0:
-                        points.push(SymmetryTest.getRandomPoint(points));
-                        break;
-                    case 1:
-                        var index = Math.floor(Math.random() * points.length);
-                        points.splice(index, 1);
-                        break;
-                }
-            }
-
-            return points;
-        },
-        /**
-         * Generate a totally random figure.
-         * @param density integer how many cells are colored. This should be a 0 >= density <= 30.
-         */
-        generateRandomFigure: function(density) {
-            if(density < 0) throw 'Figure density cannot be a negative number';
-            if(density > 30) throw 'Figure density cannot be higher than 30';
-
-            var points = [];
-            while(points.length < density * 2) {
-                points.push(SymmetryTest.getRandomPoint(points));
-            }
-            return points;
-        },
-        generateFigure: function() {
-            var density = Math.floor(Math.random() * 18) + 12; 
-            switch(Math.floor(Math.random() * 5)) {
-                case 0:
-                case 1:
-                    return SymmetryTest.generateSymmetricFigure(density);
-                case 2:
-                case 3:
-                    return SymmetryTest.generateAsymmetricFigure(density);
-                case 4:
-                    return SymmetryTest.generateRandomFigure(density);
-            }
-
-            return SymmetryTest.generateSymmetricFigure(density);
-        },
-        getMirror: function(p) {
-            return [7 - p[0], p[1]];
-        },
-        /**
-         * Checks a figure, represented by array, is symmetric.
-         * Throws if array is null or undefined.
-         */
-        figureIsSymmetric: function(array) {
-            if(!array)
-                throw 'Figure array is undefined';
-
-            for(var i = 0; i < array.length; i++)
-                if(!arrayHasPoint(array, SymmetryTest.getMirror(array[i])))
-                    return false;
-            return true;
         }
     }
 });
