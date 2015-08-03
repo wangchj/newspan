@@ -46,6 +46,6 @@ class Participant extends \yii\db\ActiveRecord
      */
     public function getResponses()
     {
-        return $this->hasMany(Responses::className(), ['partId' => 'partId']);
+        return $this->hasMany(Response::className(), ['partId' => 'partId']);
     }
 }

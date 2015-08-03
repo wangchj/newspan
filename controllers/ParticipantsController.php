@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use app\models\Participant;
 
 class ParticipantsController extends Controller
 {
@@ -28,6 +29,7 @@ class ParticipantsController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $parts = Participant::find()->all();
+        return $this->render('index', ['parts'=>$parts]);
     }
 }
