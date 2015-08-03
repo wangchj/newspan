@@ -29,6 +29,7 @@ CreateTaskAsset::register($this);
     <script type="text/javascript">
         var taskType = '<?=$type?>';
         var taskSaveUrl = '<?=Url::to(['tasks/save'])?>';
+        var taskIndexUrl = '<?=Url::to(['tasks/index'], true)?>';
     </script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
