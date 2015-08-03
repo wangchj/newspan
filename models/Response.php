@@ -65,6 +65,6 @@ class Response extends \yii\db\ActiveRecord
      */
     public function getTask()
     {
-        return $this->hasOne(Tasks::className(), ['taskId' => 'taskId']);
+        return $this->hasOne(Task::className(), ['taskId' => 'taskId']);
     }
 }
