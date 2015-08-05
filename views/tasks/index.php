@@ -3,7 +3,7 @@ use \DateTime;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-$this->title = 'Mission Control';
+$this->title = 'Tasks';
 ?>
 
 <h1>Tasks</h1>
