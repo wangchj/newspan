@@ -1,16 +1,24 @@
 var SingleLetterSlide = React.createClass({
+    propTypes: {
+        letter: React.PropTypes.string.isRequired
+    },
     render: function() {
         return (<div className="flash-letter">{this.props.letter}</div>);
     }
 });
 
 /**
- * Letter recall     screen.
+ * Letter recall screen.
  * @prop letters     array
  * @prop limitSelect boolean Limit the number of selections to the number alphabets shown.
  * @prop onSubmitResponse callback
  */ 
 var LetterRecall = React.createClass({
+    propTypes: {
+        letters: React.PropTypes.array.isRequired,
+        limitSelect: React.PropTypes.bool,
+        onSubmitResponse: React.PropTypes.func.isRequired
+    },
     getInitialState: function() {
         var selects =[];
         var limit = this.props.limitSelect ? this.props.letters.length: 12;
@@ -18,7 +26,7 @@ var LetterRecall = React.createClass({
             selects.push(null);
 
         return {
-            letters: this.randomize(this.props.letters),
+            options: LS.makeOptions(this.props.letters),
             //selects stores the order in which slots were selected.
             //For example, if the 3rd slot were select first, then 1st slot, and finally 2nd slot,
             //select would contain the values [3, 1, 2]
@@ -33,7 +41,7 @@ var LetterRecall = React.createClass({
             <div>
                 <div className="row" style={{margin:30}}>
                     {
-                        this.state.letters.map(function(letter, index){
+                        this.state.options.map(function(letter, index){
                             var s = this.state.selects.indexOf(index);
                             return (
                                 <div key={index} className="col-xs-4" onClick={this.letterClicked.bind(this, index)} style={{paddingTop:15, paddingBottom:15}}>
@@ -57,22 +65,6 @@ var LetterRecall = React.createClass({
                 </div>
             </div>
         );
-    },
-    randomize: function(letters) {
-        var res = letters.slice();
-        var a = 'A'.charCodeAt(0);
-        var z = 'Z'.charCodeAt(0);
-
-        while(res.length < 12) {
-            //Get a random letter
-            var c = Math.floor(Math.random() * (z - a)) + a;
-            var l = String.fromCharCode(c);
-            if(l != 'A' && l != 'E' && l != 'I' && l != 'O' && l != 'U' && res.indexOf(l) == -1)
-                res.push(l);
-        }
-
-        res = shuffle(res);
-        return res;
     },
     letterClicked: function(index, event) {
 
@@ -101,28 +93,36 @@ var LetterRecall = React.createClass({
         this.setState({selects:this.state.selects});
     },
     submitResponse: function() {
-        this.props.onSubmitResponse(this.state.letters, this.state.selects, this.startTime, new Date().getTime());
+        //Get the response time
+        var endTime = new Date().getTime();
+        var time = endTime - this.startTime;
+
+        //Map select indexes to letters
+        var options = this.state.options;
+        var response = trimArray(this.state.selects).map(function(i){return options[i]});
+
+        this.props.onSubmitResponse(this.state.options, response, time);
     }
 });
 
 var LetterSequenceReport = React.createClass({
+    propTypes: {
+        letters: React.PropTypes.array.isRequired,
+        response: React.PropTypes.object.isRequired
+    },
     complete: function() {
         this.props.onComplete();
     },
     render: function() {
-        var solution = this.props.response.solution;
-        var challenge = this.props.response.challenge;
-        var selections = this.props.response.selections;
-        var startTime = this.props.response.startTime;
-        var endTime = this.props.response.endTime;
-
-        //Response letter sequence
-        var response = selections.map(function(sequenceNum) {return challenge[sequenceNum];});
-        var correctCount = 0;
+        var letters = this.props.letters;
+        var options = this.props.response.options;
+        var response = this.props.response.response;
+        var time = this.props.response.time;
 
         //Calculate correct count
-        for(var i = 0; i < solution.length; i++) {
-            if(solution[i] == response[i])
+        var correctCount = 0;
+        for(var i = 0; i < letters.length; i++) {
+            if(letters[i] == response[i])
                 correctCount++;
         }
 
@@ -130,7 +130,7 @@ var LetterSequenceReport = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12" style={{fontSize:25, marginTop:200, marginBottom:25}}>
-                        You recalled {correctCount} out of {solution.length} letters correctly.
+                        You recalled {correctCount} out of {letters.length} letters correctly.
                     </div>
                 </div>
                 <div className="row">
@@ -145,11 +145,18 @@ var LetterSequenceReport = React.createClass({
 });
 
 /**
- * @prop letters    array    The list of alphabets to present to user.
- * @prop report     boolean  Indicates if the result of this assessment should be displayed.
- * @prop onComplete callback The callback when this component is finished.
+ * @prop probId The problem id.
+ * @prop letters The list of alphabets to present to user.
+ * @prop report  Indicates if the result of this assessment should be displayed.
+ * @prop onComplete The callback when this component is finished.
  */
 var LetterSequence = React.createClass({
+    propTypes: {
+        probId: React.PropTypes.number.isRequired,
+        letters: React.PropTypes.array.isRequired,
+        report: React.PropTypes.bool,
+        onComplete: React.PropTypes.func.isRequired
+    },
     /**
      * Gets the initial state of this component.
      * Stages: 'flash', 'recall', 'report'
@@ -174,29 +181,19 @@ var LetterSequence = React.createClass({
      * @params challenge array  The list of letters presented to the user on the recall screen.
      * @params selections array User's selections.
      */
-    handleResponse: function(challenge, selections, startTime, endTime) {
-        
+    handleResponse: function(options, response, time) {
+        if(this.props.probId)
+            this.response = {probId: this.props.probId, options: options, response: response, time: time};
+        else
+            this.response = {options: options, response: response, time: time};
 
-        //TODO: Submit response to the server
-
-        if(this.props.report) {
-            //Show result
-            this.response = {
-                solution: this.props.letters, 
-                challenge: challenge,
-                selections: selections,
-                startTime: startTime,
-                endTime: endTime
-            };
-
+        if(this.props.report)
             this.setState({stage: 'report'});
-        }
-        else {
-            this.props.onComplete();
-        }
+        else
+            this.complete();
     },
     complete: function() {
-        this.props.onComplete();
+        this.props.onComplete(this.response);
     },
     render: function() {
         //If there are still more letters, display the letters.
@@ -207,22 +204,7 @@ var LetterSequence = React.createClass({
             return (<LetterRecall letters={this.props.letters} onSubmitResponse={this.handleResponse}/>);
         }
         else {
-            return <LetterSequenceReport response={this.response} onComplete={this.complete}/>
-        }
-    },
-    statics: {
-        generateRandomProblem: function(length) {
-            var res = {type:'letter', problem:[]};
-            var a = 'A'.charCodeAt(0), z = 'Z'.charCodeAt(0);
-
-            while(res.problem.length < length) {
-                //Get a random letter
-                var c = Math.floor(Math.random() * (z - a)) + a;
-                var l = String.fromCharCode(c);
-                if(l != 'A' && l != 'E' && l != 'I' && l != 'O' && l != 'U' && res.problem.indexOf(l) == -1)
-                    res.problem.push(l);
-            }
-            return res;
+            return <LetterSequenceReport letters={this.props.letters} response={this.response} onComplete={this.complete}/>
         }
     }
 });

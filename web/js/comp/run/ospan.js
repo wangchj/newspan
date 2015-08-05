@@ -1,17 +1,52 @@
 var OSpan = React.createClass({
     propTypes: {
+        taskId: React.PropTypes.number.isRequired,
         blocks: React.PropTypes.array.isRequired
     },
     getInitialState: function() {
-        return {progress: 0};
+        return {progress: 0, res:[]};
+    },
+    onPartInfoComplete: function(partId) {
+        this.state.partId = partId;
+        this.advance();
+    },
+    onBlockComplete: function(res) {
+        this.state.res.push(res);
+        this.advance();
+    },
+    onTaskComplete: function(res) {
+        for(var i = 0; i < res.length; i++)
+            this.state.res.push(res[i]);
+        this.advance();
     },
     advance: function() {
         if(this.state.progress < 12)
             this.setState({progress: this.state.progress + 1});
+        else {
+            $.ajax({
+                type: 'POST',
+                url: saveUrl,
+                data: {
+                    taskId: this.props.taskId,
+                    partId: this.state.partId,
+                    blocks: JSON.stringify(this.state.res)
+                },
+                context: this,
+                success: function(data, textStatus, jqXHR) {
+                    console.log('Ajax save success', textStatus);
+                    this.setState({progress: this.state.progress + 1});
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log('Ajax save error', textStatus, errorThrown);
+                }
+            });
+        }
     },
     render:function(){
         switch(this.state.progress) {
-            case 0: //Welcome screen
+            case 0: //Participant ID screen
+                return <PartInfoForm onComplete={this.onPartInfoComplete}/>
+            case 1: //Welcome screen
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>
@@ -26,7 +61,7 @@ var OSpan = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 1: //Letters practice instruction
+            case 2: //Letters practice instruction
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -50,9 +85,10 @@ var OSpan = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 2: //Letters practice block
-                return <Block block={this.props.blocks[0]} practice={true} onComplete={this.advance} randomize={true} />
-            case 3:
+            case 3: //Letters practice block
+return <Instruction onComplete={this.advance} nextBtnLabel="ok">abc</Instruction>
+                //return <Block block={this.props.blocks[0]} practice={true} onComplete={this.onBlockComplete} randomize={true} />
+            case 4:
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>You have completed the practice.</p>
@@ -60,7 +96,7 @@ var OSpan = React.createClass({
                         <p>Please click CONTINUE to move to next part of the task.</p>
                     </Instruction>
                 );
-            case 4: //Math practice instruction
+            case 5: //Math practice instruction
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -82,9 +118,10 @@ var OSpan = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 5: //Math practice block
-                return <Block block={this.props.blocks[1]} practice={true} randomize={true} tra={{correct:0, total:0}} onComplete={this.advance}/>
-            case 6:
+            case 6: //Math practice block
+return <Instruction onComplete={this.advance} nextBtnLabel="ok">abc</Instruction>
+                //return <Block block={this.props.blocks[1]} practice={true} randomize={true} tra={{correct:0, total:0}} onComplete={this.onBlockComplete}/>
+            case 7:
                 return (
                     <Instruction practice={true} onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>You have completed the practice.</p>
@@ -92,7 +129,7 @@ var OSpan = React.createClass({
                         <p>Please click CONTINUE to move to next part of the task.</p>
                     </Instruction>
                 );
-            case 7: //Math and letter practice instruction
+            case 8: //Math and letter practice instruction
                 return (
                     <Instruction practice={false} onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -127,9 +164,10 @@ var OSpan = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 8: //Math and letter practice block
-                return <Block block={this.props.blocks[2]} practice={true} randomize={true} tra={{correct:0, total:0}} onComplete={this.advance}/>
-            case 9: //After practice interlude
+            case 9: //Math and letter practice block
+
+                return <Block block={this.props.blocks[2]} practice={true} randomize={true} tra={{correct:0, total:0}} onComplete={this.onBlockComplete}/>
+            case 10: //After practice interlude
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Continue'>
                         <p>
@@ -147,7 +185,7 @@ var OSpan = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 10: //Task instruction
+            case 11: //Task instruction
                 return (
                     <Instruction onComplete={this.advance} nextBtnLabel='Start'>
                         <p>
@@ -168,9 +206,9 @@ var OSpan = React.createClass({
                         </p>
                     </Instruction>
                 );
-            case 11: //The task
-                return <Assessment blocks={[this.props.blocks[3], this.props.blocks[4], this.props.blocks[5]]} randomize={true} keepTra={true} onComplete={this.advance} />
-            case 12: //End of task
+            case 12: //The task
+                return <Assessment blocks={[this.props.blocks[3], this.props.blocks[4], this.props.blocks[5]]} randomize={true} keepTra={true} onComplete={this.onTaskComplete} />
+            case 13: //End of task
                 return <div style={{fontSize:25, marginTop:100}}>You have completed the task. Thank you.</div>
         }
     }

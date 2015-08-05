@@ -12,7 +12,40 @@ var EQ = {
 
 var LS = {
     typeId: 'ls',
-    typeLabel: 'Letter Sequence'
+    typeLabel: 'Letter Sequence',
+    /**
+     * Make a random array of letters (options), including the specified letter array, to be used for recall.
+     *
+     * @param letters array A list of letters to include. This is usually the original list of letters shown to participant.
+     */
+    makeOptions: function(letters) {
+        var res = letters.slice(), a = 'A'.charCodeAt(0), z = 'Z'.charCodeAt(0);
+
+        while(res.length < 12) {
+            //Get a random letter
+            var c = Math.floor(Math.random() * (z - a)) + a;
+            var l = String.fromCharCode(c);
+            
+            if(l != 'A' && l != 'E' && l != 'I' && l != 'O' && l != 'U' && res.indexOf(l) == -1)
+                res.push(l);
+        }
+
+        res = shuffle(res);
+        return res;
+    },
+    makeRandomLetterArray: function(length) {
+        var res = [], a = 'A'.charCodeAt(0), z = 'Z'.charCodeAt(0);
+
+        while(res.length < length) {
+            //Get a random letter
+            var c = Math.floor(Math.random() * (z - a)) + a;
+            var l = String.fromCharCode(c);
+            if(l != 'A' && l != 'E' && l != 'I' && l != 'O' && l != 'U' && res.indexOf(l) == -1)
+                res.push(l);
+        }
+        
+        return res;
+    }
 };
 
 var EQLS = {

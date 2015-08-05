@@ -122,20 +122,27 @@ var Demographics = React.createClass({
 var Block = React.createClass({
     getInitialState: function() {
         this.tra = this.props.tra ? this.props.tra : this.props.keepTra ? {correct:0, total:0} : null;
+        this.res = [];
         
         return {
             block: this.props.randomize ? shuffle(this.props.block) : this.props.block,
             progress: 0
         };
     },
-    advance: function(tra) {
+    advance: function(res, tra) {
+        this.res.push(res);
+        this.tra = tra;
+        
         if(this.state.progress == this.state.block.length - 1) {
-            this.props.onComplete(this.tra);
+            this.onComplete(this.res, this.tra);
         }
         else {
-            this.tra = tra;
             this.setState({progress: this.state.progress + 1});
         }
+    },
+    onComplete: function(res, tra) {
+        res.sort(function(a, b){return a.probId - b.probId});
+        this.props.onComplete(this.res, this.tra);
     },
     render: function() {
         var block = this.state.block;
@@ -144,12 +151,12 @@ var Block = React.createClass({
         switch(block[progress].type) {
             case LS.typeId:
                 return (
-                    <LetterSequence key={progress} letters={block[progress].letters}
+                    <LetterSequence key={progress} probId={block[progress].id} letters={block[progress].letters}
                         onComplete={this.advance} report={this.props.practice} />
                 );
             case EQ.typeId:
                 return (
-                    <MathEq key={progress} equation={block[progress].equation}
+                    <MathEq key={progress} probId={block[progress].id} equation={block[progress].equation}
                         feedback={this.props.practice} onComplete={this.advance} />
                 );
             case EQLS.typeId:
@@ -208,17 +215,26 @@ var Block = React.createClass({
  * @prop onComplete callback
  */
 var Assessment = React.createClass({
+    propTypes: {
+        blocks: React.PropTypes.array.isRequired,
+        keepTra: React.PropTypes.bool,
+        randomize: React.PropTypes.bool,
+        onComplete: React.PropTypes.func
+    },
     getInitialState: function() {
         if(this.props.keepTra)
             this.tra = {correct: 0, total: 0};
+        
+        this.res = [];
 
         return {progress: 0};
     },
-    advance: function(tra) {
+    advance: function(res, tra) {
         if(this.state.progress == this.props.blocks.length - 1) {
-            this.props.onComplete();
+            this.props.onComplete(this.res);
         }
         else {
+            this.res.push(res);
             this.tra = tra;
             this.setState({progress: this.state.progress + 1});
         }

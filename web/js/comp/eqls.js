@@ -1,7 +1,7 @@
 /**
  * Dependencies
- *   - letter-comp.js
- *   - math-comp.js
+ *   - ls.js
+ *   - eq.js
  */
 
 /**
@@ -21,8 +21,10 @@ var MathLetter = React.createClass({
     advance: function() {
         if(this.state.stage < 1 || (this.state.stage == 1 && this.props.feedback))
             this.setState({stage: this.state.stage + 1});
-        else
-            this.props.onComplete(this.state.tra);
+        else {
+            var response = {probId: this.props.probId, letters: this.recallRes, equations: this.mathRes};
+            this.props.onComplete(response, this.state.tra);
+        }
     },
     /**
      * When MathLetter.Sequence component is completed.
@@ -34,30 +36,24 @@ var MathLetter = React.createClass({
         this.advance();
     },
     /**
-     * @param challenge array<string>  All choices (letters) presented to the user on the recall screen.
+     * @param options array<string>  All choices (letters) presented to the user on the recall screen.
      * @prarm indexes   array<Integer> user response as an array of indexes.
      * @param startTime integer        See getTime() of date object.
      * @param endTime   integer        See getTime() of date object.
      */
-    onSubmitRecall: function(challenge, indexes, startTime, endTime) {
+    onSubmitRecall: function(options, response, time) {
         //Save the recall result
-        this.recallRes = {challenge: challenge, indexes: indexes, startTime: startTime, endTime: endTime};
+        this.recallRes = {options: options, response: response, time: time};
         this.advance();
     },
     render: function() {
         switch(this.state.stage) {
             case 0:
-                return <MathLetter.Sequence problem={this.props.problem} tra={this.props.tra} onComplete={this.onSequenceComplete} />
+                return <MathLetter.Sequence problem={this.props.problem} tra={this.props.tra} onComplete={this.onSequenceComplete}/>
             case 1:
-                return <LetterRecall letters={this.props.problem.letters} onSubmitResponse={this.onSubmitRecall} />;
+                return <LetterRecall letters={this.props.problem.letters} onSubmitResponse={this.onSubmitRecall}/>
             case 2:
-                return (
-                    <MathLetter.Feedback
-                        problem={this.props.problem}
-                        mathRes={this.mathRes}
-                        recallRes={this.recallRes}
-                        onComplete={this.advance} />
-                );
+                return <MathLetter.Feedback problem={this.props.problem} mathRes={this.mathRes} recallRes={this.recallRes} onComplete={this.advance}/>
         }   
     }
 });
@@ -96,9 +92,9 @@ MathLetter.Sequence = React.createClass({
         clearInterval(this.timer);
         this.advance();
     },
-    onMathSubmit: function(res, startTime, endTime) {
-        this.mathRes.push({res: res, startTime: startTime, endTime: endTime});
-        this.adjustTra(res);
+    onMathSubmit: function(response, startTime, endTime) {
+        this.mathRes.push({response: response, time: endTime - startTime});
+        this.adjustTra(response);
 
         if(this.props.tra && this.state.tra.total > 2 &&
             !this.state.showedLowTra &&
@@ -111,14 +107,17 @@ MathLetter.Sequence = React.createClass({
         this.state.showLowTra = false;
         this.advance();
     },
-    adjustTra: function(res) {
+    /**
+     * @param response boolean Participant's response to equation problem.
+     */
+    adjustTra: function(response) {
         if(!this.state.tra)
             return;
 
         var i = Math.floor(this.state.count / 2);
         var a = EQ.getAnswer(this.props.problem.equations[i]);
         var tra = this.state.tra;
-        if(res == a)
+        if(response == a)
             tra.correct++;
         tra.total++;
         this.setState({tra: tra});
@@ -162,7 +161,7 @@ MathLetter.Feedback = React.createClass({
     getMathCorrectCount: function() {
         var res = 0;
         for(var i = 0; i < this.props.problem.equations.length; i++) {
-            if(this.props.mathRes[i].res == EQ.getAnswer(this.props.problem.equations[i]))
+            if(this.props.mathRes[i].response == EQ.getAnswer(this.props.problem.equations[i]))
                 res++;
         }
         return res;
@@ -170,14 +169,10 @@ MathLetter.Feedback = React.createClass({
     getLetterCorrectCount: function() {
         var res = 0;
 
-        var r = this.props.recallRes.indexes.map(
-            function(i) {return this.props.recallRes.challenge[i];}, this
-        );
-
-        for(var i = 0; i < this.props.problem.letters.length; i++) {
-            if(r[i] == this.props.problem.letters[i])
+        for(var i = 0; i < this.props.problem.letters.length; i++)
+            if(this.props.problem.letters[i] == this.props.recallRes.response[i])
                 res++;
-        }
+
         return res;
     },
     complete: function() {

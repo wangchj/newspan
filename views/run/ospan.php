@@ -21,7 +21,9 @@ $this->title = '';
 </div>
 
 <?php $this->beginBlock('TheEnd');?>
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+        var saveUrl = '<?=Url::to(['run/save'])?>';
+    </script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/generic.js"></script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/ls.js"></script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/eq.js"></script>
@@ -29,6 +31,6 @@ $this->title = '';
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/run/ospan.js"></script>
     <script type="text/jsx">
         var blocks = <?=$task->json?>;
-        React.render(<OSpan blocks={blocks}/>, document.getElementById('comp'));
+        React.render(<OSpan taskId={<?=$task->taskId?>} blocks={blocks}/>, document.getElementById('comp'));
     </script>
 <?php $this->endBlock();?>

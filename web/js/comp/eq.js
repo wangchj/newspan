@@ -4,14 +4,23 @@
  * @prop onComplete callback The callback when this component is finished.
  */
 var MathEq = React.createClass({
+    propTypes: {
+        probId: React.PropTypes.number.isRequired,
+        equation: React.PropTypes.string.isRequired,
+        feedback: React.PropTypes.bool,
+        onComplete: React.PropTypes.func.isRequired
+    },
     getInitialState: function() {
         return {stage: 0};
     },
     handleSubmit: function(response, startTime, endTime) {
+        this.response = {
+            probId: this.props.probId,
+            response: response,
+            time: endTime - startTime
+        }
+
         if(this.props.feedback) {
-            this.response = response;
-            this.startTime = startTime;
-            this.endTime = endTime;
             this.setState({stage:1});
         }
         else {
@@ -19,9 +28,7 @@ var MathEq = React.createClass({
         }
     },
     complete: function() {
-        if(this.props.onComplete) {
-            this.props.onComplete();
-        }
+        this.props.onComplete(this.response);
     },
     render: function() {
         switch(this.state.stage) {
@@ -30,7 +37,6 @@ var MathEq = React.createClass({
             case 1:
                 return (
                     <MathEq.Feedback equation={this.props.equation} response={this.response}
-                        startTime={this.startTime} endTime={this.endTime}
                         showTime={true} onComplete={this.complete} />
                 );
         }
@@ -124,7 +130,7 @@ MathEq.Feedback = React.createClass({
             <div>
                 <div className="row" style={{marginTop:200, marginBottom:25}}>
                     <div className="col-xs-12" style={{fontSize:25}}>
-                        {EQ.getAnswer(this.props.equation) == this.props.response ? 'Correct' : 'Incorrect'}!
+                        {EQ.getAnswer(this.props.equation) === this.props.response.response ? 'Correct' : 'Incorrect'}!
                     </div>
                 </div>
                 <div className="row">
