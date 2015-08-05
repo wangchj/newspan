@@ -43,6 +43,24 @@ function shuffle(array) {
     return array;
 }
 
+/**
+ * Trim null from the end of array, in place.
+ *
+ * @param array The array to be trimmed.
+ * @returns the array itself.
+ */
+function trimArray(array) {
+    var p = 0;
+    for(var i = 0; i < array.length; i++) {
+        if(array[i] == null) {
+            p = i;
+            break;
+        }
+    }
+    var res = array.splice(0, p);
+    return res;
+}
+
 var PointCollection = {
     indexOf: function(pointArray, point) {
         for(var i = 0; i < pointArray.length; i++)
