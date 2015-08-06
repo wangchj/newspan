@@ -651,8 +651,6 @@ var CreateTask = React.createClass({
                         {id: 4, type: SYSQ.typeId, squares: SQ.makeRandomFigure(7), symmetries: SYSQ.makeSymmetryFigures(7)}
                     ]
                 ];
-            case 'rspan':
-                return [[]];
         }
     }
 });
@@ -1064,8 +1062,6 @@ ProbForm.Body = React.createClass({
                                 <option value={SQ.typeId}>Square Sequence</option>
                                 <option value={SY.typeId}>Symmetry</option>
                                 <option value={SYSQ.typeId}>Symmetry and Squares</option>
-                                <option value={RS.typeId}>Reading</option>
-                                <option value={RSLS.typeId}>Reading and Letters</option>
                             </select>
                         </div>
                     }

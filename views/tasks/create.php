@@ -12,9 +12,6 @@ switch($type) {
     case 'sspan':
         $this->title = 'New Symmetry Span Task';
         break;
-    case 'rspan': 
-        $this->title = 'New Reading Span Task';
-        break;
 }
 
 CreateTaskAsset::register($this);
