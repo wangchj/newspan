@@ -46,10 +46,6 @@ var CreateTask = React.createClass({
                 case SYSQ.typeId:
                     prob = subId == 0 ? {type: SQ.typeId, squares: prob.squares} : {type: SY.typeId, symmetry: prob.symmetries[ssubId]};
                     break;
-                case RSLS.typeId:
-                    //TODO
-                    //prob = subId == 0 ? {type: LS.typeId, letters: prob.letters} : {type: RS.typeId, sentence: prop.sentences[ssubId]}
-                    break;
             }
 
             ec.prob = prob;
@@ -208,10 +204,6 @@ var CreateTask = React.createClass({
                 return this.probFormSaveEditSY();
             case SYSQ.typeId:
                 return this.probFormSaveEditSYSQ();
-            case RS.typeId:
-                return this.probFormSaveEditRS();
-            case RSLS.typeId:
-                return this.probFormSaveEditRSLS();
         }
     },
     probFormSaveEditLS: function() {
@@ -307,12 +299,6 @@ var CreateTask = React.createClass({
             $(ProbForm.domIdSel).modal('hide');
             
         }
-    },
-    probFormSaveEditRS: function() {
-
-    },
-    probFormSaveEditRSLS: function() {
-
     },
     onTaskSave: function() {
         if(this.validateTask()) {
@@ -826,8 +812,6 @@ Block.Table.Row = React.createClass({
             case SQ.typeId: return SQ.typeLabel
             case SY.typeId: return SY.typeLabel
             case SYSQ.typeId: return SYSQ.typeLabel
-            case RS.typeId: return RS.typeLabel
-            case RSLS.typeId: return RSLS.typeLabel
         }
     },
     getProblemWidget: function() {
@@ -844,10 +828,6 @@ Block.Table.Row = React.createClass({
                 return <Block.Table.Row.SymmetryWidget symmetry={this.props.problem.symmetry} onProbEdit={this.onProbEdit}/>
             case SYSQ.typeId:
                 return <Block.Table.Row.SymmetrySquaresWidget squares={this.props.problem.squares} symmetries={this.props.problem.symmetries} onProbEdit={this.onProbEdit}/>
-            case RS.typeId:
-                return <div>Sentence widget</div>
-            case RSLS.typeId:
-                return <div>Sentence letter widget</div>
         }
     }
 });
@@ -1092,10 +1072,6 @@ ProbForm.SpecialPane = React.createClass({
                 return <ProbForm.SYPane editContext={this.props.editContext}/>
             case SYSQ.typeId:
                 return <ProbForm.SYSQPane/>
-            case RS.typdId:
-                return <ProbForm.RSPane/>
-            case RSLS.typeId:
-                return <ProbForm.RSLSPane/>
             default:
                 return null;
         }
@@ -1297,22 +1273,6 @@ ProbForm.SYSQPane = React.createClass({
                 <input className="form-control" id="length" defaultValue={3}/>
                 <div>Length of square sequence and must be an integer</div>
             </div>
-        )
-    }
-});
-
-ProbForm.RSPane = React.createClass({
-    render: function() {
-        return (
-            <div>Reading Sentence</div>
-        )
-    }
-});
-
-ProbForm.RSLSPane = React.createClass({
-    render: function() {
-        return (
-            <div>Reading Sentence and Letters</div>
         )
     }
 });
