@@ -8,18 +8,18 @@ $this->title = 'Responses';
 <table class="table">
     <tr>
         <th>#</th>
-        <th>Task Name</th>
-        <th>Task Type</th>
         <th>Participant</th>
+        <th>Task Name</th>
         <th>Date and Time</th>
+        <th>Score</th>
     </tr>
     <?php foreach($responses as $response): ?>
         <tr>
             <td><?=$response->responseId?></td>
-            <td><?=$response->task->name?></td>
-            <td><?=$response->task->type?></td>
             <td><?=$response->partId?></td>
+            <td><?=$response->task->name?></td>
             <td><?=(new DateTime($response->datetime))->format('Y-m-d H:i:s')?></td>
+            <td></td>
         </tr>
     <?php endforeach;?>
 </table>

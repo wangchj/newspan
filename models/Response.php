@@ -57,7 +57,7 @@ class Response extends \yii\db\ActiveRecord
      */
     public function getParticipant()
     {
-        return $this->hasOne(Participants::className(), ['partId' => 'partId']);
+        return $this->hasOne(Participant::className(), ['partId' => 'partId']);
     }
 
     /**
