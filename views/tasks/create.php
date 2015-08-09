@@ -5,14 +5,7 @@ use app\assets\CreateTaskAsset;
 
 /* @var $this yii\web\View */
 
-switch($type) {
-    case 'ospan':
-        $this->title = 'New Operation Span Task';
-        break;
-    case 'sspan':
-        $this->title = 'New Symmetry Span Task';
-        break;
-}
+$this->title = 'New Task';
 
 CreateTaskAsset::register($this);
 ?>

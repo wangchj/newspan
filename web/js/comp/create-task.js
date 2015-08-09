@@ -321,20 +321,13 @@ var CreateTask = React.createClass({
     },
     onTaskSave: function() {
         if(this.validateTask()) {
-            console.log('a');
             $.ajax({
                 type: 'POST',
                 url: taskSaveUrl,
                 data: {
                     name: this.refs.taskName.refs.input.getDOMNode().value.trim(),
-                    type: taskType,
                     task: JSON.stringify(this.state.task)
                 },
-                // data:
-                //     'name=' + this.refs.taskName.refs.input.getDOMNode().value.trim() + '&' +
-                //     'type=' + taskType + '&' +
-                //     'task=' + JSON.stringify(this.state.task),
-                // processData: false,
                 success: function(data, textStatus, jqXHR) {
                     console.log('Ajax save success', textStatus);
                     window.location.href = taskIndexUrl;

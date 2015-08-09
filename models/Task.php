@@ -9,7 +9,6 @@ use Yii;
  *
  * @property integer $taskId
  * @property string $name
- * @property string $type
  * @property string $createTime
  * @property string $json
  *
@@ -31,8 +30,8 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'type', 'createTime', 'json'], 'required'],
-            [['name', 'type', 'createTime', 'json'], 'string']
+            [['name', 'createTime', 'json'], 'required'],
+            [['name', 'createTime', 'json'], 'string']
         ];
     }
 
@@ -44,7 +43,6 @@ class Task extends \yii\db\ActiveRecord
         return [
             'taskId' => 'Task ID',
             'name' => 'Name',
-            'type' => 'Type',
             'createTime' => 'Create Time',
             'json' => 'Json',
         ];
