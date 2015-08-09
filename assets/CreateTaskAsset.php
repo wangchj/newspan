@@ -17,6 +17,7 @@ class CreateTaskAsset extends AssetBundle
         'js/models.js'
     ];
     public $depends = [
-        'app\assets\AppAsset'
+        'app\assets\AppAsset',
+        'app\assets\MarkedAsset'
     ];
 }
