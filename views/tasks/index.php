@@ -12,7 +12,6 @@ $this->title = 'Tasks';
     <tr>
         <th>#</th>
         <th>Name</th>
-        <th>Type</th>
         <th>Created Date</th>
         <th>Responses</th>
     </tr>
