@@ -30,6 +30,7 @@ CreateTaskAsset::register($this);
     </script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/task-template.js"></script>
     <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
     <script type="text/jsx">
         React.render(<CreateTask />, document.getElementById('comp'));

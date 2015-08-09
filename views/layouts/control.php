@@ -50,7 +50,6 @@ AppAsset::register($this);
                                     <li role="separator" class="divider"></li>
                                     <li><a href="<?=Url::to(['tasks/create', 'type'=>'ospan'])?>">New Operation Span Task</a></li>
                                     <li><a href="<?=Url::to(['tasks/create', 'type'=>'sspan'])?>">New Symmetry Span Task</a></li>
-                                    <li><a href="<?=Url::to(['tasks/create', 'type'=>'rspan'])?>">New Operation Span Task</a></li>
                                 </ul>
                             </li>
                             <li class="<?=$controller->id === 'responses' ? 'active' : ''?>"><a href="<?=Url::to(['responses/index'])?>">Responses</a></li>

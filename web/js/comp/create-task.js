@@ -3,17 +3,36 @@ var CreateTask = React.createClass({
         editMode: {add: 0, edit: 1}
     },
     getInitialState: function() {
-        var blocks = this.getBlocksTemplate(taskType);
-
         return {
-            blocks: blocks,
+            task: taskType == 'ospan' ? taskTemplate.ospan : taskTemplate.sspan,
             //Edit problem context {mode, prob, blockId, probId, subId, ssubId}
             editContext: {mode: CreateTask.editMode.add}
         };
     },
-    addBlock: function() {
-        this.state.blocks.push([]);
-        this.setState({blocks: this.state.blocks});
+    onBlockAdd: function(type) {
+        this.state.task.blocks.push({practice: (type === 'prac'), problems:[]});
+        this.state.task.struct.push({type: 'block', id: this.state.task.blocks.length - 1});
+        this.setState({task: this.state.task});
+    },
+    onBlockDel: function(blockId) {
+        console.log('onBlockDel', blockId);
+        this.state.task.blocks.splice(blockId, 1);
+
+        //Find the entry in task.struct to remove
+        var i = 0;
+        for(; i < this.state.task.struct.length; i++)
+            if(this.state.task.struct[i].id == blockId && this.state.task.struct[i].type == 'block')
+                break;
+
+        //Remove an entry from task.struct
+        this.state.task.struct.splice(i, 1);
+
+        //Adjust inst id of remaining instruct in struct
+        for(var i = 0; i < this.state.task.struct.length; i++)
+            if(this.state.task.struct[i].type == 'block' && this.state.task.struct[i].id > blockId)
+                this.state.task.struct[i].id--;
+
+        this.setState({task: this.state.task});
     },
     /**
      * @param mode integer One of values of editMode.
@@ -29,8 +48,8 @@ var CreateTask = React.createClass({
             $(ProbForm.domIdSel).modal('show');
         }
         else {
-            var block = this.state.blocks[blockId];
-            var prob = block[probId];
+            var block = this.state.task.blocks[blockId];
+            var prob = block.problems[probId];
             var ec = {
                 mode: CreateTask.editMode.edit,
                 blockId: blockId,
@@ -61,11 +80,11 @@ var CreateTask = React.createClass({
         this.showProbForm(CreateTask.editMode.edit, blockId, probId, subId, ssubId);
     },
     onProbDel: function(blockId, probId) {
-        var block = this.state.blocks[blockId];
-        block.splice(probId, 1);
-        for(var i = 0; i < this.state.blocks[blockId].length; i++)
-            this.state.blocks[blockId][i].id = i;
-        this.setState({blocks:this.state.blocks});
+        var block = this.state.task.blocks[blockId];
+        block.problems.splice(probId, 1);
+        for(var i = 0; i < block.problems.length; i++)
+            block.problems[i].id = i;
+        this.setState({task:this.state.task});
     },
     onProbFormSave: function() {
         if(this.state.editContext.mode === CreateTask.editMode.add)
@@ -97,13 +116,13 @@ var CreateTask = React.createClass({
             var a = str.split(',').map(function(str){return str.trim()}),
                 i = this.state.editContext.blockId;
 
-            this.state.blocks[i].push({
-                id: this.state.blocks[i].length,
+            this.state.task.blocks[i].problems.push({
+                id: this.state.task.blocks[i].problems.length,
                 type: LS.typeId,
                 letters: a
             });
 
-            this.setState({blocks: this.state.blocks});
+            this.setState({task: this.state.task});
             $(ProbForm.domIdSel).modal('hide');
         }
     },
@@ -113,13 +132,13 @@ var CreateTask = React.createClass({
         if(EQ.isValid(eq)) {
             var i = this.state.editContext.blockId;
 
-            this.state.blocks[i].push({
-                id: this.state.blocks[i].length,
+            this.state.task.blocks[i].problems.push({
+                id: this.state.task.blocks[i].problems.length,
                 type: EQ.typeId,
                 equation: eq
             });
 
-            this.setState({blocks: this.state.blocks});
+            this.setState({task: this.state.task});
             $(ProbForm.domIdSel).modal('hide');
         }
     },
@@ -133,13 +152,13 @@ var CreateTask = React.createClass({
 
             if(eq && eq.length > 0 && le && le.length > 0 && eq.length == le.length) {
                 var i = this.state.editContext.blockId;
-                this.state.blocks[i].push({
-                    id: this.state.blocks[i].length,
+                this.state.task.blocks[i].problems.push({
+                    id: this.state.task.blocks[i].problems.length,
                     type: EQLS.typeId,
                     letters: le,
                     equations: eq
                 });
-                this.setState({blocks: this.state.blocks});
+                this.setState({blocks: this.state.task.blocks});
                 $(ProbForm.domIdSel).modal('hide');
             }
         }
@@ -148,24 +167,24 @@ var CreateTask = React.createClass({
         var editContext = this.state.editContext;
         var blockId = editContext.blockId;
         var json = $(ProbForm.domIdSel + ' #squares').val().trim();
-        this.state.blocks[blockId].push({
-            id: this.state.blocks[blockId].length,
+        this.state.task.blocks[blockId].problems.push({
+            id: this.state.task.blocks[blockId].problems.length,
             type: SQ.typeId,
             squares: JSON.parse(json)
         });
-        this.setState({blocks: this.state.blocks});
+        this.setState({task: this.state.task});
         $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveNewSY: function(){
         var editContext = this.state.editContext;
         var blockId = editContext.blockId;
         var json = $(ProbForm.domIdSel + ' #symmetry').val().trim();
-        this.state.blocks[blockId].push({
-            id: this.state.blocks[blockId].length,
+        this.state.task.blocks[blockId].problems.push({
+            id: this.state.task.blocks[blockId].problems.length,
             type: SY.typeId,
             symmetry: JSON.parse(json)
         });
-        this.setState({blocks: this.state.blocks});
+        this.setState({task: this.state.task});
         $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveNewSYSQ: function() {
@@ -175,21 +194,21 @@ var CreateTask = React.createClass({
         if(length && /^\d+$/.test(length)) {
             length = parseInt(length);
             
-            this.state.blocks[blockId].push({
-                id: this.state.blocks[blockId].length,
+            this.state.task.blocks[blockId].problems.push({
+                id: this.state.task.blocks[blockId].problems.length,
                 type: SYSQ.typeId,
                 squares: SQ.makeRandomFigure(length),
                 symmetries: SYSQ.makeSymmetryFigures(length)
             });
 
-            this.setState({blocks: this.state.blocks});
+            this.setState({task: this.state.task});
             $(ProbForm.domIdSel).modal('hide');
         }
     },
     probFormSaveEdit: function() {
         var editContext = this.state.editContext;
-        var block = this.state.blocks[editContext.blockId];
-        var prob = block[editContext.probId];
+        var block = this.state.task.blocks[editContext.blockId];
+        var prob = block.problems[editContext.probId];
 
         switch(prob.type) {
             case LS.typeId:
@@ -216,8 +235,8 @@ var CreateTask = React.createClass({
         if(str && str.length > 0) {
             var a = str.split(',').map(function(str){return str.trim()});
             if(a.length > 0) {
-                this.state.blocks[blockId][probId].letters = a;
-                this.setState({blocks: this.state.blocks});
+                this.state.task.blocks[blockId].problems[probId].letters = a;
+                this.setState({task: this.state.task});
                 $(ProbForm.domIdSel).modal('hide');
             }
         }
@@ -229,8 +248,8 @@ var CreateTask = React.createClass({
         var equation = $(ProbForm.domIdSel + ' #equation').val().trim();
 
         if(EQ.isValid(equation)) {
-            this.state.blocks[blockId][probId].equation = equation;
-            this.setState({blocks: this.state.blocks});
+            this.state.task.blocks[blockId].problems[probId].equation = equation;
+            this.setState({task: this.state.task});
             $(ProbForm.domIdSel).modal('hide');
         }
     },
@@ -253,8 +272,8 @@ var CreateTask = React.createClass({
             var equation = $(ProbForm.domIdSel + ' #equation').val().trim();
 
             if(EQ.isValid(equation)) {
-                this.state.blocks[blockId][probId].equations[ssubId] = equation;
-                this.setState({blocks: this.state.blocks});
+                this.state.task.blocks[blockId].problems[probId].equations[ssubId] = equation;
+                this.setState({task: this.state.task});
                 $(ProbForm.domIdSel).modal('hide');
             }
         }
@@ -264,8 +283,8 @@ var CreateTask = React.createClass({
         var blockId = editContext.blockId;
         var probId = editContext.probId;
         var json = $(ProbForm.domIdSel + ' #squares').val().trim();
-        this.state.blocks[blockId][probId].squares = JSON.parse(json);
-        this.setState({blocks: this.state.blocks});
+        this.state.task.blocks[blockId].problems[probId].squares = JSON.parse(json);
+        this.setState({task: this.state.task});
         $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveEditSY: function() {
@@ -273,8 +292,8 @@ var CreateTask = React.createClass({
         var blockId = editContext.blockId;
         var probId = editContext.probId;
         var json = $(ProbForm.domIdSel + ' #symmetry').val().trim();
-        this.state.blocks[blockId][probId].symmetry = JSON.parse(json);
-        this.setState({blocks: this.state.blocks});
+        this.state.task.blocks[blockId].problems[probId].symmetry = JSON.parse(json);
+        this.setState({task: this.state.task});
         $(ProbForm.domIdSel).modal('hide');
     },
     probFormSaveEditSYSQ: function() {
@@ -294,8 +313,8 @@ var CreateTask = React.createClass({
         //Edit one of the equations
         else if(subId == 1) {
             var symmetry = $(ProbForm.domIdSel + ' #symmetry').val().trim();
-            this.state.blocks[blockId][probId].symmetries[ssubId] = JSON.parse(symmetry);
-            this.setState({blocks: this.state.blocks});
+            this.state.task.blocks[blockId].problems[probId].symmetries[ssubId] = JSON.parse(symmetry);
+            this.setState({task: this.state.task});
             $(ProbForm.domIdSel).modal('hide');
             
         }
@@ -309,12 +328,12 @@ var CreateTask = React.createClass({
                 data: {
                     name: this.refs.taskName.refs.input.getDOMNode().value.trim(),
                     type: taskType,
-                    blocks: JSON.stringify(this.state.blocks)
+                    task: JSON.stringify(this.state.task)
                 },
                 // data:
                 //     'name=' + this.refs.taskName.refs.input.getDOMNode().value.trim() + '&' +
                 //     'type=' + taskType + '&' +
-                //     'blocks=' + JSON.stringify(this.state.blocks),
+                //     'task=' + JSON.stringify(this.state.task),
                 // processData: false,
                 success: function(data, textStatus, jqXHR) {
                     console.log('Ajax save success', textStatus);
@@ -338,8 +357,8 @@ var CreateTask = React.createClass({
         }
 
         //Validate that every block has problem
-        for(var i = 0; i < this.state.blocks.length; i++) {
-            if(this.state.blocks[i].length == 0) {
+        for(var i = 0; i < this.state.task.blocks.length; i++) {
+            if(this.state.task.blocks[i].problems.length == 0) {
                 this.setState({error: 'Block ' + (i + 1) + ' is empty'});
                 return false;
             }
@@ -347,297 +366,72 @@ var CreateTask = React.createClass({
 
         return true;
     },
+    onInstAdd: function() {
+        console.log('onInstAdd');
+        this.setState({editContext:{}});
+        $(InstForm.domIdSel).modal('show');
+    },
+    onInstEdit: function(instId) {
+        console.log('onInstEdit', instId);
+        this.setState({editContext:{inst: this.state.task.instructs[instId]}});
+        $(InstForm.domIdSel).modal('show');
+    },
+    onInstDel: function(instId) {
+        //Remove the inst entry
+        this.state.task.instructs.splice(instId, 1);
+        
+        //Find the entry in task.struct to remove
+        var i = 0;
+        for(; i < this.state.task.struct.length; i++)
+            if(this.state.task.struct[i].id == instId && this.state.task.struct[i].type == 'inst')
+                break;
+
+        //Remove an entry from task.struct
+        this.state.task.struct.splice(i, 1);
+
+        //Adjust inst id of remaining instruct in struct
+        for(var i = 0; i < this.state.task.struct.length; i++)
+            if(this.state.task.struct[i].type == 'inst' && this.state.task.struct[i].id > instId)
+                this.state.task.struct[i].id--;
+
+        this.setState({task: this.state.task});
+    },
+    onInstFormSave: function() {
+        var text = this.refs.instForm.refs.body.refs.text.getDOMNode().value.trim();
+        var next = this.refs.instForm.refs.body.refs.next.getDOMNode().value.trim();
+
+        if(text == '' || next == '') return;
+
+        //Editing existing instruction
+        if(this.state.editContext.inst) {
+            this.state.editContext.inst.text = text;
+            this.state.editContext.inst.next = next;
+            this.setState({task: this.state.task});
+        }
+        //Adding new instruction
+        else {
+            var inst = {text: text, next: next}
+            var instId = this.state.task.instructs.length;
+
+            this.state.task.instructs.push(inst);
+            this.state.task.struct.push({type: 'inst', id: instId});
+            this.setState({task: this.state.task});
+        }
+
+        $(InstForm.domIdSel).modal('hide');
+    },
     render: function() {
         return (
             <div>
                 <CreateTask.TaskNameInput ref="taskName"/>
-                <BlockList blocks={this.state.blocks} onAddProbClick={this.onAddProbClick} onProbEdit={this.onProbEdit} onProbDel={this.onProbDel}/>
+                <TaskObList task={this.state.task} onAddProbClick={this.onAddProbClick} onProbEdit={this.onProbEdit} onProbDel={this.onProbDel} onBlockDel={this.onBlockDel} onInstEdit={this.onInstEdit} onInstDel={this.onInstDel}/>
+                <CreateTask.Buttons onBlockAdd={this.onBlockAdd} onInstAdd={this.onInstAdd}/>
                 <CreateTask.Error error={this.state.error}/>
-                <CreateTask.Buttons onAddBlock={this.addBlock} onSave={this.onTaskSave}/>
+                <CreateTask.SaveRow onTaskSave={this.onTaskSave}/>
                 <ProbForm editContext={this.state.editContext} onSaveClick={this.onProbFormSave}/>
+                <InstForm ref="instForm" editContext={this.state.editContext} onSaveClick={this.onInstFormSave}/>
             </div>
         );
-    },
-    getBlocksTemplate: function(type) {
-        switch(type) {
-            case 'ospan':
-                return [
-                    [
-                        {id: 0, type: LS.typeId, letters: ['G', 'H']},
-                        {id: 1, type: LS.typeId, letters: ['P', 'F', 'D']},
-                        {id: 2, type: LS.typeId, letters: ['V', 'R', 'S', 'N']}
-                    ],
-                    [
-                        {id: 0, type: EQ.typeId, equation: '(2*4)+1=5'},
-                        {id: 1, type: EQ.typeId, equation: '(24/2)-6=1'},
-                        {id: 2, type: EQ.typeId, equation: '(10/2)+2=6'},
-                        {id: 3, type: EQ.typeId, equation: '(2*3)-3=3'},
-                        {id: 4, type: EQ.typeId, equation: '(2*2)+2=6'},
-                        {id: 5, type: EQ.typeId, equation: '(7/7)+7=8'}
-                    ],
-                    [
-                        {
-                            id: 0,
-                            type: EQLS.typeId,
-                            letters: ['G', 'H'],
-                            equations: [
-                                '(10*2)-10=10',
-                                '(1*2)+1=2'
-                            ]
-                        },
-                        {
-                            id: 1,
-                            type: EQLS.typeId,
-                            letters: ['P', 'F', 'D'],
-                            equations: [
-                                '(5*2)-10=10',
-                                '(10*3)+1=15',
-                                '(10/5)+5=7'
-                            ]
-                        },
-                        {
-                            id: 2,
-                            type: EQLS.typeId,
-                            letters: ['V', 'R', 'S', 'N'],
-                            equations: [
-                                '(6*2)-10=3',
-                                '(6/3)+3=5',
-                                '(7*2)-7=7',
-                                '(8*2)-1=16'
-                            ]
-                        }
-                    ],
-                    [
-                        {
-                            id: 0,
-                            type: EQLS.typeId,
-                            letters: ['D', 'L', 'P'],
-                            equations: [
-                                '(9*2)-10=8',
-                                '(3*4)+5=30',
-                                '(5*4)-19=1'
-                            ]
-                        },
-                        {
-                            id: 1,
-                            type: EQLS.typeId,
-                            letters: ['P', 'L', 'D', 'F'],
-                            equations: [
-                                '(25*2)-10=20',
-                                '(10*10)-10=90',
-                                '(4*5)+5=15',
-                                '(10/5)+5=7'
-                            ]
-                        },
-                        {
-                            id: 2,
-                            type: EQLS.typeId,
-                            letters: ['P', 'R', 'S', 'Y', 'N'],
-                            equations: [
-                                '(10/2)+6=4',
-                                '(8*3)-8=16',
-                                '(6/2)-1=2',
-                                '(3*12)+3=12',
-                                '(6*8)-2=20'
-                            ]
-                        },
-                        {
-                            id: 3,
-                            type: EQLS.typeId,
-                            letters: ['Q', 'X', 'Z', 'D', 'C', 'V'],
-                            equations: [
-                                '(3*5)-10=8',
-                                '(15*2)-15=0',
-                                '(5*2)-3=5',
-                                '(10/2)+6=11',
-                                '(4/2)-1=10',
-                                '(8*6)+5=53'
-                            ]
-                        },
-                        {
-                            id: 4,
-                            type: EQLS.typeId,
-                            letters: ['S', 'F', 'G', 'H', 'J', 'K', 'L'],
-                            equations: [
-                                '(10/5)-2=1',
-                                '(12/3)-4=0',
-                                '(4*4)+4=20',
-                                '(12/4)-3=4',
-                                '(25*2)-10=20',
-                                '(8*6)-8=30',
-                                '(5/5)+2=1'
-                            ]
-                        }
-                    ],
-                    [
-                        {
-                            id: 0,
-                            type: EQLS.typeId,
-                            letters: ['G', 'W', 'J'],
-                            equations: [
-                                '(9*2)-10=8',
-                                '(3*4)+5=30',
-                                '(5*4)-3=17'
-                            ]
-                        },
-                        {
-                            id: 1,
-                            type: EQLS.typeId,
-                            letters: ['D', 'L', 'T', 'Q'],
-                            equations: [
-                                '(25*2)-10=20',
-                                '(4*1)+20=24',
-                                '(4*5)+5=15',
-                                '(10/5)+5=7'
-                            ]
-                        },
-                        {
-                            id: 2,
-                            type: EQLS.typeId,
-                            letters: ['R', 'F', 'V', 'S', 'W'],
-                            equations: [
-                                '(10/2)+6=4',
-                                '(8*3)-8=16',
-                                '(6/2)-1=2',
-                                '(3*12)+3=12',
-                                '(6*8)-2=20'
-                            ]
-                        },
-                        {
-                            id: 3,
-                            type: EQLS.typeId,
-                            letters: ['T', 'X', 'G', 'D', 'C', 'V'],
-                            equations: [
-                                '(13*2)-10=14',
-                                '(15*2)-20=0',
-                                '(5*2)-3=5',
-                                '(10*8)+2=82',
-                                '(4/2)-1=10',
-                                '(8*6)+5=53'
-                            ]
-                        },
-                        {
-                            id: 4,
-                            type: EQLS.typeId,
-                            letters: ['R', 'W', 'V', 'H', 'Q', 'K', 'P'],
-                            equations: [
-                                '(10/5)-2=1',
-                                '(3*3)-5=4',
-                                '(4/4)+4=5',
-                                '(12/4)-3=4',
-                                '(25*2)-10=20',
-                                '(8/2)+4=6',
-                                '(5/5)+2=1'
-                            ]
-                        }
-                    ],
-                    [
-                        {
-                            id: 0,
-                            type: EQLS.typeId,
-                            letters: ['V', 'R', 'L'],
-                            equations: [
-                                '(9*2)-10=8',
-                                '(16/2)-5=30',
-                                '(5*4)+3=23'
-                            ]
-                        },
-                        //Problem 2
-                        {
-                            id: 1,
-                            type: EQLS.typeId,
-                            letters: ['Y', 'L', 'K', 'P'],
-                            equations: [
-                                '(25*2)-10=20',
-                                '(4*1)+6=10',
-                                '(4*5)+5=15',
-                                '(10/5)+5=7'
-                            ]
-                        },
-                        //Problem 3
-                        {
-                            id: 2,
-                            type: EQLS.typeId,
-                            letters: ['D', 'N', 'G', 'T', 'K'],
-                            equations: [
-                                '(10/2)+6=4',
-                                '(8*3)-8=16',
-                                '(6/2)-1=2',
-                                '(3*12)+3=12',
-                                '(6*8)-2=20'
-                            ]
-                        },
-                        //Problem 4
-                        {
-                            id: 3,
-                            type: EQLS.typeId,
-                            letters: ['H', 'X', 'R', 'D', 'C', 'V'],
-                            equations: [
-                                '(12*2)-10=8',
-                                '(15/5)-5=0',
-                                '(5*2)-3=5',
-                                '(20/2)+2=12',
-                                '(4/2)-1=10',
-                                '(8*6)+5=53'
-                            ]
-                        },
-                        //Problem 5
-                        {
-                            id: 4,
-                            type: EQLS.typeId,
-                            letters: ['Y', 'C', 'D', 'G', 'K', 'T', 'M'],
-                            equations: [
-                                '(10/5)-2=1',
-                                '(12/12)-0=1',
-                                '(30/2)+0=15',
-                                '(12/4)-3=4',
-                                '(25*2)-10=20',
-                                '(8*5)+4=30',
-                                '(5/5)+2=1'
-                            ]
-                        }
-                    ]
-                ];
-            case 'sspan':
-                return [
-                    [
-                        {id: 0, type: SQ.typeId, squares: SQ.makeRandomFigure(2)},
-                        {id: 1, type: SQ.typeId, squares: SQ.makeRandomFigure(3)},
-                        {id: 2, type: SQ.typeId, squares: SQ.makeRandomFigure(4)}
-                    ],
-                    [
-                        {id: 0, type: SY.typeId, symmetry: SY.makeFigure()},
-                        {id: 1, type: SY.typeId, symmetry: SY.makeFigure()},
-                        {id: 2, type: SY.typeId, symmetry: SY.makeFigure()}
-                    ],
-                    [
-                        {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(2), symmetries: SYSQ.makeSymmetryFigures(2)},
-                        {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
-                        {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)}
-                    ],
-                    [
-                        {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
-                        {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)},
-                        {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(5), symmetries: SYSQ.makeSymmetryFigures(5)},
-                        {id: 3, type: SYSQ.typeId, squares: SQ.makeRandomFigure(6), symmetries: SYSQ.makeSymmetryFigures(6)},
-                        {id: 4, type: SYSQ.typeId, squares: SQ.makeRandomFigure(7), symmetries: SYSQ.makeSymmetryFigures(7)}
-                    ],
-                    [
-                        {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
-                        {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)},
-                        {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(5), symmetries: SYSQ.makeSymmetryFigures(5)},
-                        {id: 3, type: SYSQ.typeId, squares: SQ.makeRandomFigure(6), symmetries: SYSQ.makeSymmetryFigures(6)},
-                        {id: 4, type: SYSQ.typeId, squares: SQ.makeRandomFigure(7), symmetries: SYSQ.makeSymmetryFigures(7)}
-                    ],
-                    [
-                        {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
-                        {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)},
-                        {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(5), symmetries: SYSQ.makeSymmetryFigures(5)},
-                        {id: 3, type: SYSQ.typeId, squares: SQ.makeRandomFigure(6), symmetries: SYSQ.makeSymmetryFigures(6)},
-                        {id: 4, type: SYSQ.typeId, squares: SQ.makeRandomFigure(7), symmetries: SYSQ.makeSymmetryFigures(7)}
-                    ]
-                ];
-        }
     }
 });
 
@@ -667,30 +461,46 @@ CreateTask.Error = React.createClass({
 
 CreateTask.Buttons = React.createClass({
     propTypes: {
-        //onAddBlock: React.PropTypes.func.isRequired
-        onSave: React.PropTypes.func.isRequired
+        onBlockAdd: React.PropTypes.func.isRequired,
+        onInstAdd: React.PropTypes.func.isRequired
     },
-    onAddBlock: function() {
-        this.props.onAddBlock();
+    onAddTaskBlock: function() {
+        this.props.onBlockAdd('task');
+    },
+    onAddPracBlock: function() {
+        this.props.onBlockAdd('prac');
     },
     render: function() {
         return (
-            <div>
-                {
-                    //<button className="btn btn-default" onClick={this.onAddBlock}>New Block</button>
-                }
-                <button className="btn btn-default" onClick={this.props.onSave}>Finish</button>
+            <div style={{marginBottom:10}}>
+                <button className="btn btn-default" onClick={this.onAddTaskBlock}>New Task Block</button> <button className="btn btn-default" onClick={this.onAddPracBlock}>New Practice Block</button> <button className="btn btn-default" onClick={this.props.onInstAdd}>New Instruction</button>
             </div>
         );
     }
 });
 
-var BlockList = React.createClass({
+CreateTask.SaveRow = React.createClass({
     propTypes: {
-        blocks: React.PropTypes.array.isRequired,
+        onTaskSave: React.PropTypes.func.isRequired
+    },
+    render: function() {
+        return (
+            <div style={{marginTop:10}}>
+                <button className="btn btn-default" onClick={this.props.onTaskSave}>Finish</button>
+            </div>
+        )
+    }
+});
+
+var TaskObList = React.createClass({
+    propTypes: {
+        task: React.PropTypes.object.isRequired,
         onAddProbClick: React.PropTypes.func.isRequired,
         onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired,
+        onBlockDel: React.PropTypes.func.isRequired,
+        onInstEdit: React.PropTypes.func.isRequired,
+        onInstDel: React.PropTypes.func.isRequired,
         mode: React.PropTypes.string
     },
     getDefaultProps: function() {
@@ -699,30 +509,81 @@ var BlockList = React.createClass({
         };
     },
     render: function() {
-        var blocks = this.props.blocks.map(function(block, index){
-            return <Block key={index} blockId={index} block={block} mode={this.props.mode} onAddProbClick={this.props.onAddProbClick} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel}/>
+        var comps = this.props.task.struct.map(function(desc, i) {
+            if(desc.type === 'inst')
+                return <TaskObList.Inst key={i} instId={desc.id} inst={this.props.task.instructs[desc.id]} mode={this.props.mode} onInstEdit={this.props.onInstEdit} onInstDel={this.props.onInstDel}/>
+            else if(desc.type === 'block')
+                return <Block key={i} blockId={desc.id} block={this.props.task.blocks[desc.id]} mode={this.props.mode} onAddProbClick={this.props.onAddProbClick} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel} onBlockDel={this.props.onBlockDel}/>
         }.bind(this));
 
-        return <div>{blocks}</div>
+        return <div>{comps}</div>
+    }
+});
+
+TaskObList.Inst = React.createClass({
+    propTypes: {
+        instId: React.PropTypes.number.isRequired,
+        inst: React.PropTypes.object.isRequired,
+        onInstEdit: React.PropTypes.func.isRequired,
+        onInstDel: React.PropTypes.func.isRequired,
+        mode: React.PropTypes.string.isRequired
+    },
+    onInstEdit: function() {
+        this.props.onInstEdit(this.props.instId);
+    },
+    onInstDel: function() {
+        this.props.onInstDel(this.props.instId);
+    },
+    render: function() {
+        return (
+            <div className="panel panel-default">
+                <div className="panel-heading">
+                    <table border="0" cellSpacing="0" cellPadding="0" width="100%">
+                        <tr>
+                            <td>
+                                <h2 className="panel-title">Instruction</h2>
+                            </td>
+                            {
+                                this.props.mode === 'edit' ?
+                                    <td style={{width:35}}>
+                                        <button type="button" className="close" aria-label="Close" onClick={this.onInstDel}>
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </td>
+                                :
+                                null
+                            }
+                        </tr>
+                    </table>
+                </div>
+                <div className="panel-body" onClick={this.onInstEdit}>
+                    <span dangerouslySetInnerHTML={{__html:marked(this.props.inst.text)}}/> <kbd>{this.props.inst.next}</kbd>
+                </div>
+            </div>
+        )
     }
 });
 
 var Block = React.createClass({
     propTypes: {
         blockId: React.PropTypes.number.isRequired,
-        block: React.PropTypes.array.isRequired,
+        block: React.PropTypes.object.isRequired,
         onAddProbClick: React.PropTypes.func.isRequired,
         onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired,
-        mode: React.PropTypes.string
+        mode: React.PropTypes.string.isRequired
     },
     onProbEdit: function(blockId, probId, subId, ssubId) {
         this.props.onProbEdit(this.props.blockId, probId, subId, ssubId);
     },
+    onBlockDel: function() {
+        this.props.onBlockDel(this.props.blockId);
+
+    },
     render: function() {
         return (
             <div className="panel panel-default">
-                <Block.Heading blockId={this.props.blockId} />
+                <Block.Heading blockId={this.props.blockId} block={this.props.block} onBlockDel={this.onBlockDel} mode={this.props.mode}/>
                 <Block.Body blockId={this.props.blockId} block={this.props.block} onProbEdit={this.onProbEdit} onProbDel={this.props.onProbDel}/>
                 {this.props.mode === 'edit' ? <Block.Footer blockId={this.props.blockId} onAddProbClick={this.props.onAddProbClick}/> : null }
             </div>
@@ -733,12 +594,27 @@ var Block = React.createClass({
 
 Block.Heading = React.createClass({
     propTypes: {
-        blockId: React.PropTypes.number.isRequired
+        blockId: React.PropTypes.number.isRequired,
+        block: React.PropTypes.object.isRequired,
+        mode: React.PropTypes.string.isRequired,
+        onBlockDel: React.PropTypes.func
     },
     render: function() {
         return (
             <div className="panel-heading">
-                <h2 className="panel-title">Block {this.props.blockId + 1}</h2>
+                <table border="0" cellPadding="0" cellSpacing="0" width="100%">
+                    <tr>
+                        <td>
+                            <h2 className="panel-title">Block {this.props.blockId + 1} {this.props.block.practice ? '(Practice)' : '(Non-Practice)'}</h2>
+                        </td>
+                        <td>
+                        {
+                            this.props.mode === 'edit' ?
+                                <button type="button" className="close" aria-label="Close" onClick={this.props.onBlockDel}><span aria-hidden="true">&times;</span></button> : null
+                        }
+                        </td>
+                    </tr>
+                </table>
             </div>
         )
     }
@@ -747,12 +623,12 @@ Block.Heading = React.createClass({
 Block.Body = React.createClass({
     propTypes: {
         blockId: React.PropTypes.number.isRequired,
-        block: React.PropTypes.array.isRequired,
+        block: React.PropTypes.object.isRequired,
         onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired
     },
     render: function() {
-        var res = this.props.block.length > 0 ?
+        var res = this.props.block.problems.length > 0 ?
             <Block.Table blockId={this.props.blockId} block={this.props.block} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel} /> :
             <div className="panel-body">There is currently no problem in this block.</div>
         return res;
@@ -762,7 +638,7 @@ Block.Body = React.createClass({
 Block.Table = React.createClass({
     propTypes: {
         blockId: React.PropTypes.number.isRequired,
-        block: React.PropTypes.array.isRequired,
+        block: React.PropTypes.object.isRequired,
         onProbEdit: React.PropTypes.func.isRequired,
         onProbDel: React.PropTypes.func.isRequired
     },
@@ -770,7 +646,7 @@ Block.Table = React.createClass({
         return (
             <table className="table">
                 <tbody>
-                    {this.props.block.map(function(p, i){
+                    {this.props.block.problems.map(function(p, i){
                         return <Block.Table.Row key={i} blockId={this.props.blockId} problem={p} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel}/>
                     }.bind(this))}
                 </tbody>
@@ -1046,7 +922,7 @@ ProbForm.Body = React.createClass({
                         </div>
                     }
 
-                    <ProbForm.SpecialPane editContext={this.props.editContext} type={this.props.editContext.mode === CreateTask.editMode.add ? this.state.type : this.props.editContext.prob.type}/>
+                    <ProbForm.SpecialPane editContext={this.props.editContext} type={this.props.editContext.prob ? this.props.editContext.prob.type : this.state.type}/>
                 </form>
             </div>
         )
@@ -1278,6 +1154,104 @@ ProbForm.SYSQPane = React.createClass({
 });
 
 ProbForm.Footer = React.createClass({
+    propTypes: {
+        onSaveClick: React.PropTypes.func.isRequired
+    },
+    render: function() {
+        return (
+            <div className="modal-footer">
+                <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" className="btn btn-primary" onClick={this.props.onSaveClick}>Ok</button>
+            </div>
+        )
+    }
+});
+
+var InstForm = React.createClass({
+    propTypes: {
+        editContext: React.PropTypes.object.isRequired,
+        onSaveClick: React.PropTypes.func.isRequired
+    },
+    statics: {
+        domId: 'instForm',
+        domIdSel: '#instForm'
+    },
+    render: function() {
+        return (
+            <div className="modal fade" id={InstForm.domId} tabIndex="-1" role="dialog">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <InstForm.Header editContext={this.props.editContext}/>
+                        <InstForm.Body editContext={this.props.editContext} ref="body"/>
+                        <InstForm.Footer onSaveClick={this.props.onSaveClick} />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+});
+
+InstForm.Header = React.createClass({
+    propTypes: {
+        editContext: React.PropTypes.object.isRequired
+    },
+    render: function() {
+        return (
+            <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {
+                    this.props.editContext.mode === CreateTask.editMode.add ? 
+                        <h4 className="modal-title" id="myModalLabel">New Problem</h4> :
+                        <h4 className="modal-title" id="myModalLabel">Edit Problem</h4>
+                }
+            </div>
+        )
+    }
+});
+
+InstForm.Body = React.createClass({
+    propTypes: {
+        editContext: React.PropTypes.object.isRequired
+    },
+    getInitialState: function() {
+        return {
+            text: this.props.editContext.inst ? this.props.editContext.inst.text : '',
+            next: this.props.editContext.inst ? this.props.editContext.inst.next : ''
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if(nextProps.editContext) {
+            this.setState({
+                text: nextProps.editContext.inst ? nextProps.editContext.inst.text : '',
+                next: nextProps.editContext.inst ? nextProps.editContext.inst.next : ''
+            });
+        }
+    },
+    onChange: function(event) {
+        if(event.target.id == 'instText')
+            this.setState({text: event.target.value});
+        else if(event.target.id == 'instNext')
+            this.setState({next: event.target.value});
+    },
+    render: function() {
+        return (
+            <div className="modal-body">
+                <form>
+                    <div className="form-group">
+                        <label htmlFor="instText">Text</label>
+                        <textarea className="form-control" id="instText" ref="text" rows="6" value={this.state.text} onChange={this.onChange}/>
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="instNext">Next Label</label>
+                        <input className="form-control" id="instNext" ref="next" maxLength="30" value={this.state.next} onChange={this.onChange}/>
+                    </div>
+                </form>
+            </div>
+        )
+    }
+});
+
+InstForm.Footer = React.createClass({
     propTypes: {
         onSaveClick: React.PropTypes.func.isRequired
     },
