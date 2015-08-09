@@ -1,13 +1,13 @@
 var ExplodeTask = React.createClass({
     propTypes: {
-        blocks: React.PropTypes.array.isRequired
+        task: React.PropTypes.object.isRequired
     },
-    donot: function() {
+    nop: function() {
     },
     render: function() {
         return (
             <div>
-                <BlockList blocks={this.props.blocks} mode='view' onAddProbClick={this.donot} onProbEdit={this.donot} onProbDel={this.donot}/>
+                <TaskObList task={this.props.task} mode='view' onAddProbClick={this.nop} onProbEdit={this.nop} onProbDel={this.nop} onBlockDel={this.nop} onInstEdit={this.nop} onInstDel={this.nop}/>
             </div>
         );
     }
