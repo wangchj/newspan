@@ -1,15 +1,16 @@
 /**
  * Dependencies
- *   - box-sequence-comp.js
+ *   - sq.js
  */
 
-/*
- * @prop colored    array<point>  An array specified which box should be color-filled.
- * @prop tra        object   Task Running Accuracy.
- * @prop feedback   boolean       If feedback should be displayed.
- * @prop onComplete callback
- */
 var SymmetryTest = React.createClass({
+    propTypes: {
+        probId: React.PropTypes.number,             //Problem id
+        colored: React.PropTypes.array.isRequired,  //Array of points that specifies which box should be color-filled.
+        tra: React.PropTypes.object,                //Task running accuracy
+        feedback: React.PropTypes.bool,             //If feedback should be displayed
+        onComplete: React.PropTypes.func.isRequired //Callback when this component is finished.
+    },
     getInitialState: function() {
         return {stage: 0};
     },
@@ -22,7 +23,9 @@ var SymmetryTest = React.createClass({
      */
     onRespond: function(res) {
         var endTime = new Date().getTime();
-        this.res = {res: res, startTime: this.startTime, endTime: endTime};
+        this.res = res;
+        this.time = endTime - this.startTime;
+
         this.adjustTra(res);
         this.advance();
     },
@@ -44,8 +47,12 @@ var SymmetryTest = React.createClass({
         }
     },
     onComplete:function() {
-        if(this.props.onComplete)
-            this.props.onComplete(this.res, this.tra);
+        if(this.props.probId == undefined)
+            this.props.onComplete({response: this.res, time: this.time}, this.tra);
+        else
+            this.props.onComplete({probId: this.props.probId, response: this.res, time: this.time}, this.tra);
+
+
     },
     render: function(){
         switch(this.state.stage) {
@@ -95,6 +102,11 @@ SymmetryTest.Tra = React.createClass({
  * @prop onComplete callback
  */
 SymmetryTest.Feedback = React.createClass({
+    propTypes: {
+        colored: React.PropTypes.array.isRequired,
+        res: React.PropTypes.bool.isRequired,
+        onComplete: React.PropTypes.func.isRequired
+    },
     onComplete: function() {
         if(this.props.onComplete)
             this.props.onComplete();
@@ -104,7 +116,7 @@ SymmetryTest.Feedback = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12" style={{fontSize:25, marginTop:200, marginBottom:25}}>
-                        Your answer is {SY.isSymmetric(this.props.colored) == this.props.res.res ? 'correct' : 'incorrect'}.
+                        Your answer is {SY.isSymmetric(this.props.colored) == this.props.res ? 'correct' : 'incorrect'}.
                     </div>
                 </div>
                 <div className="row">

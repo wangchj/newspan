@@ -15,15 +15,7 @@ class RunController extends Controller
     public function actionIndex($taskId)
     {
         $task = Task::findOne($taskId);
-        Yii::info($task->type);
-        switch($task->type) {
-            case 'ospan':
-                return $this->render('ospan', ['task'=>$task]);
-            case 'sspan':
-                return $this->render('sspan', ['task'=>$task]);
-            case 'rspan':
-                return $this->render('rspan', ['task'=>$task]);
-        }
+        return $this->render('index', ['task'=>$task]);
     }
 
     public function actionSave()
@@ -32,7 +24,7 @@ class RunController extends Controller
         $res->taskId = $_POST['taskId'];
         $res->partId = $_POST['partId'];
         $res->datetime = (new DateTime())->format('c');
-        $res->json = $_POST['blocks'];
+        $res->json = $_POST['json'];
         $res->save();
     }
 }

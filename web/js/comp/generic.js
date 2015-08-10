@@ -22,13 +22,7 @@ var Instruction = React.createClass({
                         border: '1px solid #e1e1e8',
                         borderRadius: 4
                     }}>
-                        {this.props.children}
-                        {//this.props.children ?
-                         //   this.props.children :
-                         //   this.props.practice ? 
-                         //       'For this practice set, letters will appear on the screen one at a time. Try to remember each letter in the order presented. After 2-3 letters have been shown, you will see a screen listing 12 possible letters with a check box beside each one. Your job is to select each letter in the order presented. To do this, use the mouse to select the box beside each letter. The letters you select will appear at the bottom of the screen.' :
-                         //       'In this task you will try to memorize letters you see on the screen, just like what we have practiced.'
-                        }
+                        <div dangerouslySetInnerHTML={{__html: marked(this.props.text)}}/>
                     </div>
                 </div>
                 <div className="row">
@@ -167,17 +161,9 @@ var Block = React.createClass({
                         onComplete={this.advance} />
                 );
             case SQ.typeId:
-                return (
-                    <BoxSequence key={progress} sequence={block[progress].squares}
-                        feedback={this.props.practice}
-                        onComplete={this.advance} />
-                );
+                return <BoxSequence key={progress} probId={block[progress].id} sequence={block[progress].squares} feedback={this.props.practice} onComplete={this.advance}/>
             case SY.typeId:
-                return (
-                    <SymmetryTest key={progress} colored={block[progress].symmetry}
-                        feedback={this.props.practice}
-                        onComplete={this.advance} />
-                );
+                return <SymmetryTest key={progress} probId={block[progress].id} colored={block[progress].symmetry} feedback={this.props.practice} onComplete={this.advance} />
             case SYSQ.typeId:
                 return (
                     <SymmetryBoxSequence key={progress}
@@ -298,7 +284,7 @@ var PartInfoForm = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5">
-                        <input type="text" ref="partId" className="form-control"/>
+                        <input type="text" ref="partId" className="form-control" style={{textAlign:'center'}}/>
                     </div>
                 </div>
                 <div className="row" style={{marginTop:30}}>

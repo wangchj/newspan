@@ -9,6 +9,12 @@
  * @prop onComplete callback
  */
 var BoxSequence = React.createClass({
+    propTypes: {
+        probId: React.PropTypes.number.isRequired,
+        sequence: React.PropTypes.array.isRequired,
+        feedback: React.PropTypes.bool,
+        onComplete: React.PropTypes.func.isRequired
+    },
     getInitialState: function() {
         return {stage: 0};
     },
@@ -16,7 +22,7 @@ var BoxSequence = React.createClass({
         if(this.state.stage < 1 || (this.state.stage == 1 && this.props.feedback))
             this.setState({stage: this.state.stage + 1});
         else
-            this.props.onComplete();
+            this.props.onComplete({probId: this.props.probId, response: this.res.res, time: (this.res.endTime - this.res.startTime)});
     },
     /**
      * Handles recall response from the user.

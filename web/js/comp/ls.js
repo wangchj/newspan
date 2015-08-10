@@ -182,7 +182,7 @@ var LetterSequence = React.createClass({
      * @params selections array User's selections.
      */
     handleResponse: function(options, response, time) {
-        if(this.props.probId)
+        if(this.props.probId != undefined && this.props.probId != null)
             this.response = {probId: this.props.probId, options: options, response: response, time: time};
         else
             this.response = {options: options, response: response, time: time};

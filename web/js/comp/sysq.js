@@ -14,6 +14,13 @@
  * @prop onComplete callback
  */
 var SymmetryBoxSequence = React.createClass({
+    propTypes: {
+        problem: React.PropTypes.object.isRequired,
+        tra: React.PropTypes.object,
+        traLow: React.PropTypes.number,
+        feedback: React.PropTypes.bool,
+        onComplete: React.PropTypes.func.isRequired
+    },
     getDefaultProps: function() {
         return {
             traLow: 0.9
@@ -26,7 +33,7 @@ var SymmetryBoxSequence = React.createClass({
         if(this.state.stage < 1 || (this.state.stage == 1 && this.props.feedback))
             this.setState({stage: this.state.stage + 1});
         else if(this.props.onComplete)
-            this.props.onComplete(this.tra);
+            this.props.onComplete({probId: this.props.problem.id, squares: {response: this.recallRes.selects, time: this.recallRes.endTime - this.recallRes.startTime}, symmetries: this.symRes}, this.tra);
     },
     /**
      * When sequence component is completed.
@@ -63,20 +70,6 @@ var SymmetryBoxSequence = React.createClass({
                         recallRes={this.recallRes} onComplete={this.advance} />
                 );
         }   
-    },
-    statics: {
-        /**
-         * Make a random computer generated problem.
-         * @param length integer The length of the squares sequence.
-         * @returns An object {type:'symmetry-square', squares:array<point>, symmetries:array<figure>}
-         */
-        // generateProblem: function(length) {
-        //     var s = BoxSequence.generateRandomProblem(length).problem;
-        //     var f = [];
-        //     for(var i = 0; i < length; i++)
-        //         f.push(SymmetryTest.generateFigure());
-        //     return {type:'symmetry-squares', squares:s, symmetries:f};
-        // }
     }
 });
 
@@ -90,8 +83,6 @@ var SymmetryBoxSequence = React.createClass({
  */
 SymmetryBoxSequence.Sequence = React.createClass({
     getInitialState: function() {
-        //An array of math responses, each of which has the format 
-        //{res: boolean, startTIme: integer, endTime: integer}
         this.symRes = [];
         return {
             count: 0,
@@ -160,7 +151,7 @@ SymmetryBoxSequence.Feedback = React.createClass({
     getSymmetryCorrectCount: function() {
         var res = 0;
         for(var i = 0; i < this.props.problem.symmetries.length; i++) {
-            if(this.props.symRes[i].res == SY.isSymmetric(this.props.problem.symmetries[i]))
+            if(this.props.symRes[i].response == SY.isSymmetric(this.props.problem.symmetries[i]))
                 res++;
         }
         return res;

@@ -22,7 +22,7 @@ var MathLetter = React.createClass({
         if(this.state.stage < 1 || (this.state.stage == 1 && this.props.feedback))
             this.setState({stage: this.state.stage + 1});
         else {
-            var response = {probId: this.props.probId, letters: this.recallRes, equations: this.mathRes};
+            var response = {probId: this.props.problem.id, letters: this.recallRes, equations: this.mathRes};
             this.props.onComplete(response, this.state.tra);
         }
     },
@@ -72,8 +72,7 @@ MathLetter.Sequence = React.createClass({
         };
     },
     getInitialState: function() {
-        //An array of math responses, each of which has the format 
-        //{res: boolean, startTIme: integer, endTime: integer}
+        //An array of math responses
         this.mathRes = [];
 
         return {
