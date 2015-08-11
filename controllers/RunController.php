@@ -25,6 +25,7 @@ class RunController extends Controller
         $res->partId = $_POST['partId'];
         $res->datetime = (new DateTime())->format('c');
         $res->json = $_POST['json'];
+        $res->score = $_POST['score'];
         $res->save();
     }
 }

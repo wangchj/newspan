@@ -11,6 +11,7 @@ use Yii;
  * @property string $name
  * @property string $createTime
  * @property string $json
+ * @property integer maxScore
  *
  * @property Response[] $responses
  */
@@ -30,8 +31,9 @@ class Task extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'createTime', 'json'], 'required'],
-            [['name', 'createTime', 'json'], 'string']
+            [['name', 'createTime', 'json', 'maxScore'], 'required'],
+            [['name', 'createTime', 'json'], 'string'],
+            [['maxScore'], 'integer']
         ];
     }
 
@@ -45,6 +47,7 @@ class Task extends \yii\db\ActiveRecord
             'name' => 'Name',
             'createTime' => 'Create Time',
             'json' => 'Json',
+            'maxScore' => 'Maximum Score'
         ];
     }
 

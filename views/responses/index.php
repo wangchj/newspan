@@ -21,6 +21,7 @@ $this->title = 'Responses';
             <th>Task Name</th>
             <th>Date and Time</th>
             <th>Score</th>
+            <th>Percentage</th>
         </tr>
     </thead>
     <tbody>
@@ -30,7 +31,8 @@ $this->title = 'Responses';
                 <td><?=$response->partId?></td>
                 <td><?=$response->task->name?></td>
                 <td><?=(new DateTime($response->datetime))->format('Y-m-d H:i:s')?></td>
-                <td></td>
+                <td><?=$response->score?> / <?=$response->task->maxScore?></td>
+                <td><?=round($response->score / $response->task->maxScore, 2)?></td>
             </tr>
         <?php endforeach;?>
     </tbody>

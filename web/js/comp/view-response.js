@@ -257,7 +257,6 @@ RespView.SYSQProblem.SQ = React.createClass({
         resp: React.PropTypes.object.isRequired
     },
     render: function () {
-        console.log(this.props);
         return (
             <tr>
                 <td style={{verticalAlign:'middle', textAlign:'center'}}>{this.props.blockId + 1}</td>
@@ -326,7 +325,7 @@ RespView.Footer = React.createClass({
                     </td>
                 </tr>
                 <tr>
-                    <th colSpan={5} style={{textAlign:'right'}}>Maxium</th>
+                    <th colSpan={5} style={{textAlign:'right'}}>Maximum</th>
                     <td style={{textAlign:'center'}}>
                         {TSK.getMaxScore(this.props.task)}
                     </td>

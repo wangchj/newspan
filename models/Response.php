@@ -12,6 +12,7 @@ use Yii;
  * @property integer $partId
  * @property string $datetime
  * @property string $json
+ * @property integer $score
  *
  * @property Participant $participant
  * @property Task $task
@@ -32,8 +33,8 @@ class Response extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['taskId', 'partId', 'datetime', 'json'], 'required'],
-            [['taskId', 'partId'], 'integer'],
+            [['taskId', 'partId', 'datetime', 'json', 'score'], 'required'],
+            [['taskId', 'partId', 'score'], 'integer'],
             [['datetime', 'json'], 'string']
         ];
     }
@@ -49,6 +50,7 @@ class Response extends \yii\db\ActiveRecord
             'partId' => 'Part ID',
             'datetime' => 'Datetime',
             'json' => 'Json',
+            'score' => 'Score'
         ];
     }
 

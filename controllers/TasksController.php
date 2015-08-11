@@ -48,6 +48,7 @@ class TasksController extends Controller
         $task = new Task();
         $task->name = $_POST['name'];
         $task->json = $_POST['task'];
+        $task->maxScore = $_POST['maxScore'];
         $task->createTime = (new DateTime())->format('c');
         $task->save();
     }

@@ -13,13 +13,18 @@ var Runner = React.createClass({
     onTaskComplete: function(res) {
         this.advance();
 
+        //Short problem blocks
+        for(var i = 0; i < this.props.task.blocks.length; i++)
+            this.props.task.blocks[i].problems.sort(function(a, b){return (a.id - b.id)});
+        
         $.ajax({
             type: 'POST',
             url: saveUrl,
             data: {
                 taskId: this.props.taskId,
                 partId: this.state.partId,
-                json: JSON.stringify(res)
+                json: JSON.stringify(res),
+                score: TSK.getScore(this.props.task, res)
             },
             context: this,
             success: function(data, textStatus, jqXHR) {

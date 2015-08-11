@@ -326,7 +326,8 @@ var CreateTask = React.createClass({
                 url: taskSaveUrl,
                 data: {
                     name: this.refs.taskName.refs.input.getDOMNode().value.trim(),
-                    task: JSON.stringify(this.state.task)
+                    task: JSON.stringify(this.state.task),
+                    maxScore: TSK.getMaxScore(this.state.task)
                 },
                 success: function(data, textStatus, jqXHR) {
                     console.log('Ajax save success', textStatus);
