@@ -332,7 +332,7 @@ var CreateTask = React.createClass({
                 },
                 success: function(data, textStatus, jqXHR) {
                     console.log('Ajax save success', textStatus, data);
-                    //window.location.href = taskIndexUrl;
+                    window.location.href = taskIndexUrl;
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log('Ajax save error', textStatus, errorThrown);
