@@ -11,16 +11,12 @@ CreateTaskAsset::register($this);
 
 <h1>Task: <?=$task->name?></h1>
 
-<table class="table">
-    <tr>
-        <td>
-            <b>Task Number:</b> <?=$task->taskId?>
-        </td>
-        <td>
-            <b>Time Created:</b> <?=(new DateTime($task->createTime))->format('Y-m-d H:i:s')?>
-        </td>
-    </tr>
-</table>
+<hr/>
+
+<div class="row">
+    <div class="col-xs-4"><b>Task Number:</b> <?=$task->taskId?></div>
+    <div class="col-xs-4"><b>Time Created:</b> <?=(new DateTime($task->createTime))->format('Y-m-d H:i:s')?></div>
+</div>
 
 <hr/>
 
