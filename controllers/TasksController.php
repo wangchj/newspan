@@ -45,10 +45,18 @@ class TasksController extends Controller
      */
     public function actionSave()
     {
+        $s = urldecode(Yii::$app->request->rawBody);
+        $p1 = strpos($s, '&task=');
+        $p2 = strpos($s, '&maxScore=');
+
+        $name = substr($s, 5, $p1 - 5);
+        $json = substr($s, $p1 + 6, $p2 - $p1 - 6);
+        $msco = substr($s, $p2 + 10);
+        
         $task = new Task();
-        $task->name = $_POST['name'];
-        $task->json = $_POST['task'];
-        $task->maxScore = $_POST['maxScore'];
+        $task->name = $name;
+        $task->json = $json;
+        $task->maxScore = $msco;
         $task->createTime = (new DateTime())->format('c');
         $task->save();
     }

@@ -324,14 +324,15 @@ var CreateTask = React.createClass({
             $.ajax({
                 type: 'POST',
                 url: taskSaveUrl,
+                contentType: 'application/json',
                 data: {
                     name: this.refs.taskName.refs.input.getDOMNode().value.trim(),
                     task: JSON.stringify(this.state.task),
                     maxScore: TSK.getMaxScore(this.state.task)
                 },
                 success: function(data, textStatus, jqXHR) {
-                    console.log('Ajax save success', textStatus);
-                    window.location.href = taskIndexUrl;
+                    console.log('Ajax save success', textStatus, data);
+                    //window.location.href = taskIndexUrl;
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log('Ajax save error', textStatus, errorThrown);
