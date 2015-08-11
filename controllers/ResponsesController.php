@@ -32,4 +32,10 @@ class ResponsesController extends Controller
         $responses = Response::find()->all();
         return $this->render('index', ['responses'=>$responses]);
     }
+
+    public function actionView($responseId)
+    {
+        $response = Response::findOne($responseId);
+        return $this->render('view', ['response'=>$response]);
+    }
 }

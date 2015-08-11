@@ -61,6 +61,11 @@ function trimArray(array) {
     return res;
 }
 
+/**
+ * No operation
+ */
+function nop() {}
+
 var PointCollection = {
     indexOf: function(pointArray, point) {
         for(var i = 0; i < pointArray.length; i++)
@@ -69,3 +74,7 @@ var PointCollection = {
         return -1;
     }
 };
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}

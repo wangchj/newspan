@@ -7,6 +7,11 @@ var EQ = {
     },
     isValid: function(equation) {
         return /^[()0-9+\-*\/]+=\d+$/.test(equation);
+    },
+    getScore: function(equation, response) {
+        if(this.getAnswer(equation) === response)
+            return 1;
+        return 0;
     }
 };
 
@@ -45,6 +50,15 @@ var LS = {
         }
         
         return res;
+    },
+    getScore: function(letters, response) {
+        var sum = 0;
+        for(var i = 0; i < letters.length; i++)
+            if(letters[i] === response[i])
+                sum++;
+        if(letters.length != response.length)
+            sum -= Math.abs(letters.length - response.length);
+        return sum;
     }
 };
 
@@ -70,6 +84,15 @@ var SQ = {
                 res.push(p);
         }
         return res;
+    },
+    getScore: function(squares, response) {
+        var sum = 0;
+        for(var i = 0; i < squares.length; i++)
+            if(squares[i][0] === response[i][0] && squares[i][1] === response[i][1])
+                sum++;
+        if(squares.length != response.length)
+            sum -= Math.abs(squares.length - response.length);
+        return sum;
     }
 };
 
@@ -173,6 +196,11 @@ var SY = {
             if(!arrayHasPoint(array, this.getMirror(array[i])))
                 return false;
         return true;
+    },
+    getScore(symmetry, response) {
+        if(this.isSymmetric(symmetry) === response)
+            return 1;
+        return 0;
     }
 };
 
@@ -208,4 +236,56 @@ var RS = {
 var RSLS = {
     typeId: 'rsls',
     typeLabel: 'Sentence Letters'
+};
+
+BLK = {
+    getScore: function(probBlock, respBlock) {
+        var sum = 0;
+        for(var i = 0; i < probBlock.problems.length; i++) {
+            var prob = probBlock.problems[i];
+            switch(prob.type) {
+                case LS.typeId: sum += LS.getScore(probBlock.problems[i].letters, respBlock[i].response); break;
+                case EQ.typeId: sum += EQ.getScore(probBlock.problems[i].equation, respBlock[i].response); break;
+                case SQ.typeId: sum += SQ.getScore(probBlock.problems[i].squares, respBlock[i].response); break;
+                case SY.typeId: sum += SY.getScore(probBlock.problems[i].symmetry, respBlock[i].response); break;
+                case EQLS.typeId: sum += LS.getScore(probBlock.problems[i].letters, respBlock[i].letters.response); break;
+                case SYSQ.typeId: sum += SQ.getScore(probBlock.problems[i].squares, respBlock[i].squares.response); break;
+            }
+        }
+        return sum;        
+    },
+    getMaxScore: function(block) {
+        var sum = 0;
+
+        for(var i = 0; i < block.problems.length; i++) {
+            var prob = block.problems[i];
+            switch(prob.type) {
+                case LS.typeId: sum += prob.letters.length; break;
+                case EQ.typeId: sum++; break;
+                case SQ.typeId: sum += prob.squares.length; break;
+                case SY.typeId: sum++; break;
+                case EQLS.typeId: sum += prob.letters.length; break;
+                case SYSQ.typeId: sum += prob.squares.length; break;
+            }
+        }
+
+        return sum;
+    }
+};
+
+TSK = {
+    getScore: function(task, respBlocks) {
+        var sum = 0;
+        for(var i = 0; i < task.blocks.length; i++)
+            if(!task.blocks[i].practice)
+                sum += BLK.getScore(task.blocks[i], respBlocks[i]);
+        return sum;
+    },
+    getMaxScore: function(task) {
+        var sum = 0;
+        for(var i = 0; i < task.blocks.length; i++)
+            if(!task.blocks[i].practice)
+                sum += BLK.getMaxScore(task.blocks[i]);
+        return sum;
+    }
 };
