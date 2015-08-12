@@ -7,6 +7,7 @@ use Yii;
 use yii\web\Controller;
 use app\models\Task;
 use app\models\Response;
+use app\models\Participant;
 
 class RunController extends Controller
 {
@@ -27,5 +28,12 @@ class RunController extends Controller
         $res->json = $_POST['json'];
         $res->score = $_POST['score'];
         $res->save();
+
+        if(!$part = Participant::findOne($res->partId))
+        {
+            $part = new Participant();
+            $part->partId = $res->partId;
+            $part->save();
+        }
     }
 }
