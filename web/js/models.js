@@ -197,7 +197,7 @@ var SY = {
                 return false;
         return true;
     },
-    getScore(symmetry, response) {
+    getScore: function(symmetry, response) {
         if(this.isSymmetric(symmetry) === response)
             return 1;
         return 0;
