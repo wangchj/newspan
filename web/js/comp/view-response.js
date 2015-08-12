@@ -303,7 +303,7 @@ RespView.ColHeaders = React.createClass({
                 <th style={{textAlign:'center'}}>Prob #</th>
                 <th>Problem</th>
                 <th>Response</th>
-                <th>Time</th>
+                <th>Time (s)</th>
                 <th style={{textAlign:'center'}}>Score</th>
             </tr>
         )
