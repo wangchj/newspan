@@ -709,7 +709,7 @@ Block.Table.Row.MathWidget = React.createClass({
         onProbEdit: React.PropTypes.func.isRequired
     },
     render: function() {
-        return <span className="inline-item" style={{cursor:'pointer'}} onClick={this.props.onProbEdit.bind(null, null, null, null, null)}>{this.props.equation}</span>
+        return <span className="inline-item" style={{cursor:'pointer'}} onClick={this.props.onProbEdit.bind(null, null, null, null, null)}>{this.props.equation}, {EQ.getAnswer(this.props.equation).toString()}</span>
     }
 });
 
