@@ -6,6 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use app\models\Response;
+use app\models\RespIndexView;
 
 class ResponsesController extends Controller
 {
@@ -29,8 +30,13 @@ class ResponsesController extends Controller
 
     public function actionIndex()
     {
-        $responses = Response::find()->all();
-        return $this->render('index', ['responses'=>$responses]);
+        $respIndexView = new RespIndexView();
+        $dataProvider = $respIndexView->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'respIndexView' => $respIndexView,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionView($responseId)
