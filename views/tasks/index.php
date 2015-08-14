@@ -17,7 +17,7 @@ $this->title = 'Tasks';
     }
 </style>
 
-<h1>Tasks</h1>
+<h1>Tasks <button type="button" id="btn-filter" class="btn btn-default" style="float:right; display:inline"><span class="glyphicon glyphicon-tasks"></span></button></h1>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
@@ -26,9 +26,11 @@ $this->title = 'Tasks';
         ['label'=>'#', 'attribute'=>'taskId'],
         'name:ntext',
         'createTime:datetime',
-        'respCount:integer'
+        ['attribute'=>'respCount'],
     ],
-    'tableOptions'=>['class'=>'table table-hover']
+    'layout'=>'{items}{pager}',
+    'tableOptions'=>['class'=>'table table-hover'],
+    'filterRowOptions'=>['style'=>($tasksIndexView->hasParam() ? 'display:table-row' : 'display:none')]
 ]);?>
 
 <?php $this->beginBlock('TheEnd');?>
@@ -40,6 +42,13 @@ $this->title = 'Tasks';
             $('tbody tr').click(function(event){
                 var id = $(this).data('key');
                 window.location.href = viewUrl.replace('0', id);
+            });
+
+            $('#btn-filter').click(function(event) {
+                if($('#w0-filters').css('display') == 'table-row')
+                    $('#w0-filters').css('display', 'none');
+                else
+                    $('#w0-filters').css('display', 'table-row');
             });
         });
     </script>

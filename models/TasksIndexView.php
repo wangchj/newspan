@@ -53,6 +53,14 @@ class TasksIndexView extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Checks if any of the params contains value.
+     */
+    public function hasParam()
+    {
+        return $this->taskId || $this->name || $this->createTime || $this->maxScore || ($this->respCount != null);
+    }
+
     public function search($params)
     {
         $query = TasksIndexView::find();
