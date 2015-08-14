@@ -7,6 +7,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use app\models\Task;
+use app\models\TasksIndexView;
 
 class TasksController extends Controller
 {
@@ -30,9 +31,13 @@ class TasksController extends Controller
 
     public function actionIndex()
     {
-        $tasks = Task::find()->all();
+        $tasksIndexView = new TasksIndexView();
+        $dataProvider = $tasksIndexView->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', ['tasks'=>$tasks]);
+        return $this->render('index', [
+            'tasksIndexView' => $tasksIndexView,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionCreate($type)

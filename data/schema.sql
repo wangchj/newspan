@@ -20,3 +20,5 @@ create table Responses (
     foreign key (taskId) references Tasks(taskId),
     foreign key (partId) references Participants(partId)
 );
+
+create view TasksIndexView as select taskId, name, createTime, maxScore, (select count(*) from Responses where taskId=Tasks.taskId) as respCount from Tasks;
