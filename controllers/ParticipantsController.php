@@ -6,6 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use app\models\Participant;
+use app\models\PartIndexView;
 
 class ParticipantsController extends Controller
 {
@@ -29,7 +30,12 @@ class ParticipantsController extends Controller
 
     public function actionIndex()
     {
-        $parts = Participant::find()->all();
-        return $this->render('index', ['parts'=>$parts]);
+        $partIndexView = new PartIndexView();
+        $dataProvider = $partIndexView->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'partIndexView' => $partIndexView,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }
