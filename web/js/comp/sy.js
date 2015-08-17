@@ -88,11 +88,12 @@ var SymmetryTest = React.createClass({
  */
 SymmetryTest.Tra = React.createClass({
     render: function() {
-        return (
-            <div style={{position:'fixed', bottom:20, left:0, width:'100%', textAlign:'center'}}>
-                <b>Symmetry Accuracy</b> <br/> Correct: {this.props.tra.correct} | Incorrect: {this.props.tra.total - this.props.tra.correct} | Total: {this.props.tra.total}
-            </div>
-        );
+        return null;
+        // return (
+        //     <div style={{position:'fixed', bottom:20, left:0, width:'100%', textAlign:'center'}}>
+        //         <b>Symmetry Accuracy</b> <br/> Correct: {this.props.tra.correct} | Incorrect: {this.props.tra.total - this.props.tra.correct} | Total: {this.props.tra.total}
+        //     </div>
+        // );
     }
 });
 
@@ -115,7 +116,7 @@ SymmetryTest.Feedback = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className="col-xs-12" style={{fontSize:25, marginTop:200, marginBottom:25}}>
+                    <div className="col-xs-12" style={{fontSize:25, marginBottom:25}}>
                         Your answer is {SY.isSymmetric(this.props.colored) == this.props.res ? 'correct' : 'incorrect'}.
                     </div>
                 </div>
