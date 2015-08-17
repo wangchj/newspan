@@ -3,7 +3,7 @@ var SingleLetterSlide = React.createClass({
         letter: React.PropTypes.string.isRequired
     },
     render: function() {
-        return (<div className="flash-letter">{this.props.letter}</div>);
+        return <div style={{fontSize:75}}>{this.props.letter}</div>;
     }
 });
 
@@ -39,13 +39,13 @@ var LetterRecall = React.createClass({
     render: function() {
         return (
             <div>
-                <div className="row" style={{margin:30}}>
+                <div className="row">
                     {
                         this.state.options.map(function(letter, index){
                             var s = this.state.selects.indexOf(index);
                             return (
-                                <div key={index} className="col-xs-4" onClick={this.letterClicked.bind(this, index)} style={{paddingTop:15, paddingBottom:15}}>
-                                    <div className="recall-letter">
+                                <div key={index} className="col-xs-4" onClick={this.letterClicked.bind(this, index)} style={{paddingTop:20, paddingBottom:20}}>
+                                    <div style={{fontSize:45, cursor:'pointer'}}>
                                         {letter}
                                     
                                         <div style={{display:'inline-block', textAlign:'center', width:50, position:'relative', top:-5}}>
@@ -59,7 +59,7 @@ var LetterRecall = React.createClass({
                         }, this)
                     }  
                 </div>
-                <div className="row">
+                <div className="row" style={{marginTop:25}}>
                     <div className="col-xs-6">
                         <button className="btn btn-default pull-right" onClick={this.clearSelects}>Clear</button>
                     </div>
@@ -133,7 +133,7 @@ var LetterSequenceReport = React.createClass({
         return (
             <div>
                 <div className="row">
-                    <div className="col-xs-12" style={{fontSize:25, marginTop:200, marginBottom:25}}>
+                    <div className="col-xs-12" style={{fontSize:25, marginBottom:25}}>
                         You recalled {correctCount} out of {letters.length} letters correctly.
                     </div>
                 </div>

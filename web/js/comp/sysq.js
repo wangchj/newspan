@@ -177,7 +177,7 @@ SymmetryBoxSequence.Feedback = React.createClass({
         var ll = this.props.problem.squares.length;  //Letters length
 
         return (
-            <div style={{marginTop:100, fontSize:22}}>
+            <div style={{fontSize:22}}>
                 <div className="row" style={{marginBottom:20}}>
                     <div className="col-xs-12">
                         You recalled {lc} out of {ll} squares correctly.  

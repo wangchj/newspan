@@ -109,18 +109,18 @@ Runner.Task = React.createClass({
 
 Runner.SavingResult = React.createClass({
     render: function() {
-        return <div style={{fontSize:25, marginTop:100}}>You have completed the task. Please wait while we are submitting your responses.</div>
+        return <div style={{fontSize:25}}>You have completed the task. Please wait while we are submitting your responses.</div>
     }
 });
 
 Runner.SaveResultSuccess = React.createClass({
     render: function() {
-        return <div style={{fontSize:25, marginTop:100}}>Your responses have been submitted. You may now close this program. Thank you.</div>
+        return <div style={{fontSize:25}}>Your responses have been submitted. You may now close this program. Thank you.</div>
     }
 });
 
 Runner.SaveResultError = React.createClass({
     render: function() {
-        return <div style={{fontSize:25, marginTop:100}}>There was an error submitting your responses. Please contact the coordinator of this experiment.</div>
+        return <div style={{fontSize:25}}>There was an error submitting your responses. Please contact the coordinator of this experiment.</div>
     }
 });

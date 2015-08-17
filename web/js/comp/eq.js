@@ -78,7 +78,7 @@ MathEq.Equation = React.createClass({
         var equation = this.props.equation.replace(/\*/g, '\\times');
 
         return (
-            <div style={{visibility:'hidden', marginTop:200}} id="component">
+            <div style={{visibility:'hidden'}} id="component">
                 <div className="row" style={{marginBottom:60}}>
                     <div className="col-xs-12" id="equation" style={{fontSize:35}}
                         dangerouslySetInnerHTML={{__html: '`' + equation + '`'}}>
@@ -105,11 +105,12 @@ MathEq.Equation = React.createClass({
  */
 MathEq.Tra = React.createClass({
     render: function() {
-        return (
-            <div style={{position:'fixed', bottom:20, left:0, width:'100%', textAlign:'center'}}>
-                <b>Math Accuracy</b> <br/> Correct: {this.props.tra.correct} | Incorrect: {this.props.tra.total - this.props.tra.correct} | Total: {this.props.tra.total}
-            </div>
-        );
+        return null;
+        // return (
+        //     <div style={{position:'fixed', bottom:-100, left:0, width:'100%', textAlign:'center'}}>
+        //         <b>Math Accuracy</b> <br/> Correct: {this.props.tra.correct} | Incorrect: {this.props.tra.total - this.props.tra.correct} | Total: {this.props.tra.total}
+        //     </div>
+        // );
     }
 });
 
@@ -128,7 +129,7 @@ MathEq.Feedback = React.createClass({
     render: function() {
         return (
             <div>
-                <div className="row" style={{marginTop:200, marginBottom:25}}>
+                <div className="row" style={{marginBottom:25}}>
                     <div className="col-xs-12" style={{fontSize:25}}>
                         {EQ.getAnswer(this.props.equation) === this.props.response.response ? 'Correct' : 'Incorrect'}!
                     </div>
