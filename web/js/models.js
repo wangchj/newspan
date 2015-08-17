@@ -88,7 +88,7 @@ var SQ = {
     getScore: function(squares, response) {
         var sum = 0;
         for(var i = 0; i < squares.length; i++)
-            if(squares[i][0] === response[i][0] && squares[i][1] === response[i][1])
+            if(response[i] && squares[i][0] === response[i][0] && squares[i][1] === response[i][1])
                 sum++;
         if(squares.length != response.length)
             sum -= Math.abs(squares.length - response.length);
