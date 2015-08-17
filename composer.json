@@ -30,6 +30,13 @@
     "scripts": {
         "post-create-project-cmd": [
             "yii\\composer\\Installer::postCreateProject"
+        ],
+        "build": [
+            "jsx web/js/comp-src web/js/comp"
+        ],
+        "build-prod": [
+            "jsx web/js/comp-src web/js/comp",
+            "sed -i -- 's/react-0.13.3.js/react-0.13.3.min.js/' assets/CreateTaskAsset.php"
         ]
     },
     "extra": {
