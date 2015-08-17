@@ -23,12 +23,12 @@ CreateTaskAsset::register($this);
 <div id="comp"></div>
 
 <?php $this->beginBlock('TheEnd');?>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/explode-task.js"></script>
-    <script type="text/jsx">
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/explode-task.js"></script>
+    <script type="text/javascript">
         var task = <?=$task->json?>;
-        React.render(<ExplodeTask task={task}/>, document.getElementById('comp'));
+        React.render(React.createElement(ExplodeTask, {task: task}), document.getElementById('comp'));
     </script>
 <?php $this->endBlock();?>

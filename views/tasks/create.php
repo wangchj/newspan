@@ -21,11 +21,11 @@ CreateTaskAsset::register($this);
         var taskSaveUrl = '<?=Url::to(['tasks/save'])?>';
         var taskIndexUrl = '<?=Url::to(['tasks/index'], true)?>';
     </script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
     <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/task-template.js"></script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
-    <script type="text/jsx">
-        React.render(<CreateTask />, document.getElementById('comp'));
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
+    <script type="text/javascript">
+        React.render(React.createElement(CreateTask, null), document.getElementById('comp'));
     </script>
 <?php $this->endBlock();?>

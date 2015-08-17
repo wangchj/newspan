@@ -25,13 +25,13 @@ CreateTaskAsset::register($this);
 <div id="comp"></div>
 
 <?php $this->beginBlock('TheEnd');?>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
-    <script type="text/jsx" src="<?=Yii::getAlias('@web')?>/js/comp/view-response.js"></script>
-    <script type="text/jsx">
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/sq.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/sy.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/create-task.js"></script>
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/view-response.js"></script>
+    <script type="text/javascript">
         var resp = <?=$response->json?>;
         var task = <?=$response->task->json?>;
-        React.render(<RespView task={task} resp={resp}/>, document.getElementById('comp'));
+        React.render(React.createElement(RespView, {task: task, resp: resp}), document.getElementById('comp'));
     </script>
 <?php $this->endBlock();?>
