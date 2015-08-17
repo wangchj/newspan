@@ -60,8 +60,12 @@ var LetterRecall = React.createClass({
                     }  
                 </div>
                 <div className="row">
-                    <div className="col-xs-1 col-xs-offset-5"><button className="btn btn-default" onClick={this.clearSelects}>Clear</button></div>
-                    <div className="col-xs-1"><button className="btn btn-default" onClick={this.submitResponse}>Continue</button></div>
+                    <div className="col-xs-6">
+                        <button className="btn btn-default pull-right" onClick={this.clearSelects}>Clear</button>
+                    </div>
+                    <div className="col-xs-6">
+                        <button className="btn btn-default pull-left" onClick={this.submitResponse}>Continue</button>
+                    </div>
                 </div>
             </div>
         );
