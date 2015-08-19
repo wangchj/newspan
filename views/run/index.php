@@ -15,7 +15,7 @@ $this->title = '';
 
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML"></script>
 
-<div id="comp" class="container" style="text-align:center; position:relative; top:50%; transform:translateY(-50%)"></div>
+<div id="comp" class="container" style="text-align:center; position:relative; top:50%; transform:translateY(-50%); -webkit-transform:translateY(-50%); -ms-transform:translateY(-50%)"></div>
 
 <?php $this->beginBlock('TheEnd');?>
 
