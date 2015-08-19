@@ -103,6 +103,7 @@ SymmetryBoxSequence.Sequence = React.createClass({
 
         if(this.props.tra && tra.total != 0 && tra.total > 2 &&
             !this.state.showedLowTra &&
+            res.response !== SY.isSymmetric(this.props.problem.symmetries[Math.floor(this.state.count / 2)]) &&
             tra.correct / tra.total < this.props.traLow)
             return this.setState({showLowTra:true, showedLowTra: true});
 

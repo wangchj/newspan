@@ -97,6 +97,7 @@ MathLetter.Sequence = React.createClass({
 
         if(this.props.tra && this.state.tra.total > 2 &&
             !this.state.showedLowTra &&
+            response !== EQ.getAnswer(this.props.problem.equations[Math.floor(this.state.count /2)]) &&
             this.state.tra.correct / this.state.tra.total < this.props.traLow)
             return this.setState({showLowTra:true, showedLowTra:true});
 
