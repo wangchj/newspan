@@ -1,5 +1,4 @@
 <?php
-use \DateTime;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
