@@ -3,8 +3,16 @@ var CreateTask = React.createClass({
         editMode: {add: 0, edit: 1}
     },
     getInitialState: function() {
+        var task;
+        if(taskType == 'ospan')
+            task = taskTemplate.ospan;
+        else if(taskType == 'sspan')
+            task = taskTemplate.sspan;
+        else
+            task = taskTemplate.combined;
+        
         return {
-            task: taskType == 'ospan' ? taskTemplate.ospan : taskTemplate.sspan,
+            task: task,
             //Edit problem context {mode, prob, blockId, probId, subId, ssubId}
             editContext: {mode: CreateTask.editMode.add}
         };
