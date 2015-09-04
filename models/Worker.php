@@ -5,20 +5,20 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "Participants".
+ * This is the model class for table "Workers".
  *
- * @property integer $partId
+ * @property string $workerId
  *
  * @property Response[] $responses
  */
-class Participant extends \yii\db\ActiveRecord
+class Worker extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'Participants';
+        return 'Workers';
     }
 
     /**
@@ -26,9 +26,7 @@ class Participant extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-        return [
-            
-        ];
+        return [];
     }
 
     /**
@@ -37,7 +35,7 @@ class Participant extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'partId' => 'Part ID',
+            'workerId' => 'Worker ID',
         ];
     }
 
@@ -46,6 +44,6 @@ class Participant extends \yii\db\ActiveRecord
      */
     public function getResponses()
     {
-        return $this->hasMany(Response::className(), ['partId' => 'partId']);
+        return $this->hasMany(Response::className(), ['workerId' => 'workerId']);
     }
 }

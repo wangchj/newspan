@@ -9,7 +9,8 @@ use yii\data\ActiveDataProvider;
  * This is the model class for table "RespIndexView".
  *
  * @property integer $responseId
- * @property integer $partId
+ * @property string $workerId
+ * @property integer $qualId
  * @property string $name
  * @property string $datetime
  * @property integer $score
@@ -32,8 +33,8 @@ class RespIndexView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['responseId', 'partId', 'score', 'maxScore'], 'integer'],
-            [['name', 'datetime', 'percentage'], 'string']
+            [['responseId', 'qualId', 'score', 'maxScore'], 'integer'],
+            [['workerId', 'name', 'datetime', 'percentage'], 'string']
         ];
     }
 
@@ -49,7 +50,8 @@ class RespIndexView extends \yii\db\ActiveRecord
     {
         return [
             'responseId' => '#',
-            'partId' => 'Participant',
+            'workerId' => 'Worker ID',
+            'qualId' => 'Qualtrics ID',
             'name' => 'Task Name',
             'datetime' => 'Date and Time',
             'score' => 'Score',
@@ -60,7 +62,7 @@ class RespIndexView extends \yii\db\ActiveRecord
 
     public function hasParam()
     {
-        return $this->responseId != null || $this->partId != null || $this->name != null || $this->datetime != null || $this->score != null || $this->maxScore != null || $this->percentage != null;
+        return $this->responseId != null || $this->workerId != null || $this->qualId != null || $this->name != null || $this->datetime != null || $this->score != null || $this->maxScore != null || $this->percentage != null;
     }
 
     public function search($params)
@@ -81,14 +83,15 @@ class RespIndexView extends \yii\db\ActiveRecord
 
         $query->andFilterWhere([
             'responseId' => $this->responseId,
-            'partId' => $this->partId,
+            'qualId' => $this->qualId,
             'score' => $this->score,
             'maxScore' => $this->maxScore,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'datetime', $this->datetime])
-            ->andFilterWhere(['like', 'percentage', $this->percentage]);
+            ->andFilterWhere(['like', 'percentage', $this->percentage])
+            ->andFilterWhere(['like', 'workerId', $this->workerId]);
 
         return $dataProvider;
     }

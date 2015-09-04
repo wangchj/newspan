@@ -19,7 +19,8 @@ $this->title = 'Responses';
     'filterModel' => $respIndexView,
     'columns' => [
         'responseId',
-        'partId',
+        'workerId',
+        'qualId',
         'name',
         'datetime:datetime',
         'score',

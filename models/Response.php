@@ -9,7 +9,8 @@ use Yii;
  *
  * @property integer $responseId
  * @property integer $taskId
- * @property integer $partId
+ * @property string $workerId
+ * @property integer $qualId
  * @property string $datetime
  * @property string $json
  * @property integer $score
@@ -33,9 +34,9 @@ class Response extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['taskId', 'partId', 'datetime', 'json', 'score'], 'required'],
-            [['taskId', 'partId', 'score'], 'integer'],
-            [['datetime', 'json'], 'string']
+            [['taskId', 'workerId', 'qualId', 'datetime', 'json', 'score'], 'required'],
+            [['taskId', 'qualId', 'score'], 'integer'],
+            [['workerId', 'datetime', 'json'], 'string']
         ];
     }
 
@@ -47,7 +48,8 @@ class Response extends \yii\db\ActiveRecord
         return [
             'responseId' => 'Response ID',
             'taskId' => 'Task ID',
-            'partId' => 'Part ID',
+            'workerId' => 'Worker ID',
+            'qualId' => 'Qualtrics ID',
             'datetime' => 'Datetime',
             'json' => 'Json',
             'score' => 'Score'
@@ -57,9 +59,9 @@ class Response extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getParticipant()
+    public function getWorker()
     {
-        return $this->hasOne(Participant::className(), ['partId' => 'partId']);
+        return $this->hasOne(Participant::className(), ['workerId' => 'workerId']);
     }
 
     /**

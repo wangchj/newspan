@@ -15,9 +15,10 @@ CreateTaskAsset::register($this);
 <hr/>
 
 <div class="row">
-    <div class="col-xs-4"><b>Response Number</b>: <?=$response->responseId?></div>
-    <div class="col-xs-4"><b>Participant Number</b>: <?=$response->partId?></div>
-    <div class="col-xs-4"><b>Time</b>: <?=(new DateTime($response->datetime))->format('Y-m-d H:i:s')?></div>
+    <div class="col-xs-3"><b>Response Number</b>: <?=$response->responseId?></div>
+    <div class="col-xs-3"><b>Worker ID</b>: <?=$response->workerId?></div>
+    <div class="col-xs-3"><b>Qualtrics ID</b>: <?=$response->qualId?></div>
+    <div class="col-xs-3"><b>Time</b>: <?=(new DateTime($response->datetime))->format('Y-m-d H:i:s')?></div>
 </div>
 
 <hr/>

@@ -3,21 +3,21 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-$this->title = 'Participants';
+$this->title = 'Workers';
 ?>
 
-<h1>Participants <button type="button" id="btn-filter" class="btn btn-default" style="float:right; display:inline"><span class="glyphicon glyphicon-tasks"></span></button></h1>
+<h1>Workers <button type="button" id="btn-filter" class="btn btn-default" style="float:right; display:inline"><span class="glyphicon glyphicon-tasks"></span></button></h1>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
-    'filterModel' => $partIndexView,
+    'filterModel' => $workIndexView,
     'columns' => [
-        'partId',
+        'workerId',
         'respCount'
     ],
     'layout'=>'{items}{pager}',
     'tableOptions'=>['class'=>'table table-hover'],
-    'filterRowOptions'=>['style'=>($partIndexView->hasParam() ? 'display:table-row' : 'display:none')]
+    'filterRowOptions'=>['style'=>($workIndexView->hasParam() ? 'display:table-row' : 'display:none')]
 ]); ?>
 
 

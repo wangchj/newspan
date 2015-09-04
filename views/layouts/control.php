@@ -54,7 +54,7 @@ AppAsset::register($this);
                                 </ul>
                             </li>
                             <li class="<?=$controller->id === 'responses' ? 'active' : ''?>"><a href="<?=Url::to(['responses/index'])?>">Responses</a></li>
-                            <li class="<?=$controller->id === 'participants' ? 'active' : ''?>"><a href="<?=Url::to(['participants/index'])?>">Participants</a></li>
+                            <li class="<?=$controller->id === 'workers' ? 'active' : ''?>"><a href="<?=Url::to(['workers/index'])?>">Workers</a></li>
                             <li>
                                 <?php if(Yii::$app->user->isGuest):?>
                                     <a href="<?=Url::to(['site/login'])?>">Login</a>

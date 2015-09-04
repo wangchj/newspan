@@ -272,22 +272,28 @@ var PartInfoForm = React.createClass({
         onComplete: React.PropTypes.func.isRequired
     },
     onComplete: function() {
-        var partId = this.refs.partId.getDOMNode().value.trim();
-        if(partId && partId != '' && /^\d+$/.test(partId))
-            this.props.onComplete(partId);
+        var workerId = this.refs.workerId.getDOMNode().value.trim();
+        var qualId = this.refs.qualId.getDOMNode().value.trim();
+
+        if(workerId && workerId != '' && qualId && qualId != '' && /^\d+$/.test(qualId))
+            this.props.onComplete(workerId, qualId);
     },
     render: function() {
         return (
             <div>
                 <div className="row" style={{marginBottom:25}}>
-                    <div className="col-xs-12"><label className="form-label">Please enter Participant number</label></div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5">
-                        <input type="text" ref="partId" className="form-control" style={{textAlign:'center'}}/>
+                    <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5 form-Group">
+                        <label className="form-label">Worker Identifier</label>
+                        <input type="text" ref="workerId" className="form-control" style={{textAlign:'center'}}/>
                     </div>
                 </div>
-                <div className="row" style={{marginTop:30}}>
+                <div className="row">
+                    <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5 form-group">
+                        <label className="form-label">Qualtrics Number</label>
+                        <input type="text" ref="qualId" className="form-control" style={{textAlign:'center'}}/>
+                    </div>
+                </div>
+                <div className="row" style={{marginTop:25}}>
                     <div className="col-xs-12" style={{textAlign:'center'}}>
                         <button type="button" className="btn btn-default" onClick={this.onComplete}>Continue</button>
                     </div>

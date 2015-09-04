@@ -6,8 +6,9 @@ var Runner = React.createClass({
     getInitialState: function() {
         return {progress: 0};
     },
-    onPartInfoComplete: function(partId) {
-        this.state.partId = partId;
+    onPartInfoComplete: function(workerId, qualId) {
+        this.state.workerId = workerId;
+        this.state.qualId = qualId;
         this.advance();
     },
     onTaskComplete: function(res) {
@@ -22,13 +23,15 @@ var Runner = React.createClass({
             url: saveUrl,
             data: {
                 taskId: this.props.taskId,
-                partId: this.state.partId,
+                workerId: this.state.workerId,
+                qualId: this.state.qualId,
                 json: JSON.stringify(res),
                 score: TSK.getScore(this.props.task, res)
             },
             context: this,
             success: function(data, textStatus, jqXHR) {
-                console.log('Ajax save success', textStatus);
+                console.log('Ajax save success', data, textStatus);
+                this.state.respId = data;
                 this.advance();
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -50,7 +53,7 @@ var Runner = React.createClass({
             case 2:
                 return <Runner.SavingResult/>
             case 3:
-                return <Runner.SaveResultSuccess/>
+                return <Runner.SaveResultSuccess workerId={this.state.workerId} qualId={this.state.qualId} respId={this.state.respId}/>
             case 4:
                 return <Runner.SaveResultError/>
         }
@@ -114,8 +117,18 @@ Runner.SavingResult = React.createClass({
 });
 
 Runner.SaveResultSuccess = React.createClass({
+    propTypes: {
+        workerId: React.PropTypes.string.isRequired,
+        qualId: React.PropTypes.number.isRequired,
+        respId: React.PropTypes.number.isRequired
+    },
     render: function() {
-        return <div style={{fontSize:25}}>Your responses have been submitted. You may now close this program. Thank you.</div>
+        return (
+            <div style={{fontSize:25}}>
+                <p>Your responses have been submitted with confirmation code <b>{this.props.workerId + '-' + this.props.qualId + '-' + this.props.respId}</b></p>
+                <p>You may now close this survey. Thank you.</p>
+            </div>
+        )
     }
 });
 

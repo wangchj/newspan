@@ -5,10 +5,9 @@ namespace app\controllers;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
-use app\models\Participant;
-use app\models\PartIndexView;
+use app\models\WorkIndexView;
 
-class ParticipantsController extends Controller
+class WorkersController extends Controller
 {
     public $layout = 'control';
     
@@ -30,11 +29,11 @@ class ParticipantsController extends Controller
 
     public function actionIndex()
     {
-        $partIndexView = new PartIndexView();
-        $dataProvider = $partIndexView->search(Yii::$app->request->queryParams);
+        $workIndexView = new WorkIndexView();
+        $dataProvider = $workIndexView->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'partIndexView' => $partIndexView,
+            'workIndexView' => $workIndexView,
             'dataProvider' => $dataProvider,
         ]);
     }

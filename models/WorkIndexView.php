@@ -6,24 +6,24 @@ use Yii;
 use yii\data\ActiveDataProvider;
 
 /**
- * This is the model class for table "PartIndexView".
+ * This is the model class for table "WorkIndexView".
  *
- * @property integer $partId
+ * @property integer $workerId
  * @property string $respCount
  */
-class PartIndexView extends \yii\db\ActiveRecord
+class WorkIndexView extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'PartIndexView';
+        return 'WorkIndexView';
     }
 
     public static function primaryKey()
     {
-        return ['partId'];
+        return ['workerId'];
     }
 
     /**
@@ -32,7 +32,8 @@ class PartIndexView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['partId', 'respCount'], 'integer']
+            [['workerId'], 'string'],
+            [['respCount'], 'integer']
         ];
     }
 
@@ -42,19 +43,19 @@ class PartIndexView extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'partId' => 'Participant',
+            'workerId' => 'Worker ID',
             'respCount' => 'Responses'
         ];
     }
 
     public function hasParam()
     {
-        return $this->partId != null || $this->respCount != null;
+        return $this->workerId != null || $this->respCount != null;
     }
 
     public function search($params)
     {
-        $query = PartIndexView::find();
+        $query = WorkIndexView::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -68,11 +69,12 @@ class PartIndexView extends \yii\db\ActiveRecord
             return $dataProvider;
         }
 
-        $query->andFilterWhere([
-            'partId' => $this->partId,
-        ]);
+        // $query->andFilterWhere([
+        //     'workerId' => $this->workerId,
+        // ]);
 
-        $query->andFilterWhere(['like', 'respCount', $this->respCount]);
+        $query->andFilterWhere(['like', 'respCount', $this->respCount])
+            ->andFilterWhere(['like', 'workerId', $this->workerId]);
 
         return $dataProvider;
     }
