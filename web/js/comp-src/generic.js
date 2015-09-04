@@ -289,7 +289,7 @@ var PartInfoForm = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5 form-group">
-                        <label className="form-label">Qualtrics Number</label>
+                        <label className="form-label">Validation Code</label>
                         <input type="text" ref="qualId" className="form-control" style={{textAlign:'center'}}/>
                     </div>
                 </div>
