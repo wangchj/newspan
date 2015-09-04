@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-$this->title = '';
+$this->title = 'Working Memory Task';
 ?>
 
 <script type="text/x-mathjax-config">
