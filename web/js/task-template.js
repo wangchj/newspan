@@ -187,75 +187,6 @@ taskTemplate.ospan = {
                     ]
                 }
             ]
-        },
-        {
-            practice: false,
-            problems: [
-                {
-                    id: 0,
-                    type: EQLS.typeId,
-                    letters: ['V', 'R', 'L'],
-                    equations: [
-                        '(9*2)-10=8',
-                        '(16/2)-5=30',
-                        '(5*4)+3=23'
-                    ]
-                },
-                //Problem 2
-                {
-                    id: 1,
-                    type: EQLS.typeId,
-                    letters: ['Y', 'L', 'K', 'P'],
-                    equations: [
-                        '(25*2)-10=20',
-                        '(4*1)+6=10',
-                        '(4*5)+5=15',
-                        '(10/5)+5=7'
-                    ]
-                },
-                //Problem 3
-                {
-                    id: 2,
-                    type: EQLS.typeId,
-                    letters: ['D', 'N', 'G', 'T', 'K'],
-                    equations: [
-                        '(10/2)+6=4',
-                        '(8*3)-8=16',
-                        '(6/2)-1=2',
-                        '(3*12)+3=12',
-                        '(6*8)-2=20'
-                    ]
-                },
-                //Problem 4
-                {
-                    id: 3,
-                    type: EQLS.typeId,
-                    letters: ['H', 'X', 'R', 'D', 'C', 'V'],
-                    equations: [
-                        '(12*2)-10=8',
-                        '(15/5)-5=0',
-                        '(5*2)-3=5',
-                        '(20/2)+2=12',
-                        '(4/2)-1=10',
-                        '(8*6)+5=53'
-                    ]
-                },
-                //Problem 5
-                {
-                    id: 4,
-                    type: EQLS.typeId,
-                    letters: ['Y', 'C', 'D', 'G', 'K', 'T', 'M'],
-                    equations: [
-                        '(10/5)-2=1',
-                        '(12/12)-0=1',
-                        '(30/2)+0=15',
-                        '(12/4)-3=4',
-                        '(25*2)-10=20',
-                        '(8*5)+4=30',
-                        '(5/5)+2=1'
-                    ]
-                }
-            ]
         }
     ],
     instructs: [
@@ -307,8 +238,7 @@ taskTemplate.ospan = {
         {type: 'inst',  id: 6},
         {type: 'inst',  id: 7},
         {type: 'block', id: 3},
-        {type: 'block', id: 4},
-        {type: 'block', id: 5}
+        {type: 'block', id: 4}
     ]
 };
 
@@ -336,16 +266,6 @@ taskTemplate.sspan = {
                 {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(2), symmetries: SYSQ.makeSymmetryFigures(2)},
                 {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
                 {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)}
-            ]
-        },
-        {
-            practice: false,
-            problems: [
-                {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
-                {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)},
-                {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(5), symmetries: SYSQ.makeSymmetryFigures(5)},
-                {id: 3, type: SYSQ.typeId, squares: SQ.makeRandomFigure(6), symmetries: SYSQ.makeSymmetryFigures(6)},
-                {id: 4, type: SYSQ.typeId, squares: SQ.makeRandomFigure(7), symmetries: SYSQ.makeSymmetryFigures(7)}
             ]
         },
         {
@@ -416,8 +336,7 @@ taskTemplate.sspan = {
         {type: 'inst',  id: 6},
         {type: 'inst',  id: 7},
         {type: 'block', id: 3},
-        {type: 'block', id: 4},
-        {type: 'block', id: 5}
+        {type: 'block', id: 4}
     ]
 }
 
@@ -608,75 +527,6 @@ taskTemplate.combined = {
             ]
         },
         {
-            practice: false,
-            problems: [
-                {
-                    id: 0,
-                    type: EQLS.typeId,
-                    letters: ['V', 'R', 'L'],
-                    equations: [
-                        '(9*2)-10=8',
-                        '(16/2)-5=30',
-                        '(5*4)+3=23'
-                    ]
-                },
-                //Problem 2
-                {
-                    id: 1,
-                    type: EQLS.typeId,
-                    letters: ['Y', 'L', 'K', 'P'],
-                    equations: [
-                        '(25*2)-10=20',
-                        '(4*1)+6=10',
-                        '(4*5)+5=15',
-                        '(10/5)+5=7'
-                    ]
-                },
-                //Problem 3
-                {
-                    id: 2,
-                    type: EQLS.typeId,
-                    letters: ['D', 'N', 'G', 'T', 'K'],
-                    equations: [
-                        '(10/2)+6=4',
-                        '(8*3)-8=16',
-                        '(6/2)-1=2',
-                        '(3*12)+3=12',
-                        '(6*8)-2=20'
-                    ]
-                },
-                //Problem 4
-                {
-                    id: 3,
-                    type: EQLS.typeId,
-                    letters: ['H', 'X', 'R', 'D', 'C', 'V'],
-                    equations: [
-                        '(12*2)-10=8',
-                        '(15/5)-5=0',
-                        '(5*2)-3=5',
-                        '(20/2)+2=12',
-                        '(4/2)-1=10',
-                        '(8*6)+5=53'
-                    ]
-                },
-                //Problem 5
-                {
-                    id: 4,
-                    type: EQLS.typeId,
-                    letters: ['Y', 'C', 'D', 'G', 'K', 'T', 'M'],
-                    equations: [
-                        '(10/5)-2=1',
-                        '(12/12)-0=1',
-                        '(30/2)+0=15',
-                        '(12/4)-3=4',
-                        '(25*2)-10=20',
-                        '(8*5)+4=30',
-                        '(5/5)+2=1'
-                    ]
-                }
-            ]
-        },
-        {
             practice: true,
             problems: [
                 {id: 0, type: SQ.typeId, squares: SQ.makeRandomFigure(2)},
@@ -698,16 +548,6 @@ taskTemplate.combined = {
                 {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(2), symmetries: SYSQ.makeSymmetryFigures(2)},
                 {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
                 {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)}
-            ]
-        },
-        {
-            practice: false,
-            problems: [
-                {id: 0, type: SYSQ.typeId, squares: SQ.makeRandomFigure(3), symmetries: SYSQ.makeSymmetryFigures(3)},
-                {id: 1, type: SYSQ.typeId, squares: SQ.makeRandomFigure(4), symmetries: SYSQ.makeSymmetryFigures(4)},
-                {id: 2, type: SYSQ.typeId, squares: SQ.makeRandomFigure(5), symmetries: SYSQ.makeSymmetryFigures(5)},
-                {id: 3, type: SYSQ.typeId, squares: SQ.makeRandomFigure(6), symmetries: SYSQ.makeSymmetryFigures(6)},
-                {id: 4, type: SYSQ.typeId, squares: SQ.makeRandomFigure(7), symmetries: SYSQ.makeSymmetryFigures(7)}
             ]
         },
         {
@@ -813,20 +653,18 @@ taskTemplate.combined = {
         {type: 'inst',  id: 7},
         {type: 'block', id: 3},
         {type: 'block', id: 4},
-        {type: 'block', id: 5},
         {type: 'inst',  id: 8},//sspan
         {type: 'inst',  id: 9},
-        {type: 'block', id: 6},
+        {type: 'block', id: 5},
         {type: 'inst',  id: 10},
         {type: 'inst',  id: 11},
-        {type: 'block', id: 7},
+        {type: 'block', id: 6},
         {type: 'inst',  id: 12},
         {type: 'inst',  id: 13},
-        {type: 'block', id: 8},
+        {type: 'block', id: 7},
         {type: 'inst',  id: 14},
         {type: 'inst',  id: 15},
-        {type: 'block', id: 9},
-        {type: 'block', id: 10},
-        {type: 'block', id: 11}
+        {type: 'block', id: 8},
+        {type: 'block', id: 9}
     ]
 };
