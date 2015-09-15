@@ -56,8 +56,6 @@ var LS = {
         for(var i = 0; i < letters.length; i++)
             if(letters[i] === response[i])
                 sum++;
-        if(letters.length != response.length)
-            sum -= Math.abs(letters.length - response.length);
         return sum;
     }
 };
@@ -90,8 +88,6 @@ var SQ = {
         for(var i = 0; i < squares.length; i++)
             if(response[i] && squares[i][0] === response[i][0] && squares[i][1] === response[i][1])
                 sum++;
-        if(squares.length != response.length)
-            sum -= Math.abs(squares.length - response.length);
         return sum;
     }
 };
