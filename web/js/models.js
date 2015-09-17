@@ -57,6 +57,14 @@ var LS = {
             if(letters[i] === response[i])
                 sum++;
         return sum;
+    },
+    getStrictScore: function(letters, response) {
+        if(letters.length !== response.length)
+            return 0;
+        for(var i = 0; i < letters.length; i++)
+            if(letters[i] !== response[i])
+                return 0;
+        return letters.length;
     }
 };
 
@@ -89,6 +97,14 @@ var SQ = {
             if(response[i] && squares[i][0] === response[i][0] && squares[i][1] === response[i][1])
                 sum++;
         return sum;
+    },
+    getStrictScore: function(squares, response) {
+        if(squares.length !== response.length)
+            return 0;
+        for(var i = 0; i < squares.length; i++)
+            if(!response[i] || squares[i][0] !== response[i][0] || squares[i][1] !== response[i][1])
+                return 0;
+        return squares.length;
     }
 };
 
@@ -250,6 +266,21 @@ BLK = {
         }
         return sum;        
     },
+    getStrictScore: function(probBlock, respBlock) {
+        var sum = 0;
+        for(var i = 0; i < probBlock.problems.length; i++) {
+            var prob = probBlock.problems[i];
+            switch(prob.type) {
+                case LS.typeId: sum += LS.getStrictScore(probBlock.problems[i].letters, respBlock[i].response); break;
+                case EQ.typeId: sum += EQ.getScore(probBlock.problems[i].equation, respBlock[i].response); break;
+                case SQ.typeId: sum += SQ.getStrictScore(probBlock.problems[i].squares, respBlock[i].response); break;
+                case SY.typeId: sum += SY.getScore(probBlock.problems[i].symmetry, respBlock[i].response); break;
+                case EQLS.typeId: sum += LS.getStrictScore(probBlock.problems[i].letters, respBlock[i].letters.response); break;
+                case SYSQ.typeId: sum += SQ.getStrictScore(probBlock.problems[i].squares, respBlock[i].squares.response); break;
+            }
+        }
+        return sum;        
+    },
     getMaxScore: function(block) {
         var sum = 0;
 
@@ -275,6 +306,13 @@ TSK = {
         for(var i = 0; i < task.blocks.length; i++)
             if(!task.blocks[i].practice)
                 sum += BLK.getScore(task.blocks[i], respBlocks[i]);
+        return sum;
+    },
+    getStrictScore: function(task, respBlocks) {
+        var sum = 0;
+        for(var i = 0; i < task.blocks.length; i++)
+            if(!task.blocks[i].practice)
+                sum += BLK.getStrictScore(task.blocks[i], respBlocks[i]);
         return sum;
     },
     getMaxScore: function(task) {
