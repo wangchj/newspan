@@ -39,6 +39,15 @@ class ResponsesController extends Controller
         ]);
     }
 
+    public function actionWm()
+    {
+        $resps = Response::find()->all();
+
+        return $this->render('wm', [
+            'resps' => $resps
+        ]);
+    }
+    
     public function actionView($responseId)
     {
         $response = Response::findOne($responseId);
