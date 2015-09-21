@@ -20,4 +20,11 @@ class Sy
                 return false;
         return true;
     }
+
+    public static function getScore($symmetry, $response)
+    {
+        if(self::isSymmetric($symmetry) == $response)
+            return 1;
+        return 0;
+    }
 }

@@ -58,4 +58,17 @@ class Task extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Response::className(), ['taskId' => 'taskId']);
     }
+
+    /**
+     * @param $task object Json decoded object.
+     * @param $resp object Json decoded object.
+     */
+    public static function getScore($task, $resp)
+    {
+        $sum = 0;
+        for($i = 0; $i < count($task->blocks); $i++)
+            if(!$task->blocks[$i]->practice)
+                $sum += Block::getScore($task->blocks[$i], $resp[$i]);
+        return $sum;
+    }
 }
