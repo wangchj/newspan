@@ -221,7 +221,7 @@ RespView.SYProblem = React.createClass({
                 <td style={{verticalAlign:'middle'}}>{this.props.resp.response ? 'Symmetric' : 'Asymmetric'}</td>
                 <td style={{verticalAlign:'middle'}}>{this.props.resp.time / 1000}</td>
                 <td style={{verticalAlign:'middle', textAlign:'center'}}>
-                    {this.props.probBlock.practice ? 'Practice' : SY.getScore(this.props.prob.equation, this.props.resp.response)}
+                    {this.props.probBlock.practice ? 'Practice' : SY.getScore(this.props.prob.symmetry, this.props.resp.response)}
                 </td>
             </tr>
         )
