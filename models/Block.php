@@ -46,16 +46,17 @@ class Block
     }
 
     /**
-     * Gets the total number of correct math responses.
+     * Gets the total number of correct math and square responses.
      */
-    public static function getOspanAcc($probBlock, $respBlock)
+    public static function getAccScore($probBlock, $respBlock)
     {
         $sum = 0;
         for($i = 0; $i < count($probBlock->problems); $i++) {
             $prob = $probBlock->problems[$i];
-            if($prob->type != EqLs::typeId)
-                continue;
-            $sum += EqLs::getAcc($prob, $respBlock[$i]);
+            if($prob->type == EqLs::typeId)
+                $sum += EqLs::getAcc($prob, $respBlock[$i]);
+            else if($prob->type == SySq::typeId)
+                $sum += SySq::getAcc($prob, $respBlock[$i]);
         }
         return $sum;
     }
@@ -64,35 +65,14 @@ class Block
      * Gets the total number of math questions of all EqLs problems in the block.
      * Each problem could contain multiple math questions.
      */
-    public static function getOspanLength($probBlock)
+    public static function getAccLength($probBlock)
     {
         $sum = 0;
         for($i = 0; $i < count($probBlock->problems); $i++) {
             $prob = $probBlock->problems[$i];
             if($prob->type === EqLs::typeId)
                 $sum += count($prob->equations);
-        }
-        return $sum;
-    }
-
-    public static function getSspanAcc($probBlock, $respBlock)
-    {
-        $sum = 0;
-        for($i = 0; $i < count($probBlock->problems); $i++) {
-            $prob = $probBlock->problems[$i];
-            if($prob->type != SySq::typeId)
-                continue;
-            $sum += SySq::getAcc($prob, $respBlock[$i]);
-        }
-        return $sum;
-    }
-
-    public static function getSspanLength($probBlock)
-    {
-        $sum = 0;
-        for($i = 0; $i < count($probBlock->problems); $i++) {
-            $prob = $probBlock->problems[$i];
-            if($prob->type === SySq::typeId)
+            else if($prob->type === SySq::typeId)
                 $sum += count($prob->symmetries);
         }
         return $sum;

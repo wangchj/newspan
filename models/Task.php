@@ -71,4 +71,33 @@ class Task extends \yii\db\ActiveRecord
                 $sum += Block::getScore($task->blocks[$i], $resp[$i]);
         return $sum;
     }
+
+    /**
+     * @see Task::getScore()
+     */
+    public static function getStrictScore($task, $resp)
+    {
+        $sum = 0;
+        for($i = 0; $i < count($task->blocks); $i++)
+            if(!$task->blocks[$i]->practice)
+                $sum += Block::getStrictScore($task->blocks[$i], $resp[$i]);
+        return $sum;
+    }
+
+    public static function getAccuracy($task, $resp)
+    {
+        $sum = 0;
+        $len = 0;
+        for($i = 0; $i < count($task->blocks); $i++) {
+            if(!$task->blocks[$i]->practice) {
+                $sum += Block::getAccScore($task->blocks[$i], $resp[$i]);
+                $len += Block::getAccLength($task->blocks[$i]);
+            }
+        }
+
+        if($len == 0)
+            return null;
+        else
+            return $sum / $len;
+    }
 }

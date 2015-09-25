@@ -101,12 +101,12 @@ function getOss($taskJson, $respJson) {
 function getOa($taskJson, $respJson) {
     return
     (
-        Block::getOspanAcc($taskJson->blocks[3], $respJson[3]) +
-        Block::getOspanAcc($taskJson->blocks[4], $respJson[4])
+        Block::getAccScore($taskJson->blocks[3], $respJson[3]) +
+        Block::getAccScore($taskJson->blocks[4], $respJson[4])
     ) /
     (
-        Block::getOspanLength($taskJson->blocks[3]) +
-        Block::getOspanLength($taskJson->blocks[4])
+        Block::getAccLength($taskJson->blocks[3]) +
+        Block::getAccLength($taskJson->blocks[4])
     );
 }
 
@@ -123,12 +123,12 @@ function getSss($taskJson, $respJson) {
 function getSa($taskJson, $respJson) {
     return
     (
-        Block::getSspanAcc($taskJson->blocks[8], $respJson[8]) +
-        Block::getSspanAcc($taskJson->blocks[9], $respJson[9])
+        Block::getAccScore($taskJson->blocks[8], $respJson[8]) +
+        Block::getAccScore($taskJson->blocks[9], $respJson[9])
     ) /
     (
-        Block::getSspanLength($taskJson->blocks[8]) +
-        Block::getSspanLength($taskJson->blocks[9])
+        Block::getAccLength($taskJson->blocks[8]) +
+        Block::getAccLength($taskJson->blocks[9])
     );
 }
 

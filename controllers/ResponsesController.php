@@ -30,12 +30,10 @@ class ResponsesController extends Controller
 
     public function actionIndex()
     {
-        $respIndexView = new RespIndexView();
-        $dataProvider = $respIndexView->search(Yii::$app->request->queryParams);
+        $resps = Response::find()->all();
 
         return $this->render('index', [
-            'respIndexView' => $respIndexView,
-            'dataProvider' => $dataProvider,
+            'resps' => $resps
         ]);
     }
 
