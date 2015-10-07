@@ -19,8 +19,7 @@ $this->title = 'Responses';
     <thead>
         <tr>
             <th>#</th>
-            <th>Worker ID</th>
-            <th>Qual ID</th>
+            <th>Participant</th>
             <th>Task Name</th>
             <th>Date and Time</th>
             <th>Score</th>
@@ -42,7 +41,6 @@ $this->title = 'Responses';
             <tr data-key=<?=$resp->responseId?>>
                 <td><?=$resp->responseId?></td>
                 <td><?=$resp->workerId?></td>
-                <td><?=$resp->qualId?></td>
                 <td><?=$resp->task->name?></td>
                 <td><?=(new DateTime($resp->datetime))->format("M j, Y g:i A")?></td>
                 <td><?=$s?></td>
@@ -53,19 +51,6 @@ $this->title = 'Responses';
         <?php endforeach;?>
     </tbody>
 </table>
-
-<hr />
-    <table>
-        <tr><td><b>OS</b></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>OSpan Score</td></tr>
-        <tr><td><b>OSS</b></td><td> </td><td>OSpan Strict Score</td></tr>
-        <tr><td><b>OA</b></td><td> </td><td>OSpan Accuracy</td></tr>
-        <tr><td><b>SS</b></td><td> </td><td>SSpan Score</td></tr>
-        <tr><td><b>SSS</b></td><td> </td><td>SSpan Strict Score</td></tr>
-        <tr><td><b>SA</b></td><td> </td><td>SSpan Accuracy</td></tr>
-        <tr><td><b>T</b></td><td> </td><td>Total</td></tr>
-        <tr><td><b>TS</b></td><td> </td><td>Strict Total</td></tr>
-        <tr><td><b>Max</b></td><td> </td><td>Max Possible Score</td></tr>
-    </table>
 
 <?php $this->beginBlock('TheEnd');?>
     <script type="text/javascript">

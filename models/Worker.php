@@ -35,7 +35,7 @@ class Worker extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'workerId' => 'Worker ID',
+            'workerId' => 'Participant',
         ];
     }
 

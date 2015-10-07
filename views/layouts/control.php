@@ -53,16 +53,8 @@ AppAsset::register($this);
                                     <li><a href="<?=Url::to(['tasks/create', 'type'=>'combined'])?>">New Combined Task</a></li>
                                 </ul>
                             </li>
-
-                            <li class="dropdown<?=$controller->id === 'responses' ? ' active' : ''?>">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Responses <span class="caret"></span></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="<?=Url::to(['responses/wm'])?>">WM Report</a></li>
-                                    <li><a href="<?=Url::to(['responses/index'])?>">Generic Report</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="<?=$controller->id === 'workers' ? 'active' : ''?>"><a href="<?=Url::to(['workers/index'])?>">Workers</a></li>
+                            <li class="<?=$controller->id === 'responses' ? 'active' : ''?>"><a href="<?=Url::to(['responses/index'])?>">Responses</a></li>
+                            <li class="<?=$controller->id === 'workers' ? 'active' : ''?>"><a href="<?=Url::to(['workers/index'])?>">Participants</a></li>
                             <li>
                                 <?php if(Yii::$app->user->isGuest):?>
                                     <a href="<?=Url::to(['site/login'])?>">Login</a>

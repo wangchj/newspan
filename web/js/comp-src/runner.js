@@ -6,9 +6,8 @@ var Runner = React.createClass({
     getInitialState: function() {
         return {progress: 0};
     },
-    onPartInfoComplete: function(workerId, qualId) {
+    onPartInfoComplete: function(workerId) {
         this.state.workerId = workerId;
-        this.state.qualId = qualId;
         this.advance();
     },
     onTaskComplete: function(res) {
@@ -24,7 +23,6 @@ var Runner = React.createClass({
             data: {
                 taskId: this.props.taskId,
                 workerId: this.state.workerId,
-                qualId: this.state.qualId,
                 json: JSON.stringify(res),
                 score: TSK.getScore(this.props.task, res)
             },
@@ -53,7 +51,7 @@ var Runner = React.createClass({
             case 2:
                 return <Runner.SavingResult/>
             case 3:
-                return <Runner.SaveResultSuccess workerId={this.state.workerId} qualId={this.state.qualId} respId={this.state.respId}/>
+                return <Runner.SaveResultSuccess workerId={this.state.workerId} respId={this.state.respId}/>
             case 4:
                 return <Runner.SaveResultError/>
         }
@@ -119,13 +117,12 @@ Runner.SavingResult = React.createClass({
 Runner.SaveResultSuccess = React.createClass({
     propTypes: {
         workerId: React.PropTypes.string.isRequired,
-        qualId: React.PropTypes.number.isRequired,
         respId: React.PropTypes.number.isRequired
     },
     render: function() {
         return (
             <div style={{fontSize:25}}>
-                <p>Your responses have been submitted with confirmation code <b>{this.props.workerId + '-' + this.props.qualId + '-' + this.props.respId}</b></p>
+                <p>Your responses have been submitted</p>
                 <p>You may now close this survey. Thank you.</p>
             </div>
         )

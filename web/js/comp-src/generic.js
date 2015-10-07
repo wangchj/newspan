@@ -273,24 +273,17 @@ var PartInfoForm = React.createClass({
     },
     onComplete: function() {
         var workerId = this.refs.workerId.getDOMNode().value.trim();
-        var qualId = this.refs.qualId.getDOMNode().value.trim();
 
-        if(workerId && workerId != '' && qualId && qualId != '' && /^\d+$/.test(qualId))
-            this.props.onComplete(workerId, qualId);
+        if(workerId && workerId != '')
+            this.props.onComplete(workerId);
     },
     render: function() {
         return (
             <div>
                 <div className="row" style={{marginBottom:25}}>
                     <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5 form-Group">
-                        <label className="form-label">Worker Identifier</label>
+                        <label className="form-label">Participant ID</label>
                         <input type="text" ref="workerId" className="form-control" style={{textAlign:'center'}}/>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5 form-group">
-                        <label className="form-label">Validation Code</label>
-                        <input type="text" ref="qualId" className="form-control" style={{textAlign:'center'}}/>
                     </div>
                 </div>
                 <div className="row" style={{marginTop:25}}>
