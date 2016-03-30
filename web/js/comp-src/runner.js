@@ -112,7 +112,12 @@ Runner.Task = React.createClass({
 
 Runner.SavingResult = React.createClass({
     render: function() {
-        return <div style={{fontSize:25}}>You have completed the task. Please wait while we are submitting your responses.</div>
+        return <div style={{fontSize:25}}>
+            {
+                //You have completed the task. Please wait while we are submitting your responses.
+                _('s0')
+            }
+        </div>
     }
 });
 
@@ -125,8 +130,16 @@ Runner.SaveResultSuccess = React.createClass({
     render: function() {
         return (
             <div style={{fontSize:25}}>
-                <p>Your responses have been submitted with confirmation code <b>{this.props.workerId + '-' + this.props.qualId + '-' + this.props.respId}</b></p>
-                <p>You may now close this survey. Thank you.</p>
+                <p>
+                    {
+                        //Your responses have been submitted with confirmation code <b>{this.props.workerId + '-' + this.props.qualId + '-' + this.props.respId}</b>
+                        _('s1')
+                    }
+                </p>
+                <p>{
+                    //You may now close this survey. Thank you.
+                    _('s4')
+                }</p>
             </div>
         )
     }
@@ -134,6 +147,11 @@ Runner.SaveResultSuccess = React.createClass({
 
 Runner.SaveResultError = React.createClass({
     render: function() {
-        return <div style={{fontSize:25}}>There was an error submitting your responses. Please contact the coordinator of this experiment.</div>
+        return <div style={{fontSize:25}}>
+        {
+            //There was an error submitting your responses. Please contact the coordinator of this experiment.
+            _('s3')
+        }
+        </div>
     }
 });
