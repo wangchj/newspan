@@ -514,7 +514,7 @@ var TaskObList = React.createClass({
     render: function() {
         var comps = this.props.task.struct.map(function(desc, i) {
             if(desc.type === 'inst')
-                return <TaskObList.Inst key={i} instId={desc.id} inst={this.props.task.instructs[desc.id]} mode={this.props.mode} onInstEdit={this.props.onInstEdit} onInstDel={this.props.onInstDel}/>
+                return <TaskObList.Inst key={i} instId={desc.id} inst={this.props.task.instructs.en[desc.id]} mode={this.props.mode} onInstEdit={this.props.onInstEdit} onInstDel={this.props.onInstDel}/>
             else if(desc.type === 'block')
                 return <Block key={i} blockId={desc.id} block={this.props.task.blocks[desc.id]} mode={this.props.mode} onAddProbClick={this.props.onAddProbClick} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel} onBlockDel={this.props.onBlockDel}/>
         }.bind(this));

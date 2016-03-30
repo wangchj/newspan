@@ -102,7 +102,7 @@ Runner.Task = React.createClass({
      */
     getInstToRender: function() {
         var entry = this.props.task.struct[this.state.i];
-        var inst = this.props.task.instructs[entry.id];
+        var inst = this.props.task.instructs[lang][entry.id];
         return <Instruction key={this.state.i} text={inst.text} nextBtnLabel={inst.next} onComplete={this.advance}/>
     },
     render: function() {
