@@ -40,7 +40,6 @@ class RunController extends Controller
         $res = new Response();
         $res->taskId = $_POST['taskId'];
         $res->workerId = $_POST['workerId'];
-        $res->qualId = $_POST['qualId'];
         $res->datetime = (new DateTime())->format('c');
         $res->json = $_POST['json'];
         $res->score = $_POST['score'];
