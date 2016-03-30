@@ -308,7 +308,10 @@ BoxSequence.Recall = React.createClass({
             <div>
                 <div className="row" style={{marginBottom:20}}>
                     <div className="col-xs-12" style={{fontSize:20, textAlign:'center'}}>
-                        Please recall the order of the blue boxes
+                        {
+                            //Please recall the order of the blue boxes
+                        }
+                        {_('sq0')}
                     </div>
                 </div>
                 <div className="row" style={{marginBottom:25}}>
@@ -318,10 +321,10 @@ BoxSequence.Recall = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-xs-6">
-                        <button className="btn btn-default pull-right" onClick={this.onClear}>Clear</button>
+                        <button className="btn btn-default pull-right" onClick={this.onClear}>{_('Clear')}</button>
                     </div>
                     <div className="col-xs-6">
-                        <button className="btn btn-default pull-left" onClick={this.onComplete}>Continue</button>
+                        <button className="btn btn-default pull-left" onClick={this.onComplete}>{_('Continue')}</button>
                     </div>
                 </div>
             </div>
@@ -352,11 +355,16 @@ BoxSequence.Feedback = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12" style={{fontSize:25, marginBottom:25}}>
-                        You recalled {this.getCorrectCount()} out of {this.props.sequence.length} squares correctly.
+                        {
+                            //You recalled {this.getCorrectCount()} out of {this.props.sequence.length} squares correctly.
+                        }
+                        {
+                            _('sq1').replace('{1}', this.getCorrectCount()).replace('{2}', this.props.sequence.length)
+                        }
                     </div>
                 </div>
                 <div className="row">
-                    <button className="btn btn-default" onClick={this.onComplete}>Continue</button>
+                    <button className="btn btn-default" onClick={this.onComplete}>{_('Continue')}</button>
                 </div>
             </div>
         )

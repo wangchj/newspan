@@ -20,8 +20,10 @@ $this->title = 'Working Memory Task';
 
     <script type="text/javascript">
         var saveUrl = '<?=Url::to(['run/save'])?>';
+        var lang = '<?=Yii::$app->session->get('lang', 'en')?>';
     </script>
 
+    <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/lang.js"></script>
     <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/generic.js"></script>
     <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/ls.js"></script>
     <script type="text/javascript" src="<?=Yii::getAlias('@web')?>/js/comp/eq.js"></script>

@@ -86,10 +86,10 @@ MathEq.Equation = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-xs-6">
-                        <button className="btn btn-default pull-right" onClick={this.submitTrue}>True</button>
+                        <button className="btn btn-default pull-right" onClick={this.submitTrue}>{_('True')}</button>
                     </div>
                     <div className="col-xs-6">
-                        <button className="btn btn-default pull-left" onClick={this.submitFalse}>False</button>
+                        <button className="btn btn-default pull-left" onClick={this.submitFalse}>{_('False')}</button>
                     </div>
                 </div>
                 {
@@ -131,12 +131,13 @@ MathEq.Feedback = React.createClass({
             <div>
                 <div className="row" style={{marginBottom:25}}>
                     <div className="col-xs-12" style={{fontSize:25}}>
-                        {EQ.getAnswer(this.props.equation) === this.props.response.response ? 'Correct' : 'Incorrect'}!
+                        {EQ.getAnswer(this.props.equation) === this.props.response.response ?
+                            _('Correct') : _('Incorrect')}!
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
-                        <button className="btn btn-default" onClick={this.complete}>Continue</button>
+                        <button className="btn btn-default" onClick={this.complete}>{_('Continue')}</button>
                     </div>
                 </div>
             </div>

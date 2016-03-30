@@ -66,10 +66,10 @@ var SymmetryTest = React.createClass({
                         </div>
                         <div className="row">
                             <div className="col-xs-6">
-                                <button className="btn btn-default pull-right" onClick={this.onRespond.bind(this, true)}>True</button>
+                                <button className="btn btn-default pull-right" onClick={this.onRespond.bind(this, true)}>{_('True')}</button>
                             </div>
                             <div className="col-xs=6">
-                                <button className="btn btn-default pull-left" onClick={this.onRespond.bind(this, false)}>False</button>
+                                <button className="btn btn-default pull-left" onClick={this.onRespond.bind(this, false)}>{_('False')}</button>
                             </div>
                         </div>
                         {
@@ -117,11 +117,11 @@ SymmetryTest.Feedback = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12" style={{fontSize:25, marginBottom:25}}>
-                        Your answer is {SY.isSymmetric(this.props.colored) == this.props.res ? 'correct' : 'incorrect'}.
+                        {_('Your answer is')} {SY.isSymmetric(this.props.colored) == this.props.res ? _('correct') : _('incorrect')}.
                     </div>
                 </div>
                 <div className="row">
-                    <button className="btn btn-default" onClick={this.onComplete}>Continue</button>
+                    <button className="btn btn-default" onClick={this.onComplete}>{_('Continue')}</button>
                 </div>
             </div>
         )
