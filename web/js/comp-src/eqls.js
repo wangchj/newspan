@@ -188,17 +188,23 @@ MathLetter.Feedback = React.createClass({
             <div style={{fontSize:22}}>
                 <div className="row" style={{marginBottom:20}}>
                     <div className="col-xs-12">
-                        You recalled {lc} out of {ll} letters correctly.  
+                        {
+                            //You recalled {lc} out of {ll} letters correctly.
+                        }
+                        {_('ls0').replace('{1}', lc).replace('{2}', ll)}
                     </div>
                 </div>
                 <div className="row" style={{marginBottom:25}}>
                     <div className="col-xs-12">
-                        You answered {mc} out of {ml} math questions correctly.
+                        {
+                            //You answered {mc} out of {ml} math questions correctly.
+                        }
+                        {_('eq0').replace('{1}', mc).replace('{2}', ml)}
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
-                        <button className="btn btn-default" onClick={this.complete}>Continue</button>
+                        <button className="btn btn-default" onClick={this.complete}>{_('Continue')}</button>
                     </div>
                 </div>
             </div>

@@ -61,10 +61,10 @@ var LetterRecall = React.createClass({
                 </div>
                 <div className="row" style={{marginTop:25}}>
                     <div className="col-xs-6">
-                        <button className="btn btn-default pull-right" onClick={this.clearSelects}>Clear</button>
+                        <button className="btn btn-default pull-right" onClick={this.clearSelects}>{_('Clear')}</button>
                     </div>
                     <div className="col-xs-6">
-                        <button className="btn btn-default pull-left" onClick={this.submitResponse}>Continue</button>
+                        <button className="btn btn-default pull-left" onClick={this.submitResponse}>{_('Continue')}</button>
                     </div>
                 </div>
             </div>
@@ -134,12 +134,15 @@ var LetterSequenceReport = React.createClass({
             <div>
                 <div className="row">
                     <div className="col-xs-12" style={{fontSize:25, marginBottom:25}}>
-                        You recalled {correctCount} out of {letters.length} letters correctly.
+                        {
+                            //You recalled {correctCount} out of {letters.length} letters correctly.
+                        }
+                        {_('ls0').replace('{1}', correctCount).replace('{2}', letters.length)}
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
-                        <button className="btn btn-default" onClick={this.complete}>Continue</button>
+                        <button className="btn btn-default" onClick={this.complete}>{_('Continue')}</button>
                     </div>
                 </div>
             </div>

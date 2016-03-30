@@ -15,8 +15,24 @@ class RunController extends Controller
 
     public function actionIndex($taskId)
     {
-        $task = Task::findOne($taskId);
-        return $this->render('index', ['task'=>$task]);
+        $session = Yii::$app->session;
+        if(!$lang = $session->get('lang')) {
+            return $this->redirect(['lang', 'taskId'=>$taskId]);
+        }
+        else {
+            $task = Task::findOne($taskId);
+            return $this->render('index', ['task'=>$task, 'lang'=>$lang]);
+        }
+    }
+
+    public function actionLang($taskId) {
+        if($lang = Yii::$app->request->post('lang')) {
+            $session = Yii::$app->session->set('lang', $lang);
+            return $this->redirect(['index', 'taskId'=>$taskId]);
+        }
+        else {
+            return $this->render('lang', ['taskId'=>$taskId]);
+        }
     }
 
     public function actionSave()

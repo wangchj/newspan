@@ -97,7 +97,7 @@ var Demographics = React.createClass({
                 </div>
                 <div className="row">
                     <div className="col-xs-12">
-                        <button className="btn btn-default" onClick={this.complete}>Continue</button>
+                        <button className="btn btn-default" onClick={this.complete}>{_('Continue')}</button>
                     </div>
                 </div>
             </div>
@@ -252,14 +252,14 @@ var LowTra = React.createClass({
                     <div className="col-xs-12" style={{fontSize:25, marginTop:100}}>
                         {
                             this.props.type === 'math' ? 
-                                'Please try to solve each math problem correctly, as quickly as you can.' :
-                                'Please try to identify each symmetric and asymmetric figure correctly, as quickly as you can.'
+                                _('eq1') :
+                                _('sy1')
                         }
                     </div>
                 </div>
                 <div className="row" style={{marginTop:25}}>
                     <div className="col-xs-12" style={{textAlign:'center'}}>
-                        <button className="btn btn-default" onClick={this.onComplete}>Got it</button>
+                        <button className="btn btn-default" onClick={this.onComplete}>{_('Got it')}</button>
                     </div>
                 </div>
             </div>
@@ -273,29 +273,22 @@ var PartInfoForm = React.createClass({
     },
     onComplete: function() {
         var workerId = this.refs.workerId.getDOMNode().value.trim();
-        var qualId = this.refs.qualId.getDOMNode().value.trim();
 
-        if(workerId && workerId != '' && qualId && qualId != '' && /^\d+$/.test(qualId))
-            this.props.onComplete(workerId, qualId);
+        if(workerId && workerId != '')
+            this.props.onComplete(workerId);
     },
     render: function() {
         return (
             <div>
                 <div className="row" style={{marginBottom:25}}>
                     <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5 form-Group">
-                        <label className="form-label">Worker Identifier</label>
+                        <label className="form-label">{_('Participant ID')}</label>
                         <input type="text" ref="workerId" className="form-control" style={{textAlign:'center'}}/>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-xs-4 col-xs-offset-4 col-sm-2 col-sm-offset-5 form-group">
-                        <label className="form-label">Validation Code</label>
-                        <input type="text" ref="qualId" className="form-control" style={{textAlign:'center'}}/>
                     </div>
                 </div>
                 <div className="row" style={{marginTop:25}}>
                     <div className="col-xs-12" style={{textAlign:'center'}}>
-                        <button type="button" className="btn btn-default" onClick={this.onComplete}>Continue</button>
+                        <button type="button" className="btn btn-default" onClick={this.onComplete}>{_('Continue')}</button>
                     </div>
                 </div>
             </div>
