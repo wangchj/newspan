@@ -380,9 +380,13 @@ var CreateTask = React.createClass({
         $(InstForm.domIdSel).modal('show');
     },
     onInstDel: function(instId) {
-        //Remove the inst entry
-        this.state.task.instructs.splice(instId, 1);
-        
+        var inst = this.state.task.instructs;
+
+        //Remove the inst entry for all langues
+        for(var locale in inst) {
+            inst[locale].splice(instId, 1);
+        }
+
         //Find the entry in task.struct to remove
         var i = 0;
         for(; i < this.state.task.struct.length; i++)
