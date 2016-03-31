@@ -20,7 +20,6 @@ $this->title = 'Responses';
         <tr>
             <th>#</th>
             <th>Worker ID</th>
-            <th>Qual ID</th>
             <th>Task Name</th>
             <th>Date and Time</th>
             <th>Score</th>
@@ -42,7 +41,6 @@ $this->title = 'Responses';
             <tr data-key=<?=$resp->responseId?>>
                 <td><?=$resp->responseId?></td>
                 <td><?=$resp->workerId?></td>
-                <td><?=$resp->qualId?></td>
                 <td><?=$resp->task->name?></td>
                 <td><?=(new DateTime($resp->datetime))->format("M j, Y g:i A")?></td>
                 <td><?=$s?></td>
