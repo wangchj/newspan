@@ -48,7 +48,7 @@ var lang_map = {
         's0' : 'Usted ha completado la tarea.  Por favor espere mientras enviamos sus respuestas.',
 
         //Your responses have been submitted
-        's1' : 'Sus respuestas has sido enviadas.',
+        's1' : 'Sus respuestas han sido enviadas.',
 
         //Your responses have been submitted with confirmation code asfda-1111-688
         's2' : 'Sus respuestas han sido enviadas. Su número de confirmación es {1}.',
@@ -82,8 +82,8 @@ var lang_map = {
         'sy1' : 'Please try to identify each symmetric and asymmetric figure correctly, as quickly as you can.',
 
         //Your answer is {SY.isSymmetric(this.props.colored) == this.props.res ? 'correct' : 'incorrect'}.
-        'c0' : 'Su respuesta es correcta.',
-        'c1' : 'Su respuesta es incorrecta.', 
+        'c0' : 'Your answer is correct.',
+        'c1' : 'Your answer is incorrect.', 
 
         //You have completed the task. Please wait while we are submitting your responses.
         's0' : 'You have completed the task. Please wait while we are submitting your responses.',
