@@ -10,9 +10,10 @@ var CreateTask = React.createClass({
             task = taskTemplate.sspan;
         else
             task = taskTemplate.combined;
-        
+
         return {
             task: task,
+            lang: Object.keys(task.instructs)[0],
             //Edit problem context {mode, prob, blockId, probId, subId, ssubId}
             editContext: {mode: CreateTask.editMode.add}
         };
@@ -376,7 +377,7 @@ var CreateTask = React.createClass({
     },
     onInstEdit: function(instId) {
         console.log('onInstEdit', instId);
-        this.setState({editContext:{inst: this.state.task.instructs[instId]}});
+        this.setState({editContext:{inst: this.state.task.instructs[this.state.lang][instId]}});
         $(InstForm.domIdSel).modal('show');
     },
     onInstDel: function(instId) {
@@ -420,23 +421,62 @@ var CreateTask = React.createClass({
             var inst = {text: text, next: next}
             var instId = this.state.task.instructs.length;
 
-            this.state.task.instructs.push(inst);
+            for(lang in this.state.task.instructs)
+                this.state.task.instructs[lang].push(inst);
+
             this.state.task.struct.push({type: 'inst', id: instId});
             this.setState({task: this.state.task});
         }
 
         $(InstForm.domIdSel).modal('hide');
     },
+    onLangClick: function(lang) {
+        this.setState({lang: lang});
+    },
+    onAddLangClick: function() {
+        $(this.refs.langForm.getDOMNode()).modal('show');
+    },
+    onLangFormSave: function(lang) {
+        if(lang == null || lang === undefined)
+            return;
+
+        lang = lang.trim().toLowerCase();
+
+        if(lang == '')
+            return;
+
+        //Check to see if lang already exist in the task
+        if(lang in this.state.task.instructs) {
+            $(this.refs.langForm.getDOMNode()).modal('hide');
+            return;
+        }
+
+        //Make empty instructions for the new language
+        var instructs = this.state.task.instructs;
+        var len = instructs[Object.keys(instructs)[0]].length;
+        var newLang = [];
+        for(var i = 0; i < len; i++)
+            newLang.push({text: 'Instruction Text', next:'Button Text'});
+
+        //Add the new language to the task
+        instructs[lang] = newLang;
+
+        this.setState({task: this.state.task});
+
+        $(this.refs.langForm.getDOMNode()).modal('hide');
+    },
     render: function() {
         return (
             <div>
                 <CreateTask.TaskNameInput ref="taskName"/>
-                <TaskObList task={this.state.task} onAddProbClick={this.onAddProbClick} onProbEdit={this.onProbEdit} onProbDel={this.onProbDel} onBlockDel={this.onBlockDel} onInstEdit={this.onInstEdit} onInstDel={this.onInstDel}/>
+                <CreateTask.LangPane task={this.state.task} lang={this.state.lang} onLangClick={this.onLangClick} onAddLangClick={this.onAddLangClick}/>
+                <TaskObList task={this.state.task} onAddProbClick={this.onAddProbClick} onProbEdit={this.onProbEdit} onProbDel={this.onProbDel} onBlockDel={this.onBlockDel} onInstEdit={this.onInstEdit} onInstDel={this.onInstDel} lang={this.state.lang}/>
                 <CreateTask.Buttons onBlockAdd={this.onBlockAdd} onInstAdd={this.onInstAdd}/>
                 <CreateTask.Error error={this.state.error}/>
                 <CreateTask.SaveRow onTaskSave={this.onTaskSave}/>
                 <ProbForm editContext={this.state.editContext} onSaveClick={this.onProbFormSave}/>
                 <InstForm ref="instForm" editContext={this.state.editContext} onSaveClick={this.onInstFormSave}/>
+                <LangForm ref="langForm" onSaveClick={this.onLangFormSave}/>
             </div>
         );
     }
@@ -452,6 +492,60 @@ CreateTask.TaskNameInput = React.createClass({
                 </div>
             </form>
         )
+    }
+});
+
+CreateTask.LangPane = React.createClass({
+    propTypes: {
+        task: React.PropTypes.object.isRequired,
+        lang: React.PropTypes.string.isRequired,
+        onLangClick: React.PropTypes.func.isRequired,
+        onAddLangClick: React.PropTypes.func.isRequired
+    },
+    render: function() {
+        return (
+            <div className="panel panel-default">
+                <div className="panel-heading">
+                    <table border="0" cellSpacing="0" cellPadding="0" width="100%">
+                        <tr>
+                            <td>
+                                <h2 className="panel-title">Available Languages</h2>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div className="panel-body">
+                    <CreateTask.LangPane.List task={this.props.task} lang={this.props.lang} onLangClick={this.props.onLangClick}/>
+                </div>
+                {
+                    typeof taskType == 'undefined' ? null :
+                    (
+                        <div className="panel-footer">
+                            <button className="btn btn-default" onClick={this.props.onAddLangClick}>Add Language</button>
+                        </div>
+                    )
+                }
+            </div>
+        )
+    }
+});
+
+
+CreateTask.LangPane.List = React.createClass({
+    propTypes: {
+        task: React.PropTypes.object.isRequired,
+        lang: React.PropTypes.string.isRequired,
+        onLangClick: React.PropTypes.func.isRequired
+    },
+    render: function() {
+        var items = Object.keys(this.props.task.instructs).map(function(lang) {
+            var className = 'btn btn-default';
+            if(this.props.lang == lang)
+                className += ' active';
+
+            return <button className={className} onClick={this.props.onLangClick.bind(null, lang)} style={{marginRight:10}}>{lang}</button>
+        }.bind(this));
+        return <div>{items}</div>
     }
 });
 
@@ -508,7 +602,8 @@ var TaskObList = React.createClass({
         onBlockDel: React.PropTypes.func.isRequired,
         onInstEdit: React.PropTypes.func.isRequired,
         onInstDel: React.PropTypes.func.isRequired,
-        mode: React.PropTypes.string
+        mode: React.PropTypes.string,
+        lang: React.PropTypes.string
     },
     getDefaultProps: function() {
         return {
@@ -518,7 +613,7 @@ var TaskObList = React.createClass({
     render: function() {
         var comps = this.props.task.struct.map(function(desc, i) {
             if(desc.type === 'inst')
-                return <TaskObList.Inst key={i} instId={desc.id} inst={this.props.task.instructs.en[desc.id]} mode={this.props.mode} onInstEdit={this.props.onInstEdit} onInstDel={this.props.onInstDel}/>
+                return <TaskObList.Inst key={i} instId={desc.id} inst={this.props.task.instructs[this.props.lang][desc.id]} mode={this.props.mode} onInstEdit={this.props.onInstEdit} onInstDel={this.props.onInstDel}/>
             else if(desc.type === 'block')
                 return <Block key={i} blockId={desc.id} block={this.props.task.blocks[desc.id]} mode={this.props.mode} onAddProbClick={this.props.onAddProbClick} onProbEdit={this.props.onProbEdit} onProbDel={this.props.onProbDel} onBlockDel={this.props.onBlockDel}/>
         }.bind(this));
@@ -1267,6 +1362,45 @@ InstForm.Footer = React.createClass({
             <div className="modal-footer">
                 <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
                 <button type="button" className="btn btn-primary" onClick={this.props.onSaveClick}>Ok</button>
+            </div>
+        )
+    }
+});
+
+var LangForm = React.createClass({
+    propTypes: {
+        onSaveClick: React.PropTypes.func.isRequired
+    },
+    onSaveClick: function() {
+        var val = this.refs.input.getDOMNode().value;
+        this.props.onSaveClick(val);
+    },
+    render: function() {
+        return (
+            <div ref="langForm" className="modal fade" role="dialog">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 className="modal-title" id="myModalLabel">New Language</h4>
+                        </div>
+
+                        <div className="modal-body">
+                            <form>
+                                <div className="form-group">
+                                    <label>Language Label</label>
+                                    <input type="text" className="form-control" ref="input" />
+                                    <div>A short language code. For example: <code>en</code></div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
+                            <button type="button" className="btn btn-primary" onClick={this.onSaveClick}>Ok</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     }
