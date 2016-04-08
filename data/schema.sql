@@ -15,6 +15,7 @@ create table Responses (
     taskId integer not null,
     workerId text not null,
     qualId integer not null, -- Qualtrics id
+    lang text,
     datetime text not null,
     json text not null,
     score integer not null,
