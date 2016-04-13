@@ -21,6 +21,7 @@ $this->title = 'Responses';
             <th>#</th>
             <th>Worker ID</th>
             <th>Task Name</th>
+            <th>Lang</th>
             <th>Date and Time</th>
             <th>Score</th>
             <th>Strict Score</th>
@@ -42,6 +43,7 @@ $this->title = 'Responses';
                 <td><?=$resp->responseId?></td>
                 <td><?=$resp->workerId?></td>
                 <td><?=$resp->task->name?></td>
+                <td><?=$resp->lang?></td>
                 <td><?=(new DateTime($resp->datetime))->format("M j, Y g:i A")?></td>
                 <td><?=$s?></td>
                 <td><?=$ss?></td>
