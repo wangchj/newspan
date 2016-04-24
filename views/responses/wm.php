@@ -2,6 +2,7 @@
 use yii\helpers\Url;
 use yii\grid\GridView;
 use app\models\Block;
+use app\models\json\WmScorer;
 
 /* @var $this yii\web\View */
 $this->title = 'Responses';
@@ -13,7 +14,11 @@ $this->title = 'Responses';
     }
 </style>
 
-<h1>WM Response Report</h1>
+<h1>WM Response Report
+    <a class="btn btn-default" href="<?=Url::to(['responses/wm-sum-csv'])?>" role="button" style="float:right; display:inline">
+        <span class="glyphicon glyphicon-download"></span>
+    </a>
+</h1>
 
 <table class="table table-hover">
     <thead>
@@ -36,17 +41,18 @@ $this->title = 'Responses';
     </thead>
     <tbody>
         <?php foreach($resps as $resp):?>
-            <?php 
-                $taskJson = json_decode($resp->task->json);
-                $respJson = json_decode($resp->json);
-                if(!isWm($taskJson))
+            <?php
+                $scorer = new WmScorer($resp);
+
+                if(!$scorer->isWm())
                     continue;
-                $os = getOs($taskJson, $respJson);
-                $oss = getOss($taskJson, $respJson);
-                $oa = getOa($taskJson, $respJson);
-                $ss = getSs($taskJson, $respJson);
-                $sss = getSss($taskJson, $respJson);
-                $sa = getSa($taskJson, $respJson);
+
+                $os = $scorer->getOspanScore();
+                $oss = $scorer->getOspanStrictScore();
+                $oa = $scorer->getOspanAccuracy();
+                $ss = $scorer->getSspanScore();
+                $sss = $scorer->getSspanStrictScore();
+                $sa = $scorer->getSspanAccuracy();
             ?>
 
             <tr data-key=<?=$resp->responseId?>>
@@ -70,69 +76,18 @@ $this->title = 'Responses';
 </table>
 
 <hr />
-    <table>
-        <tr><td><b>OS</b></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>OSpan Score</td></tr>
-        <tr><td><b>OSS</b></td><td> </td><td>OSpan Strict Score</td></tr>
-        <tr><td><b>OA</b></td><td> </td><td>OSpan Accuracy</td></tr>
-        <tr><td><b>SS</b></td><td> </td><td>SSpan Score</td></tr>
-        <tr><td><b>SSS</b></td><td> </td><td>SSpan Strict Score</td></tr>
-        <tr><td><b>SA</b></td><td> </td><td>SSpan Accuracy</td></tr>
-        <tr><td><b>T</b></td><td> </td><td>Total</td></tr>
-        <tr><td><b>TS</b></td><td> </td><td>Strict Total</td></tr>
-        <tr><td><b>Max</b></td><td> </td><td>Max Possible Score</td></tr>
-    </table>
-<?php
-function isWm($taskJson) {
-    if(count($taskJson->blocks) != 10)
-        return false;
-    return true;
-}
 
-function getOs($taskJson, $respJson) {
-    return Block::getScore($taskJson->blocks[3], $respJson[3]) +
-        Block::getScore($taskJson->blocks[4], $respJson[4]);
-}
-
-function getOss($taskJson, $respJson) {
-    return Block::getStrictScore($taskJson->blocks[3], $respJson[3]) +
-        Block::getStrictScore($taskJson->blocks[4], $respJson[4]);
-}
-
-function getOa($taskJson, $respJson) {
-    return
-    (
-        Block::getAccScore($taskJson->blocks[3], $respJson[3]) +
-        Block::getAccScore($taskJson->blocks[4], $respJson[4])
-    ) /
-    (
-        Block::getAccLength($taskJson->blocks[3]) +
-        Block::getAccLength($taskJson->blocks[4])
-    );
-}
-
-function getSs($taskJson, $respJson) {
-    return Block::getScore($taskJson->blocks[8], $respJson[8]) +
-        Block::getScore($taskJson->blocks[9], $respJson[9]);
-}
-
-function getSss($taskJson, $respJson) {
-    return Block::getStrictScore($taskJson->blocks[8], $respJson[8]) +
-        Block::getStrictScore($taskJson->blocks[9], $respJson[9]);
-}
-
-function getSa($taskJson, $respJson) {
-    return
-    (
-        Block::getAccScore($taskJson->blocks[8], $respJson[8]) +
-        Block::getAccScore($taskJson->blocks[9], $respJson[9])
-    ) /
-    (
-        Block::getAccLength($taskJson->blocks[8]) +
-        Block::getAccLength($taskJson->blocks[9])
-    );
-}
-
-?>
+<table>
+    <tr><td><b>OS</b></td><td>&nbsp;&nbsp;&nbsp;&nbsp;</td><td>OSpan Score</td></tr>
+    <tr><td><b>OSS</b></td><td> </td><td>OSpan Strict Score</td></tr>
+    <tr><td><b>OA</b></td><td> </td><td>OSpan Accuracy</td></tr>
+    <tr><td><b>SS</b></td><td> </td><td>SSpan Score</td></tr>
+    <tr><td><b>SSS</b></td><td> </td><td>SSpan Strict Score</td></tr>
+    <tr><td><b>SA</b></td><td> </td><td>SSpan Accuracy</td></tr>
+    <tr><td><b>T</b></td><td> </td><td>Total</td></tr>
+    <tr><td><b>TS</b></td><td> </td><td>Strict Total</td></tr>
+    <tr><td><b>Max</b></td><td> </td><td>Max Possible Score</td></tr>
+</table>
 
 <?php $this->beginBlock('TheEnd');?>
     <script type="text/javascript">

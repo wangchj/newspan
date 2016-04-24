@@ -46,6 +46,18 @@ class ResponsesController extends Controller
         ]);
     }
     
+    public function actionWmSumCsv() {
+        $resps = Response::find()->all();
+
+        $dateStr = (new \DateTime())->format('YmdHi');
+
+        $response = Yii::$app->response;
+        $response->format = \yii\web\Response::FORMAT_RAW;
+        $response->headers->add('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->add('Content-Disposition', "attachment; filename=wm_response_summary_{$dateStr}.csv");
+        return $this->renderPartial('wmSumCsv', ['resps'=>$resps]);
+    }
+
     public function actionView($responseId)
     {
         $response = Response::findOne($responseId);
